@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
-  <title>smoothtime | Public NTP Server</title>
+  <title>smoothtime | The Natural Time Server</title>
   <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
@@ -88,7 +88,6 @@
         border-color: transparent !important;
     }
     
-    /* Mobile text scaling safeguards */
     @media (max-width: 640px) {
       .mobile-clock-text { font-size: 4rem !important; line-height: 1 !important; }
       .mobile-hero-text { font-size: 3.5rem !important; line-height: 1.1 !important; }
@@ -116,12 +115,12 @@
           <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
           <span class="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
         </span>
-        <span class="text-xs font-bold text-primary tracking-widest uppercase">Stratum-2 Live</span>
+        <span class="text-xs font-bold text-primary tracking-widest uppercase">Public Time Server</span>
       </div>
       <h1 class="font-headline text-5xl md:text-8xl mobile-hero-text font-bold tracking-tighter text-on-surface mb-6">smoothtime</h1>
       <p class="text-lg md:text-2xl text-on-surface-variant max-w-2xl mx-auto font-light leading-relaxed">
-          NTP without the twice-yearly trauma. <br>
-          <span class="text-primary/80">Continuous linear drift compensation.</span>
+          Time without the twice-yearly trauma. <br>
+          <span class="text-primary/80">We spread the 1-hour jump smoothly across the entire season.</span>
       </p>
     </section>
 
@@ -133,7 +132,7 @@
           <div id="live-clock" class="text-6xl md:text-[9rem] mobile-clock-text font-bold font-headline tracking-tighter text-on-surface leading-none py-4 md:py-6">00:00:00</div>
           
           <div class="flex flex-col items-center gap-2 w-full max-w-md">
-            <span class="text-xs font-bold text-primary tracking-widest uppercase mt-2">Active Offset</span>
+            <span class="text-xs font-bold text-primary tracking-widest uppercase mt-2">Active Adjustment</span>
             <div id="active-offset" class="text-2xl md:text-3xl font-mono font-bold text-primary mb-4">+1.000 h</div>
             <div class="bg-surface-container-lowest h-1.5 w-full rounded-full overflow-hidden relative mb-8 md:mb-10">
               <div id="offset-progress" class="absolute inset-y-0 left-0 bg-primary w-0 rounded-full shadow-[0_0_15px_rgba(78,222,163,0.5)] transition-all duration-1000"></div>
@@ -160,23 +159,23 @@
       <div class="glass-card p-6 md:p-12 rounded-xl border border-outline-variant/10">
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 items-center">
           <div>
-            <h3 class="text-2xl font-bold mb-4">The Natural "Astro-Shift"</h3>
+            <h3 class="text-2xl font-bold mb-4">The Problem with Jumping Time</h3>
             <p class="text-on-surface-variant text-base md:text-lg leading-relaxed mb-4">
-              Nature does not execute sudden jumps. Animals naturally synchronize their internal clocks to the gradual daily shift of the sunrise. 
+              Nature does not execute sudden jumps. Yet, twice a year, we force a jarring 60-minute time shift on ourselves and our technology.
             </p>
             <p class="text-on-surface-variant text-base md:text-lg leading-relaxed mb-4">
-              Humans, however, force a jarring 60-minute jump on a single Sunday. This abrupt adjustment causes "social jetlag" in our bodies and wreaks havoc on digital infrastructure - causing cron jobs to skip, logs to overlap, and IoT devices to crash.
+              For humans, this sudden jump causes "social jetlag" - we lose sleep, miss meetings, and feel out of sync. For our digital devices, it is even worse. Smart home alarms trigger an hour late, automated daily routines crash, and servers log duplicate data when the clock falls back.
             </p>
             <p class="text-on-surface-variant text-base md:text-lg leading-relaxed">
-              <strong>smoothtime.io</strong> brings nature's gradual "Astro-Shift" to your network. By spreading the transition across the entire season - adjusting just a fraction of a second each day - your systems stay perfectly aligned with Daylight Saving Time without ever experiencing the trauma of a sudden jump.
+              <strong>smoothtime.io</strong> solves this by making tiny, imperceptible adjustments of just fractions of a second each day. Your computers, routers, and smart devices stay perfectly aligned with the seasons, naturally - without ever experiencing the shock of a sudden jump.
             </p>
           </div>
           <div class="bg-surface-container-lowest rounded-xl p-8 border border-outline-variant/20 flex flex-col items-center justify-center text-center">
             <div class="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mb-6 text-primary">
               <span class="material-symbols-outlined text-3xl">psychology</span>
             </div>
-            <h4 class="text-xl font-bold text-on-surface mb-2">Zero Discontinuities</h4>
-            <p class="text-sm text-on-surface-variant mb-6">No missed server events. No duplicate database timestamps.</p>
+            <h4 class="text-xl font-bold text-on-surface mb-2">Zero Disruptions</h4>
+            <p class="text-sm text-on-surface-variant mb-6">No missed morning alarms. No confusing overlapping calendar events.</p>
             <div class="w-full h-1.5 bg-outline-variant/20 rounded-full overflow-hidden flex">
               <div class="h-full bg-primary/40 w-1/4"></div>
               <div class="h-full bg-primary/70 w-2/4"></div>
@@ -189,7 +188,7 @@
 
     <section class="mb-24 md:mb-32">
       <h2 class="text-3xl md:text-4xl font-headline font-bold mb-8 md:mb-12 flex items-center gap-4">
-        <span class="text-primary font-mono text-xl">02.</span> Core Architecture
+        <span class="text-primary font-mono text-xl">02.</span> How it Works
       </h2>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div class="md:col-span-2 glass-card p-8 md:p-10 rounded-xl border border-outline-variant/10 hover:border-primary/30 transition-all group">
@@ -198,13 +197,13 @@
               <div class="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-6 text-primary">
                 <span class="material-symbols-outlined">timeline</span>
               </div>
-              <h3 class="text-xl md:text-2xl font-headline font-bold mb-4">Continuous Linear Drift</h3>
-              <p class="text-on-surface-variant text-sm md:text-base leading-relaxed">Our open-source mathematical model spreads the 3600-second shift smoothly across the seasons, eliminating jarring step adjustments that crash legacy services.</p>
+              <h3 class="text-xl md:text-2xl font-headline font-bold mb-4">Gentle Adjustments</h3>
+              <p class="text-on-surface-variant text-sm md:text-base leading-relaxed">Instead of waiting months to move your clock by a full hour, our open-source time servers gradually shift the time throughout the year. It works just like a physical clock moving very slightly faster or slower, entirely unnoticed by users.</p>
             </div>
             <div class="mt-8 pt-6 md:pt-8 border-t border-outline-variant/10 flex items-center gap-4 text-xs md:text-sm font-mono text-primary/60">
-              <span>DRIFT_MODEL_V2</span>
+              <span>MATHEMATICAL_DRIFT</span>
               <span class="h-1 w-1 bg-outline-variant rounded-full hidden md:block"></span>
-              <span class="hidden md:block">OFFSET_PRECISION_99.9%</span>
+              <span class="hidden md:block">100% OPEN SOURCE</span>
             </div>
           </div>
         </div>
@@ -212,58 +211,50 @@
           <div class="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-6 text-primary">
             <span class="material-symbols-outlined">devices</span>
           </div>
-          <h3 class="text-xl md:text-2xl font-headline font-bold mb-4">Works Anywhere</h3>
-          <p class="text-on-surface-variant text-sm md:text-base leading-relaxed">Compatible with any standard NTP client via UDP Port 123. No plugins, no wrappers, no nonsense.</p>
+          <h3 class="text-xl md:text-2xl font-headline font-bold mb-4">Compatible with Everything</h3>
+          <p class="text-on-surface-variant text-sm md:text-base leading-relaxed">It works out-of-the-box with any standard device that connects to the internet to check the time. No special software needed.</p>
         </div>
       </div>
     </section>
 
     <section id="how-to-use" class="mb-16">
       <h2 class="text-3xl md:text-4xl font-headline font-bold mb-8 md:mb-12 flex items-center gap-4">
-        <span class="text-primary font-mono text-xl">03.</span> How to Use
+        <span class="text-primary font-mono text-xl">03.</span> Setup for your Devices
       </h2>
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12">
         <div>
           <p class="text-on-surface-variant text-base md:text-lg leading-relaxed mb-8">
-              Integration is seamless. Swap your default NTP server address with ours. We recommend configuring a standard pool as a fallback.
+              Integration is easy. Simply tell your computer, router, or smart home hub to get its time from us instead of the default manufacturer servers.
           </p>
-          <ul class="space-y-6">
-            <li class="flex items-start gap-4">
-              <div class="mt-1 w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center text-primary flex-shrink-0">
-                <span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">check</span>
-              </div>
-              <div>
-                <h4 class="font-bold text-on-surface">Standard Protocol</h4>
-                <p class="text-sm text-on-surface-variant">Operates on native network protocols without requiring elevated system permissions to install.</p>
-              </div>
-            </li>
-            <li class="flex items-start gap-4">
-              <div class="mt-1 w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center text-primary flex-shrink-0">
-                <span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">check</span>
-              </div>
-              <div>
-                <h4 class="font-bold text-on-surface">Anycast Routing</h4>
-                <p class="text-sm text-on-surface-variant">Connect to the nearest regional node automatically via smoothtime.io subdomains.</p>
-              </div>
-            </li>
-          </ul>
+          
+          <div class="space-y-6">
+            <div class="bg-surface-container-lowest p-5 rounded-lg border border-outline-variant/10">
+              <h4 class="font-bold text-on-surface mb-1">For Home Users (Routers & Smart Hubs)</h4>
+              <p class="text-sm text-on-surface-variant">Log into your Wi-Fi router or smart home dashboard. Look for "Time Settings" or "NTP Server" and paste the address shown on the right.</p>
+            </div>
+            <div class="bg-surface-container-lowest p-5 rounded-lg border border-outline-variant/10">
+              <h4 class="font-bold text-on-surface mb-1">For System Administrators</h4>
+              <p class="text-sm text-on-surface-variant">Update your standard network configuration files. We highly recommend keeping a standard time pool (like pool.ntp.org) configured as a secondary fallback.</p>
+            </div>
+          </div>
         </div>
         
-        <div class="bg-surface-container-lowest rounded-xl border border-outline-variant/20 overflow-hidden shadow-2xl">
+        <div class="bg-surface-container-lowest rounded-xl border border-outline-variant/20 overflow-hidden shadow-2xl h-fit">
           <div class="px-4 md:px-6 py-3 border-b border-outline-variant/10 flex items-center justify-between bg-surface-container-low">
             <div class="flex gap-1.5">
               <div class="w-3 h-3 rounded-full bg-error/40"></div>
               <div class="w-3 h-3 rounded-full bg-secondary-container"></div>
               <div class="w-3 h-3 rounded-full bg-primary/40"></div>
             </div>
-            <span class="text-xs font-mono text-on-surface-variant">ntp.conf</span>
+            <span class="text-xs font-mono text-on-surface-variant">Server Address</span>
           </div>
           <div class="p-6 md:p-8 font-mono text-xs md:text-sm relative group overflow-x-auto">
-            <pre class="text-on-surface-variant whitespace-pre-wrap min-w-[300px]"><span class="text-primary"># Use smoothtime pool</span>
-<span id="cmd-server">server europe-central.smoothtime.io iburst</span>
+            <pre class="text-on-surface-variant whitespace-pre-wrap min-w-[300px]"><span class="text-primary"># Your regional smoothtime server:</span>
+<span id="cmd-server">europe-central.smoothtime.io</span>
 
-<span class="text-primary"># Fallback pool</span>
-pool pool.ntp.org iburst</pre>
+<span class="text-outline-variant mt-4 block"># Example Linux (ntp.conf) integration:</span>
+<span class="text-on-surface-variant">server europe-central.smoothtime.io iburst
+pool pool.ntp.org iburst</span></pre>
             <button onclick="copyCommand()" class="absolute top-4 md:top-6 right-4 md:right-6 p-2 bg-surface-container-high rounded text-on-surface-variant hover:text-primary transition-colors focus:outline-none">
               <span id="copy-icon" class="material-symbols-outlined text-base md:text-lg">content_copy</span>
             </button>
@@ -379,7 +370,14 @@ pool pool.ntp.org iburst</pre>
       document.querySelectorAll('.region-btn').forEach(btn => {
         btn.classList.toggle('btn-active', btn.id === `btn-${region}`);
       });
-      document.getElementById('cmd-server').textContent = `server ${region}.smoothtime.io iburst`;
+      
+      // Update the code blocks cleanly
+      document.getElementById('cmd-server').textContent = `${region}.smoothtime.io`;
+      
+      const confBlock = document.querySelector('.text-on-surface-variant.whitespace-pre-wrap').innerHTML;
+      const newBlock = confBlock.replace(/server .*\.smoothtime\.io iburst/, `server ${region}.smoothtime.io iburst`);
+      document.querySelector('.text-on-surface-variant.whitespace-pre-wrap').innerHTML = newBlock;
+      
       updateClock();
     }
 

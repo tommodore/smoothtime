@@ -64,15 +64,14 @@
           fontFamily: {
             "headline": ["Space Grotesk"],
             "body": ["Manrope"],
-            "label": ["Manrope"],
             "mono": ["ui-monospace", "SFMono-Regular", "Menlo", "Monaco", "Consolas", "Liberation Mono", "Courier New", "monospace"]
-          },
-          borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
-        },
-      },
+          }
+        }
+      }
     }
   </script>
   <style>
+    html { scroll-behavior: smooth; }
     body {
         background-color: #131315;
         background-image: radial-gradient(circle at 2px 2px, rgba(60, 74, 66, 0.15) 1px, transparent 0);
@@ -91,55 +90,43 @@
   </style>
 </head>
 <body class="font-body text-on-surface selection:bg-primary selection:text-on-primary">
-
-  <nav class="fixed top-0 w-full z-50 bg-[#131315]/60 backdrop-blur-xl no-border shadow-[0_20px_50px_rgba(16,185,129,0.05)]">
+  <nav class="fixed top-0 w-full z-50 bg-[#131315]/60 backdrop-blur-xl border-b border-outline-variant/10 shadow-[0_20px_50px_rgba(16,185,129,0.05)]">
     <div class="flex justify-between items-center px-8 h-20 max-w-7xl mx-auto">
-      <div class="text-2xl font-bold tracking-tighter text-[#e5e1e4] font-headline">
-          smoothtime
-      </div>
+      <div class="text-2xl font-bold tracking-tighter text-[#e5e1e4] font-headline">smoothtime</div>
       <div class="hidden md:flex gap-8 items-center">
-        <a class="text-[#bbcabf] hover:text-[#e5e1e4] transition-colors font-headline tracking-tight" href="#">Network</a>
-        <a class="text-[#bbcabf] hover:text-[#e5e1e4] transition-colors font-headline tracking-tight" href="#">Status</a>
-        <a class="text-[#bbcabf] hover:text-[#e5e1e4] transition-colors font-headline tracking-tight" href="#">Docs</a>
-        <button class="bg-primary text-on-primary px-6 py-2 font-bold scale-95 active:scale-90 transition-transform rounded-DEFAULT">
-            Connect Now
-        </button>
+        <a class="text-[#bbcabf] hover:text-[#e5e1e4] transition-colors font-headline tracking-tight" href="https://github.com/tommodore/smoothtime/blob/main/README.md" target="_blank">Docs</a>
+        <a class="text-[#bbcabf] hover:text-[#e5e1e4] transition-colors font-headline tracking-tight" href="https://status.smoothtime.io" target="_blank">Status</a>
+        <a class="text-[#bbcabf] hover:text-[#e5e1e4] transition-colors font-headline tracking-tight" href="https://github.com/tommodore/smoothtime" target="_blank">GitHub</a>
       </div>
     </div>
   </nav>
 
   <main class="pt-32 pb-24 px-6 max-w-7xl mx-auto">
-    
     <section class="text-center mb-16">
       <div class="inline-flex items-center gap-2 bg-surface-container-low px-4 py-1 rounded-full border border-outline-variant/10 mb-8">
         <span class="relative flex h-2 w-2">
           <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
           <span class="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
         </span>
-        <span class="text-xs font-bold text-primary tracking-widest uppercase">Stratum-1 Live</span>
+        <span class="text-xs font-bold text-primary tracking-widest uppercase">Stratum-2 Live</span>
       </div>
-      <h1 class="font-headline text-7xl md:text-8xl font-bold tracking-tighter text-on-surface mb-6">
-          smoothtime
-      </h1>
+      <h1 class="font-headline text-7xl md:text-8xl font-bold tracking-tighter text-on-surface mb-6">smoothtime</h1>
       <p class="text-xl md:text-2xl text-on-surface-variant max-w-2xl mx-auto font-light leading-relaxed">
           NTP without the twice-yearly trauma. <br>
           <span class="text-primary/80">Continuous linear drift compensation.</span>
       </p>
     </section>
 
-    <section class="mb-32 relative">
+    <section id="regions" class="mb-32 relative">
       <div class="absolute inset-0 bg-primary/5 blur-[120px] rounded-full pointer-events-none"></div>
       <div class="glass-card p-8 md:p-12 rounded-xl border border-outline-variant/10 text-center relative overflow-hidden">
-        
         <div class="flex flex-col items-center justify-center gap-4">
           <span id="region-name" class="text-xs font-mono text-on-surface-variant uppercase tracking-[0.3em] font-bold">Europe Central (CET/CEST)</span>
-          
           <div id="live-clock" class="text-6xl md:text-[9rem] font-bold font-headline tracking-tighter text-on-surface leading-none py-6">00:00:00</div>
           
           <div class="flex flex-col items-center gap-2 w-full max-w-md">
             <span class="text-xs font-bold text-primary tracking-widest uppercase mt-2">Active Offset</span>
             <div id="active-offset" class="text-3xl font-mono font-bold text-primary mb-4">+1.000 h</div>
-            
             <div class="bg-surface-container-lowest h-1.5 w-full rounded-full overflow-hidden relative mb-10">
               <div id="offset-progress" class="absolute inset-y-0 left-0 bg-primary w-0 rounded-full shadow-[0_0_15px_rgba(78,222,163,0.5)] transition-all duration-1000"></div>
             </div>
@@ -159,67 +146,67 @@
     </section>
 
     <section class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-32">
-      <div class="md:col-span-2 glass-card p-10 rounded-xl border border-outline-variant/10 hover:border-primary/30 transition-all group">
-        <div class="flex flex-col h-full justify-between">
-          <div>
-            <div class="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-6 text-primary">
-              <span class="material-symbols-outlined">timeline</span>
+        <div class="md:col-span-2 glass-card p-10 rounded-xl border border-outline-variant/10 hover:border-primary/30 transition-all group">
+          <div class="flex flex-col h-full justify-between">
+            <div>
+              <div class="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-6 text-primary">
+                <span class="material-symbols-outlined">timeline</span>
+              </div>
+              <h3 class="text-2xl font-headline font-bold mb-4">Continuous Linear Drift</h3>
+              <p class="text-on-surface-variant leading-relaxed">Our open-source mathematical model spreads the 3600-second shift smoothly across the seasons, eliminating jarring step adjustments that crash legacy services.</p>
             </div>
-            <h3 class="text-2xl font-headline font-bold mb-4">Continuous Linear Drift</h3>
-            <p class="text-on-surface-variant leading-relaxed">Our proprietary algorithm spreads the 3600-second shift smoothly across the seasons, eliminating jarring step adjustments that crash legacy services.</p>
-          </div>
-          <div class="mt-8 pt-8 border-t border-outline-variant/10 flex items-center gap-4 text-sm font-mono text-primary/60">
-            <span>DRIFT_MODEL_V2</span>
-            <span class="h-1 w-1 bg-outline-variant rounded-full"></span>
-            <span>OFFSET_PRECISION_99.9%</span>
+            <div class="mt-8 pt-8 border-t border-outline-variant/10 flex items-center gap-4 text-sm font-mono text-primary/60">
+              <span>DRIFT_MODEL_V2</span>
+              <span class="h-1 w-1 bg-outline-variant rounded-full"></span>
+              <span>OFFSET_PRECISION_99.9%</span>
+            </div>
           </div>
         </div>
-      </div>
-      <div class="glass-card p-10 rounded-xl border border-outline-variant/10 hover:border-primary/30 transition-all">
-        <div class="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-6 text-primary">
-          <span class="material-symbols-outlined">devices</span>
+        <div class="glass-card p-10 rounded-xl border border-outline-variant/10 hover:border-primary/30 transition-all">
+          <div class="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-6 text-primary">
+            <span class="material-symbols-outlined">devices</span>
+          </div>
+          <h3 class="text-2xl font-headline font-bold mb-4">Works Anywhere</h3>
+          <p class="text-on-surface-variant leading-relaxed">Compatible with any standard NTP client. No plugins, no wrappers, no nonsense.</p>
         </div>
-        <h3 class="text-2xl font-headline font-bold mb-4">Works Anywhere</h3>
-        <p class="text-on-surface-variant leading-relaxed">Compatible with any standard NTP client. No plugins, no wrappers, no nonsense.</p>
-      </div>
-      <div class="glass-card p-10 rounded-xl border border-outline-variant/10 hover:border-primary/30 transition-all">
-        <div class="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-6 text-primary">
-          <span class="material-symbols-outlined">public</span>
+        <div class="glass-card p-10 rounded-xl border border-outline-variant/10 hover:border-primary/30 transition-all">
+          <div class="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-6 text-primary">
+            <span class="material-symbols-outlined">public</span>
+          </div>
+          <h3 class="text-2xl font-headline font-bold mb-4">Multiple Regions</h3>
+          <p class="text-on-surface-variant leading-relaxed">Edge nodes configured for specific geopolitical transition rules and base offsets.</p>
         </div>
-        <h3 class="text-2xl font-headline font-bold mb-4">Multiple Regions</h3>
-        <p class="text-on-surface-variant leading-relaxed">Edge nodes configured for specific geopolitical transition rules and base offsets.</p>
-      </div>
-      <div class="md:col-span-2 glass-card p-10 rounded-xl border border-outline-variant/10 flex flex-col md:flex-row gap-10 items-center overflow-hidden">
-        <div class="flex-1">
-          <h3 class="text-2xl font-headline font-bold mb-4">Real-time Visualization</h3>
-          <p class="text-on-surface-variant leading-relaxed mb-6">Monitor the micro-adjustments in real-time. Our dashboard provides full transparency into the mathematical smoothing process.</p>
-          <div class="flex items-center gap-2 text-primary font-bold cursor-pointer hover:underline decoration-2 underline-offset-4">
-              Explore the source <span class="material-symbols-outlined text-sm">arrow_forward</span>
+        <div class="md:col-span-2 glass-card p-10 rounded-xl border border-outline-variant/10 flex flex-col md:flex-row gap-10 items-center overflow-hidden">
+          <div class="flex-1">
+            <h3 class="text-2xl font-headline font-bold mb-4">Real-time Visualization</h3>
+            <p class="text-on-surface-variant leading-relaxed mb-6">Monitor the micro-adjustments in real-time. Our dashboard provides full transparency into the mathematical smoothing process.</p>
+            <a href="https://github.com/tommodore/smoothtime" target="_blank" class="flex items-center gap-2 text-primary font-bold cursor-pointer hover:underline decoration-2 underline-offset-4">
+                Explore the source <span class="material-symbols-outlined text-sm">arrow_forward</span>
+            </a>
+          </div>
+          <div class="w-full md:w-1/2 h-48 bg-surface-container-lowest rounded-lg border border-outline-variant/10 flex items-center justify-center relative group overflow-hidden">
+            <div class="absolute inset-0 bg-gradient-to-t from-primary/10 to-transparent"></div>
+            <div class="flex items-end gap-1 h-24">
+              <div class="w-2 bg-primary/20 h-1/4 rounded-full"></div>
+              <div class="w-2 bg-primary/40 h-2/4 rounded-full"></div>
+              <div class="w-2 bg-primary/60 h-3/4 rounded-full"></div>
+              <div class="w-2 bg-primary h-full rounded-full"></div>
+              <div class="w-2 bg-primary/60 h-3/4 rounded-full"></div>
+              <div class="w-2 bg-primary/40 h-2/4 rounded-full"></div>
+              <div class="w-2 bg-primary/20 h-1/4 rounded-full"></div>
+            </div>
           </div>
         </div>
-        <div class="w-full md:w-1/2 h-48 bg-surface-container-lowest rounded-lg border border-outline-variant/10 flex items-center justify-center relative group overflow-hidden">
-          <div class="absolute inset-0 bg-gradient-to-t from-primary/10 to-transparent"></div>
-          <div class="flex items-end gap-1 h-24">
-            <div class="w-2 bg-primary/20 h-1/4 rounded-full"></div>
-            <div class="w-2 bg-primary/40 h-2/4 rounded-full"></div>
-            <div class="w-2 bg-primary/60 h-3/4 rounded-full"></div>
-            <div class="w-2 bg-primary h-full rounded-full"></div>
-            <div class="w-2 bg-primary/60 h-3/4 rounded-full"></div>
-            <div class="w-2 bg-primary/40 h-2/4 rounded-full"></div>
-            <div class="w-2 bg-primary/20 h-1/4 rounded-full"></div>
-          </div>
-        </div>
-      </div>
-    </section>
+      </section>
 
-    <section class="mb-32">
+    <section id="how-to-use" class="mb-32">
       <h2 class="text-4xl font-headline font-bold mb-12 flex items-center gap-4">
-        <span class="text-primary font-mono text-xl">01.</span> How to use
+        <span class="text-primary font-mono text-xl">01.</span> How to Use
       </h2>
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
         <div>
           <p class="text-on-surface-variant text-lg leading-relaxed mb-8">
-              Integration is seamless. Just swap your default NTP server address with ours. We recommend configuring a standard pool as fallback.
+              Integration is seamless. Swap your default NTP server address with ours. We recommend configuring a standard pool as a fallback.
           </p>
           <ul class="space-y-6">
             <li class="flex items-start gap-4">
@@ -265,7 +252,6 @@ pool pool.ntp.org iburst</pre>
         </div>
       </div>
     </section>
-
   </main>
 
   <footer class="bg-[#131315] w-full py-12 border-t border-[#3c4a42]/15">
@@ -275,9 +261,9 @@ pool pool.ntp.org iburst</pre>
         <div class="text-[#bbcabf]">© 2026 smoothtime.</div>
       </div>
       <div class="flex flex-wrap justify-center gap-8">
-        <a class="text-[#bbcabf] hover:text-[#4edea3] transition-colors" href="https://github.com/tommodore/smoothtime">GitHub</a>
-        <a class="text-[#bbcabf] hover:text-[#4edea3] transition-colors" href="#">Documentation</a>
-        <a class="text-[#bbcabf] hover:text-[#4edea3] transition-colors" href="#">Status Page</a>
+        <a class="text-[#bbcabf] hover:text-[#4edea3] transition-colors" href="https://github.com/tommodore/smoothtime" target="_blank">GitHub</a>
+        <a class="text-[#bbcabf] hover:text-[#4edea3] transition-colors" href="https://github.com/tommodore/smoothtime/blob/main/README.md" target="_blank">Documentation</a>
+        <a class="text-[#bbcabf] hover:text-[#4edea3] transition-colors" href="https://status.smoothtime.io" target="_blank">Status Page</a>
       </div>
       <div class="text-xs text-outline-variant uppercase tracking-widest font-bold">
           MIT Licensed Open Source
@@ -286,7 +272,6 @@ pool pool.ntp.org iburst</pre>
   </footer>
 
   <script>
-    // --- Configuration ---
     const regions = {
       "europe-west":    { name: "Europe Western (WET/WEST)", base: 0.0,  rule: "eu" },
       "europe-central": { name: "Europe Central (CET/CEST)", base: 1.0,  rule: "eu" },
@@ -299,7 +284,6 @@ pool pool.ntp.org iburst</pre>
 
     let currentRegion = "europe-central";
 
-    // --- Dynamic Date Calculators ---
     function getNthSunday(year, month, nth) {
       let date = new Date(Date.UTC(year, month, 1));
       let count = 0;
@@ -330,99 +314,63 @@ pool pool.ntp.org iburst</pre>
       return null;
     }
 
-    // --- Core Smoothing Logic ---
     function smoothOffset() {
       const cfg = regions[currentRegion];
       const now = new Date();
       const year = now.getUTCFullYear();
-
       const dates = getDstDates(year, cfg.rule);
       const tStart = dates.start;
       const tEnd = dates.end;
 
       let offset;
-      let fraction = 0;
-
       if (now >= tStart && now < tEnd) {
-        // Summer: Drifting down
-        const totalSummer = (tEnd - tStart);
-        const passedSummer = (now - tStart);
-        fraction = passedSummer / totalSummer;
+        const fraction = (now - tStart) / (tEnd - tStart);
         offset = cfg.base + 1.0 - fraction;
       } else {
-        // Winter: Drifting up
         let wStart = tEnd;
         let wEnd = getDstDates(year + 1, cfg.rule).start;
-
         if (now < tStart) {
           wStart = getDstDates(year - 1, cfg.rule).end;
           wEnd = tStart;
         }
-
-        const totalWinter = (wEnd - wStart);
-        const passedWinter = (now - wStart);
-        fraction = passedWinter / totalWinter;
+        const fraction = (now - wStart) / (wEnd - wStart);
         offset = cfg.base + fraction;
       }
-
-      return { offset, fraction };
+      return offset;
     }
 
-    // --- UI Updaters ---
     function updateClock() {
-      const data = smoothOffset();
-      const offsetH = data.offset;
+      const offsetH = smoothOffset();
       const utcNow = new Date();
-      
       const smoothTime = new Date(utcNow.getTime() + offsetH * 3600 * 1000);
 
       document.getElementById("live-clock").textContent = 
-        smoothTime.toLocaleTimeString("en-US", { 
-          timeZone: "UTC", 
-          hour12: false, 
-          hour: "2-digit", 
-          minute: "2-digit", 
-          second: "2-digit" 
-        });
+        smoothTime.toLocaleTimeString("en-US", { timeZone: "UTC", hour12: false, hour: "2-digit", minute: "2-digit", second: "2-digit" });
 
       document.getElementById("region-name").textContent = regions[currentRegion].name;
-      
       const sign = offsetH >= 0 ? "+" : "";
       document.getElementById("active-offset").textContent = `${sign}${offsetH.toFixed(4)} h`;
       
-      // Update Progress Bar based on where we are in the +/- 1 hour drift
-      // We calculate progress relative to the +1 hour max drift
       const progressPercent = Math.max(0, Math.min(100, (offsetH - regions[currentRegion].base) * 100));
       document.getElementById("offset-progress").style.width = `${progressPercent}%`;
     }
 
     function switchRegion(region) {
       currentRegion = region;
-      
-      // Update Buttons
       document.querySelectorAll('.region-btn').forEach(btn => {
-        if (btn.id === `btn-${region}`) {
-          btn.classList.add('btn-active');
-        } else {
-          btn.classList.remove('btn-active');
-        }
+        btn.classList.toggle('btn-active', btn.id === `btn-${region}`);
       });
-      
-      // Update Code Snippet
       document.getElementById('cmd-server').textContent = `server ${region}.smoothtime.io iburst`;
-      
       updateClock();
     }
 
     function copyCommand() {
-      const cmdText = document.getElementById('cmd-server').textContent;
-      navigator.clipboard.writeText(cmdText);
+      navigator.clipboard.writeText(document.getElementById('cmd-server').textContent);
       const icon = document.getElementById('copy-icon');
       icon.textContent = "check";
       setTimeout(() => icon.textContent = "content_copy", 1500);
     }
 
-    // --- Initialization ---
     const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
     if (["America/New_York","America/Toronto"].includes(tz)) currentRegion = "us-eastern";
     else if (["America/Chicago"].includes(tz)) currentRegion = "us-central";

@@ -19,7 +19,7 @@
     <div class="bg-zinc-900 rounded-3xl p-10 mb-10 shadow-2xl">
       <div id="clock" class="clock text-emerald-400">00:00:00</div>
       <div id="region" class="text-zinc-400 mt-3 text-lg"></div>
-      <div id="offset" class="text-emerald-500 font-mono mt-1">+1.508 h</div>
+      <div id="offset" class="text-emerald-500 font-mono mt-1">+1.000 h</div>
     </div>
 
     <div class="flex justify-center gap-4 mb-12">
@@ -45,18 +45,14 @@
 
   <script>
     const regions = {
-      cet:  { name: "Central Europe (CET/CEST)", base: 1.0, phase: 80 },
-      eest: { name: "Eastern Europe (EET/EEST)", base: 2.0, phase: 80 }
+      cet:  { name: "Central Europe (CET/CEST)", base: 1.0, phase: 115 },
+      eest: { name: "Eastern Europe (EET/EEST)", base: 2.0, phase: 115 }
     };
 
     let currentRegion = "cet";
 
     function smoothOffset() {
       const cfg = regions[currentRegion];
-      const doy = new Date().getUTCDateOfYear ? 
-        Math.floor((new Date() - new Date(new Date().getUTCFullYear(), 0, 0)) / 86400000) + 1 : 
-        new Date().getUTCDayOfYear(); // fallback
-
       const now = new Date();
       const startOfYear = new Date(Date.UTC(now.getUTCFullYear(), 0, 0));
       const doy = Math.floor((now - startOfYear) / 86400000) + 1;
@@ -67,7 +63,7 @@
 
     function updateClock() {
       const offsetH = smoothOffset();
-      const utcNow = new Date(); // base time is always UTC
+      const utcNow = new Date();
       const smoothTime = new Date(utcNow.getTime() + offsetH * 3600 * 1000);
 
       document.getElementById("clock").textContent = 

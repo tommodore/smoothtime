@@ -1,55 +1,292 @@
 <!DOCTYPE html>
-<html lang="en">
+<html class="dark" lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>smoothtime - NTP without the trauma</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>smoothtime | Public NTP Server</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "error-container": "#93000a",
+            "surface-container-lowest": "#0e0e10",
+            "outline": "#86948a",
+            "on-secondary-container": "#91c4a8",
+            "tertiary-fixed-dim": "#ffb3af",
+            "background": "#131315",
+            "on-secondary": "#013824",
+            "on-surface": "#e5e1e4",
+            "on-surface-variant": "#bbcabf",
+            "on-background": "#e5e1e4",
+            "surface-dim": "#131315",
+            "primary-fixed": "#6ffbbe",
+            "tertiary-fixed": "#ffdad7",
+            "secondary-container": "#21523c",
+            "tertiary": "#ffb3af",
+            "surface-container": "#201f22",
+            "error": "#ffb4ab",
+            "on-tertiary-container": "#711419",
+            "surface-container-high": "#2a2a2c",
+            "on-secondary-fixed": "#002113",
+            "on-primary-fixed-variant": "#005236",
+            "on-error": "#690005",
+            "on-error-container": "#ffdad6",
+            "surface-variant": "#353437",
+            "tertiary-container": "#fc7c78",
+            "secondary-fixed-dim": "#9ed2b5",
+            "on-primary": "#003824",
+            "surface-container-low": "#1c1b1d",
+            "surface-bright": "#39393b",
+            "on-tertiary-fixed-variant": "#842225",
+            "outline-variant": "#3c4a42",
+            "secondary-fixed": "#baeed1",
+            "on-tertiary-fixed": "#410005",
+            "primary-fixed-dim": "#4edea3",
+            "on-primary-container": "#00422b",
+            "surface-container-highest": "#353437",
+            "inverse-on-surface": "#313032",
+            "on-secondary-fixed-variant": "#1e4f3a",
+            "surface-tint": "#4edea3",
+            "on-tertiary": "#650911",
+            "surface": "#131315",
+            "primary": "#4edea3",
+            "inverse-surface": "#e5e1e4",
+            "secondary": "#9ed2b5",
+            "primary-container": "#10b981",
+            "inverse-primary": "#006c49",
+            "on-primary-fixed": "#002113"
+          },
+          fontFamily: {
+            "headline": ["Space Grotesk"],
+            "body": ["Manrope"],
+            "label": ["Manrope"],
+            "mono": ["ui-monospace", "SFMono-Regular", "Menlo", "Monaco", "Consolas", "Liberation Mono", "Courier New", "monospace"]
+          },
+          borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+        },
+      },
+    }
+  </script>
   <style>
-    .clock { font-size: 5.5rem; font-family: monospace; letter-spacing: 0.05em; }
-    @media (max-width: 640px) { .clock { font-size: 3.8rem; } }
+    body {
+        background-color: #131315;
+        background-image: radial-gradient(circle at 2px 2px, rgba(60, 74, 66, 0.15) 1px, transparent 0);
+        background-size: 40px 40px;
+    }
+    .glass-card {
+        background: rgba(32, 31, 34, 0.6);
+        backdrop-filter: blur(12px);
+    }
+    .btn-active {
+        background-color: #4edea3 !important;
+        color: #003824 !important;
+        box-shadow: 0 0 30px rgba(78,222,163,0.3);
+        border-color: transparent !important;
+    }
   </style>
 </head>
-<body class="bg-zinc-950 text-white min-h-screen font-sans">
-  <div class="max-w-3xl mx-auto px-6 py-16 text-center">
+<body class="font-body text-on-surface selection:bg-primary selection:text-on-primary">
+
+  <nav class="fixed top-0 w-full z-50 bg-[#131315]/60 backdrop-blur-xl no-border shadow-[0_20px_50px_rgba(16,185,129,0.05)]">
+    <div class="flex justify-between items-center px-8 h-20 max-w-7xl mx-auto">
+      <div class="text-2xl font-bold tracking-tighter text-[#e5e1e4] font-headline">
+          smoothtime
+      </div>
+      <div class="hidden md:flex gap-8 items-center">
+        <a class="text-[#bbcabf] hover:text-[#e5e1e4] transition-colors font-headline tracking-tight" href="#">Network</a>
+        <a class="text-[#bbcabf] hover:text-[#e5e1e4] transition-colors font-headline tracking-tight" href="#">Status</a>
+        <a class="text-[#bbcabf] hover:text-[#e5e1e4] transition-colors font-headline tracking-tight" href="#">Docs</a>
+        <button class="bg-primary text-on-primary px-6 py-2 font-bold scale-95 active:scale-90 transition-transform rounded-DEFAULT">
+            Connect Now
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <main class="pt-32 pb-24 px-6 max-w-7xl mx-auto">
     
-    <h1 class="text-6xl font-bold tracking-tighter mb-2">smoothtime</h1>
-    <p class="text-emerald-400 text-xl mb-10">NTP without the twice-yearly trauma</p>
+    <section class="text-center mb-16">
+      <div class="inline-flex items-center gap-2 bg-surface-container-low px-4 py-1 rounded-full border border-outline-variant/10 mb-8">
+        <span class="relative flex h-2 w-2">
+          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+          <span class="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+        </span>
+        <span class="text-xs font-bold text-primary tracking-widest uppercase">Stratum-1 Live</span>
+      </div>
+      <h1 class="font-headline text-7xl md:text-8xl font-bold tracking-tighter text-on-surface mb-6">
+          smoothtime
+      </h1>
+      <p class="text-xl md:text-2xl text-on-surface-variant max-w-2xl mx-auto font-light leading-relaxed">
+          NTP without the twice-yearly trauma. <br>
+          <span class="text-primary/80">Continuous linear drift compensation.</span>
+      </p>
+    </section>
 
-    <div class="bg-zinc-900 rounded-3xl p-10 mb-10 shadow-2xl">
-      <div id="clock" class="clock text-emerald-400">00:00:00</div>
-      <div id="region" class="text-zinc-400 mt-3 text-lg"></div>
-      <div id="offset" class="text-emerald-500 font-mono mt-1">+1.000 h</div>
+    <section class="mb-32 relative">
+      <div class="absolute inset-0 bg-primary/5 blur-[120px] rounded-full pointer-events-none"></div>
+      <div class="glass-card p-8 md:p-12 rounded-xl border border-outline-variant/10 text-center relative overflow-hidden">
+        
+        <div class="flex flex-col items-center justify-center gap-4">
+          <span id="region-name" class="text-xs font-mono text-on-surface-variant uppercase tracking-[0.3em] font-bold">Europe Central (CET/CEST)</span>
+          
+          <div id="live-clock" class="text-6xl md:text-[9rem] font-bold font-headline tracking-tighter text-on-surface leading-none py-6">00:00:00</div>
+          
+          <div class="flex flex-col items-center gap-2 w-full max-w-md">
+            <span class="text-xs font-bold text-primary tracking-widest uppercase mt-2">Active Offset</span>
+            <div id="active-offset" class="text-3xl font-mono font-bold text-primary mb-4">+1.000 h</div>
+            
+            <div class="bg-surface-container-lowest h-1.5 w-full rounded-full overflow-hidden relative mb-10">
+              <div id="offset-progress" class="absolute inset-y-0 left-0 bg-primary w-0 rounded-full shadow-[0_0_15px_rgba(78,222,163,0.5)] transition-all duration-1000"></div>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-3 w-full">
+            <button onclick="switchRegion('europe-west')" id="btn-europe-west" class="region-btn group relative px-4 py-3 bg-surface-container-highest text-on-surface text-sm font-bold border border-outline-variant/20 rounded-lg hover:bg-surface-bright transition-all">Europe Western</button>
+            <button onclick="switchRegion('europe-central')" id="btn-europe-central" class="region-btn group relative px-4 py-3 bg-surface-container-highest text-on-surface text-sm font-bold border border-outline-variant/20 rounded-lg hover:bg-surface-bright transition-all btn-active">Europe Central</button>
+            <button onclick="switchRegion('europe-east')" id="btn-europe-east" class="region-btn group relative px-4 py-3 bg-surface-container-highest text-on-surface text-sm font-bold border border-outline-variant/20 rounded-lg hover:bg-surface-bright transition-all">Europe Eastern</button>
+            <button onclick="switchRegion('us-eastern')" id="btn-us-eastern" class="region-btn group relative px-4 py-3 bg-surface-container-highest text-on-surface text-sm font-bold border border-outline-variant/20 rounded-lg hover:bg-surface-bright transition-all">US Eastern</button>
+            <button onclick="switchRegion('us-central')" id="btn-us-central" class="region-btn group relative px-4 py-3 bg-surface-container-highest text-on-surface text-sm font-bold border border-outline-variant/20 rounded-lg hover:bg-surface-bright transition-all">US Central</button>
+            <button onclick="switchRegion('us-mountain')" id="btn-us-mountain" class="region-btn group relative px-4 py-3 bg-surface-container-highest text-on-surface text-sm font-bold border border-outline-variant/20 rounded-lg hover:bg-surface-bright transition-all">US Mountain</button>
+            <button onclick="switchRegion('us-pacific')" id="btn-us-pacific" class="region-btn group relative px-4 py-3 bg-surface-container-highest text-on-surface text-sm font-bold border border-outline-variant/20 rounded-lg hover:bg-surface-bright transition-all">US Pacific</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-32">
+      <div class="md:col-span-2 glass-card p-10 rounded-xl border border-outline-variant/10 hover:border-primary/30 transition-all group">
+        <div class="flex flex-col h-full justify-between">
+          <div>
+            <div class="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-6 text-primary">
+              <span class="material-symbols-outlined">timeline</span>
+            </div>
+            <h3 class="text-2xl font-headline font-bold mb-4">Continuous Linear Drift</h3>
+            <p class="text-on-surface-variant leading-relaxed">Our proprietary algorithm spreads the 3600-second shift smoothly across the seasons, eliminating jarring step adjustments that crash legacy services.</p>
+          </div>
+          <div class="mt-8 pt-8 border-t border-outline-variant/10 flex items-center gap-4 text-sm font-mono text-primary/60">
+            <span>DRIFT_MODEL_V2</span>
+            <span class="h-1 w-1 bg-outline-variant rounded-full"></span>
+            <span>OFFSET_PRECISION_99.9%</span>
+          </div>
+        </div>
+      </div>
+      <div class="glass-card p-10 rounded-xl border border-outline-variant/10 hover:border-primary/30 transition-all">
+        <div class="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-6 text-primary">
+          <span class="material-symbols-outlined">devices</span>
+        </div>
+        <h3 class="text-2xl font-headline font-bold mb-4">Works Anywhere</h3>
+        <p class="text-on-surface-variant leading-relaxed">Compatible with any standard NTP client. No plugins, no wrappers, no nonsense.</p>
+      </div>
+      <div class="glass-card p-10 rounded-xl border border-outline-variant/10 hover:border-primary/30 transition-all">
+        <div class="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-6 text-primary">
+          <span class="material-symbols-outlined">public</span>
+        </div>
+        <h3 class="text-2xl font-headline font-bold mb-4">Multiple Regions</h3>
+        <p class="text-on-surface-variant leading-relaxed">Edge nodes configured for specific geopolitical transition rules and base offsets.</p>
+      </div>
+      <div class="md:col-span-2 glass-card p-10 rounded-xl border border-outline-variant/10 flex flex-col md:flex-row gap-10 items-center overflow-hidden">
+        <div class="flex-1">
+          <h3 class="text-2xl font-headline font-bold mb-4">Real-time Visualization</h3>
+          <p class="text-on-surface-variant leading-relaxed mb-6">Monitor the micro-adjustments in real-time. Our dashboard provides full transparency into the mathematical smoothing process.</p>
+          <div class="flex items-center gap-2 text-primary font-bold cursor-pointer hover:underline decoration-2 underline-offset-4">
+              Explore the source <span class="material-symbols-outlined text-sm">arrow_forward</span>
+          </div>
+        </div>
+        <div class="w-full md:w-1/2 h-48 bg-surface-container-lowest rounded-lg border border-outline-variant/10 flex items-center justify-center relative group overflow-hidden">
+          <div class="absolute inset-0 bg-gradient-to-t from-primary/10 to-transparent"></div>
+          <div class="flex items-end gap-1 h-24">
+            <div class="w-2 bg-primary/20 h-1/4 rounded-full"></div>
+            <div class="w-2 bg-primary/40 h-2/4 rounded-full"></div>
+            <div class="w-2 bg-primary/60 h-3/4 rounded-full"></div>
+            <div class="w-2 bg-primary h-full rounded-full"></div>
+            <div class="w-2 bg-primary/60 h-3/4 rounded-full"></div>
+            <div class="w-2 bg-primary/40 h-2/4 rounded-full"></div>
+            <div class="w-2 bg-primary/20 h-1/4 rounded-full"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="mb-32">
+      <h2 class="text-4xl font-headline font-bold mb-12 flex items-center gap-4">
+        <span class="text-primary font-mono text-xl">01.</span> How to use
+      </h2>
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+        <div>
+          <p class="text-on-surface-variant text-lg leading-relaxed mb-8">
+              Integration is seamless. Just swap your default NTP server address with ours. We recommend configuring a standard pool as fallback.
+          </p>
+          <ul class="space-y-6">
+            <li class="flex items-start gap-4">
+              <div class="mt-1 w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center text-primary">
+                <span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">check</span>
+              </div>
+              <div>
+                <h4 class="font-bold text-on-surface">Standard Protocol</h4>
+                <p class="text-sm text-on-surface-variant">Uses standard UDP port 123.</p>
+              </div>
+            </li>
+            <li class="flex items-start gap-4">
+              <div class="mt-1 w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center text-primary">
+                <span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">check</span>
+              </div>
+              <div>
+                <h4 class="font-bold text-on-surface">Anycast Routing</h4>
+                <p class="text-sm text-on-surface-variant">Connect to the nearest node automatically.</p>
+              </div>
+            </li>
+          </ul>
+        </div>
+        
+        <div class="bg-surface-container-lowest rounded-xl border border-outline-variant/20 overflow-hidden">
+          <div class="px-6 py-3 border-b border-outline-variant/10 flex items-center justify-between bg-surface-container-low">
+            <div class="flex gap-1.5">
+              <div class="w-3 h-3 rounded-full bg-error/40"></div>
+              <div class="w-3 h-3 rounded-full bg-secondary-container"></div>
+              <div class="w-3 h-3 rounded-full bg-primary/40"></div>
+            </div>
+            <span class="text-xs font-mono text-on-surface-variant">ntp.conf</span>
+          </div>
+          <div class="p-8 font-mono text-sm relative group">
+            <pre class="text-on-surface-variant whitespace-pre-wrap"><span class="text-primary"># Use smoothtime pool</span>
+<span id="cmd-server">server europe-central.smoothtime.io iburst</span>
+
+<span class="text-primary"># Fallback pool</span>
+pool pool.ntp.org iburst</pre>
+            <button onclick="copyCommand()" class="absolute top-6 right-6 p-2 bg-surface-container-high rounded text-on-surface-variant hover:text-primary transition-colors">
+              <span id="copy-icon" class="material-symbols-outlined text-lg">content_copy</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="bg-[#131315] w-full py-12 border-t border-[#3c4a42]/15">
+    <div class="flex flex-col md:flex-row justify-between items-center px-8 max-w-7xl mx-auto gap-6 font-body text-sm">
+      <div class="flex flex-col gap-2 text-center md:text-left">
+        <div class="text-lg font-mono text-[#4edea3]">smoothtime</div>
+        <div class="text-[#bbcabf]">© 2026 smoothtime.</div>
+      </div>
+      <div class="flex flex-wrap justify-center gap-8">
+        <a class="text-[#bbcabf] hover:text-[#4edea3] transition-colors" href="https://github.com/tommodore/smoothtime">GitHub</a>
+        <a class="text-[#bbcabf] hover:text-[#4edea3] transition-colors" href="#">Documentation</a>
+        <a class="text-[#bbcabf] hover:text-[#4edea3] transition-colors" href="#">Status Page</a>
+      </div>
+      <div class="text-xs text-outline-variant uppercase tracking-widest font-bold">
+          MIT Licensed Open Source
+      </div>
     </div>
-
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-12">
-      <button onclick="switchRegion('europe-west')" id="btn-europe-west" class="px-6 py-3 rounded-2xl font-medium transition bg-zinc-800">Europe Western</button>
-      <button onclick="switchRegion('europe-central')" id="btn-europe-central" class="px-6 py-3 rounded-2xl font-medium transition bg-emerald-600">Europe Central</button>
-      <button onclick="switchRegion('europe-east')" id="btn-europe-east" class="px-6 py-3 rounded-2xl font-medium transition bg-zinc-800">Europe Eastern</button>
-      <button onclick="switchRegion('us-eastern')" id="btn-us-eastern" class="px-6 py-3 rounded-2xl font-medium transition bg-zinc-800">US Eastern</button>
-      <button onclick="switchRegion('us-central')" id="btn-us-central" class="px-6 py-3 rounded-2xl font-medium transition bg-zinc-800">US Central</button>
-      <button onclick="switchRegion('us-mountain')" id="btn-us-mountain" class="px-6 py-3 rounded-2xl font-medium transition bg-zinc-800">US Mountain</button>
-      <button onclick="switchRegion('us-pacific')" id="btn-us-pacific" class="px-6 py-3 rounded-2xl font-medium transition bg-zinc-800">US Pacific</button>
-    </div>
-
-    <div class="bg-zinc-900 rounded-3xl p-8 text-left max-w-md mx-auto">
-      <h2 class="text-xl font-semibold mb-4">How to use it</h2>
-      <code onclick="copyCommand('europe-west')" id="cmd-europe-west" class="hidden bg-black p-4 rounded-2xl text-emerald-400 cursor-pointer hover:text-emerald-300 mb-3">server europe-west.smoothtime.io iburst</code>
-      <code onclick="copyCommand('europe-central')" id="cmd-europe-central" class="block bg-black p-4 rounded-2xl text-emerald-400 cursor-pointer hover:text-emerald-300 mb-3">server europe-central.smoothtime.io iburst</code>
-      <code onclick="copyCommand('europe-east')" id="cmd-europe-east" class="hidden bg-black p-4 rounded-2xl text-emerald-400 cursor-pointer hover:text-emerald-300 mb-3">server europe-east.smoothtime.io iburst</code>
-      <code onclick="copyCommand('us-eastern')" id="cmd-us-eastern" class="hidden bg-black p-4 rounded-2xl text-emerald-400 cursor-pointer hover:text-emerald-300 mb-3">server us-eastern.smoothtime.io iburst</code>
-      <code onclick="copyCommand('us-central')" id="cmd-us-central" class="hidden bg-black p-4 rounded-2xl text-emerald-400 cursor-pointer hover:text-emerald-300 mb-3">server us-central.smoothtime.io iburst</code>
-      <code onclick="copyCommand('us-mountain')" id="cmd-us-mountain" class="hidden bg-black p-4 rounded-2xl text-emerald-400 cursor-pointer hover:text-emerald-300 mb-3">server us-mountain.smoothtime.io iburst</code>
-      <code onclick="copyCommand('us-pacific')" id="cmd-us-pacific" class="hidden bg-black p-4 rounded-2xl text-emerald-400 cursor-pointer hover:text-emerald-300">server us-pacific.smoothtime.io iburst</code>
-    </div>
-
-    <p class="text-xs text-zinc-500 mt-16">
-      Open Source • MIT • 
-      <a href="https://github.com/tommodore/smoothtime" class="text-emerald-400 hover:underline">github.com/tommodore/smoothtime</a>
-    </p>
-  </div>
+  </footer>
 
   <script>
+    // --- Configuration ---
     const regions = {
       "europe-west":    { name: "Europe Western (WET/WEST)", base: 0.0,  rule: "eu" },
       "europe-central": { name: "Europe Central (CET/CEST)", base: 1.0,  rule: "eu" },
@@ -104,12 +341,13 @@
       const tEnd = dates.end;
 
       let offset;
+      let fraction = 0;
 
       if (now >= tStart && now < tEnd) {
         // Summer: Drifting down
         const totalSummer = (tEnd - tStart);
         const passedSummer = (now - tStart);
-        const fraction = passedSummer / totalSummer;
+        fraction = passedSummer / totalSummer;
         offset = cfg.base + 1.0 - fraction;
       } else {
         // Winter: Drifting up
@@ -123,22 +361,22 @@
 
         const totalWinter = (wEnd - wStart);
         const passedWinter = (now - wStart);
-        const fraction = passedWinter / totalWinter;
+        fraction = passedWinter / totalWinter;
         offset = cfg.base + fraction;
       }
 
-      return offset;
+      return { offset, fraction };
     }
 
+    // --- UI Updaters ---
     function updateClock() {
-      const offsetH = smoothOffset();
+      const data = smoothOffset();
+      const offsetH = data.offset;
       const utcNow = new Date();
       
-      // Calculate the new time by adding the fractional offset to the raw UTC time
       const smoothTime = new Date(utcNow.getTime() + offsetH * 3600 * 1000);
 
-      // Force output to UTC so the browser doesn't add the local system timezone
-      document.getElementById("clock").textContent = 
+      document.getElementById("live-clock").textContent = 
         smoothTime.toLocaleTimeString("en-US", { 
           timeZone: "UTC", 
           hour12: false, 
@@ -147,41 +385,44 @@
           second: "2-digit" 
         });
 
-      document.getElementById("region").textContent = regions[currentRegion].name;
+      document.getElementById("region-name").textContent = regions[currentRegion].name;
       
       const sign = offsetH >= 0 ? "+" : "";
-      document.getElementById("offset").textContent = `${sign}${offsetH.toFixed(3)} h`;
+      document.getElementById("active-offset").textContent = `${sign}${offsetH.toFixed(4)} h`;
+      
+      // Update Progress Bar based on where we are in the +/- 1 hour drift
+      // We calculate progress relative to the +1 hour max drift
+      const progressPercent = Math.max(0, Math.min(100, (offsetH - regions[currentRegion].base) * 100));
+      document.getElementById("offset-progress").style.width = `${progressPercent}%`;
     }
 
     function switchRegion(region) {
       currentRegion = region;
-      Object.keys(regions).forEach(r => {
-        const btn = document.getElementById(`btn-${r}`);
-        const cmd = document.getElementById(`cmd-${r}`);
-        
-        if (btn) {
-          btn.classList.toggle("bg-emerald-600", r === region);
-          btn.classList.toggle("bg-zinc-800", r !== region);
-        }
-        
-        // Only show the command for the active region
-        if (cmd) {
-          cmd.classList.toggle("block", r === region);
-          cmd.classList.toggle("hidden", r !== region);
+      
+      // Update Buttons
+      document.querySelectorAll('.region-btn').forEach(btn => {
+        if (btn.id === `btn-${region}`) {
+          btn.classList.add('btn-active');
+        } else {
+          btn.classList.remove('btn-active');
         }
       });
+      
+      // Update Code Snippet
+      document.getElementById('cmd-server').textContent = `server ${region}.smoothtime.io iburst`;
+      
       updateClock();
     }
 
-    function copyCommand(region) {
-      navigator.clipboard.writeText(`server ${region}.smoothtime.io iburst`);
-      const el = document.getElementById(`cmd-${region}`);
-      const orig = el.textContent;
-      el.textContent = "✅ Copied!";
-      setTimeout(() => el.textContent = orig, 1500);
+    function copyCommand() {
+      const cmdText = document.getElementById('cmd-server').textContent;
+      navigator.clipboard.writeText(cmdText);
+      const icon = document.getElementById('copy-icon');
+      icon.textContent = "check";
+      setTimeout(() => icon.textContent = "content_copy", 1500);
     }
 
-    // Auto-detect region
+    // --- Initialization ---
     const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
     if (["America/New_York","America/Toronto"].includes(tz)) currentRegion = "us-eastern";
     else if (["America/Chicago"].includes(tz)) currentRegion = "us-central";
@@ -191,7 +432,6 @@
     else if (["Europe/Bucharest","Europe/Helsinki","Europe/Riga","Europe/Tallinn","Europe/Vilnius","Europe/Sofia","Europe/Athens"].includes(tz)) currentRegion = "europe-east";
     else currentRegion = "europe-central";
 
-    // Initialize UI state based on auto-detection
     switchRegion(currentRegion);
     setInterval(updateClock, 1000);
   </script>

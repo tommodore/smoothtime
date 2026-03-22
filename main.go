@@ -3,121 +3,163 @@ package main
 import (
 	"encoding/binary"
 	"flag"
-	"fmt"
-	"log/slog"
+	"log"
 	"net"
-	"net/http"
-	"os"
-	"os/signal"
-	"syscall"
 	"time"
-
-	"math"
 )
 
-const defaultNTPPort = "1123"
-const defaultHTTPPort = "8080"
+type Rule string
+
+const (
+	RuleEU Rule = "eu"
+	RuleUS Rule = "us"
+)
 
 type RegionConfig struct {
-	Name      string
-	Base      float64
-	Amplitude float64
-	Phase     int
+	Name string
+	Base float64
+	Rule Rule
 }
 
-var regions = map[string]RegionConfig{
-	"cet":  {"Central Europe (CET/CEST)", 1.0, 0.5, 80},
-	"eest": {"Eastern Europe (EET/EEST)", 2.0, 0.5, 80},
+var Regions = map[string]RegionConfig{
+	"europe-west":    {"Europe Western (WET/WEST)", 0.0, RuleEU},
+	"europe-central": {"Europe Central (CET/CEST)", 1.0, RuleEU},
+	"europe-east":    {"Europe Eastern (EET/EEST)", 2.0, RuleEU},
+	"us-eastern":     {"US Eastern (EST/EDT)", -5.0, RuleUS},
+	"us-central":     {"US Central (CST/CDT)", -6.0, RuleUS},
+	"us-mountain":    {"US Mountain (MST/MDT)", -7.0, RuleUS},
+	"us-pacific":     {"US Pacific (PST/PDT)", -8.0, RuleUS},
 }
 
-func smoothOffset(region string) float64 {
-	cfg, ok := regions[region]
-	if !ok {
-		cfg = regions["cet"]
-		slog.Warn("unknown region, falling back to CET", "region", region)
-	}
-	doy := time.Now().UTC().YearDay()
-	phase := 2 * math.Pi * float64(doy-cfg.Phase) / 365.0
-	return cfg.Base + cfg.Amplitude*(1+math.Sin(phase))
-}
-
-func toNTPTime(t time.Time) [8]byte {
-	sec := uint32(t.Unix() + 2208988800)
-	frac := uint32(t.Nanosecond() * 4294967296 / 1e9)
-	var b [8]byte
-	binary.BigEndian.PutUint32(b[0:4], sec)
-	binary.BigEndian.PutUint32(b[4:8], frac)
-	return b
-}
+// Seconds between NTP epoch (1900) and Unix epoch (1970)
+const ntpEpochOffset = 2208988800
 
 func main() {
-	regionPtr := flag.String("region", "cet", "region (cet, eest)")
-	ntpPortPtr := flag.String("ntp-port", defaultNTPPort, "NTP UDP port")
-	httpPortPtr := flag.String("http-port", defaultHTTPPort, "HTTP health port")
+	regionFlag := flag.String("region", "europe-central", "Region for DST rules (e.g., europe-central, us-eastern)")
+	portFlag := flag.Int("ntp-port", 123, "UDP port to listen on")
 	flag.Parse()
 
-	region := *regionPtr
-	offsetHours := smoothOffset(region)
-
-	slog.Info("smoothtime started",
-		"region", regions[region].Name,
-		"offset_hours", fmt.Sprintf("%.3f", offsetHours),
-		"ntp_port", *ntpPortPtr,
-		"http_port", *httpPortPtr)
-
-	// Graceful shutdown
-	ctx, stop := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGTERM)
-	defer stop()
-
-	// HTTP health check (optional but very useful on VPS)
-	go func() {
-		http.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
-			w.Header().Set("Content-Type", "application/json")
-			fmt.Fprintf(w, `{"status":"ok","region":"%s","offset":%.3f}`, region, offsetHours)
-		})
-		if err := http.ListenAndServe(":"+*httpPortPtr, nil); err != nil && err != http.ErrServerClosed {
-			slog.Error("http server failed", "error", err)
-		}
-	}()
-
-	// NTP server (exactly the same reliable logic you already tested)
-	addr, _ := net.ResolveUDPAddr("udp", ":"+*ntpPortPtr)
-	conn, err := net.ListenUDP("udp", addr)
+	addr := net.UDPAddr{
+		Port: *portFlag,
+		IP:   net.ParseIP("0.0.0.0"),
+	}
+	conn, err := net.ListenUDP("udp", &addr)
 	if err != nil {
-		slog.Error("failed to listen", "error", err)
-		os.Exit(1)
+		log.Fatalf("Failed to listen on port %d: %v", *portFlag, err)
 	}
 	defer conn.Close()
 
+	log.Printf("smoothtime server listening on udp :%d for region %s", *portFlag, *regionFlag)
+
 	buf := make([]byte, 48)
 	for {
-		select {
-		case <-ctx.Done():
-			slog.Info("shutting down gracefully")
-			return
-		default:
-			n, client, err := conn.ReadFromUDP(buf)
-			if err != nil || n < 48 || (buf[0]&0x07) != 3 {
-				continue
-			}
-
-			now := time.Now().UTC()
-			smoothTime := now.Add(time.Duration(offsetHours*3600) * time.Second)
-
-			resp := make([]byte, 48)
-			resp[0] = 0x24
-			resp[1] = 2
-			resp[2] = 6
-			resp[3] = 0xec
-
-			ref := toNTPTime(smoothTime.Add(-time.Second))
-			copy(resp[16:24], ref[:])
-			copy(resp[24:32], buf[40:48])
-			rxtx := toNTPTime(smoothTime)
-			copy(resp[32:40], rxtx[:])
-			copy(resp[40:48], rxtx[:])
-
-			conn.WriteToUDP(resp, client)
+		n, clientAddr, err := conn.ReadFromUDP(buf)
+		if err != nil || n < 48 {
+			continue
 		}
+
+		go handleNTPRequest(conn, clientAddr, buf, *regionFlag)
 	}
+}
+
+func handleNTPRequest(conn *net.UDPConn, clientAddr *net.UDPAddr, req []byte, region string) {
+	resp := make([]byte, 48)
+	
+	// Set NTP protocol headers
+	resp[0] = 0x1C   // LI=0, VN=3, Mode=4 (Server)
+	resp[1] = 2      // Stratum 2
+	resp[2] = req[2] // Poll interval copied from request
+	resp[3] = 0xFA   // Precision (-6)
+
+	// Copy Originate Timestamp directly from the client's Transmit Timestamp
+	copy(resp[24:32], req[40:48])
+
+	nowUTC := time.Now().UTC()
+	smoothTime := ApplySmoothTime(nowUTC, region)
+
+	// Convert smoothTime into NTP 64-bit timestamp format
+	sec := uint32(smoothTime.Unix() + ntpEpochOffset)
+	frac := uint32((smoothTime.Nanosecond() * int(1<<32)) / 1e9)
+
+	// Set Receive Timestamp
+	binary.BigEndian.PutUint32(resp[32:36], sec)
+	binary.BigEndian.PutUint32(resp[36:40], frac)
+
+	// Set Transmit Timestamp
+	binary.BigEndian.PutUint32(resp[40:44], sec)
+	binary.BigEndian.PutUint32(resp[44:48], frac)
+
+	conn.WriteToUDP(resp, clientAddr)
+}
+
+func getNthSunday(year int, month time.Month, nth int) time.Time {
+	t := time.Date(year, month, 1, 0, 0, 0, 0, time.UTC)
+	count := 0
+	for {
+		if t.Weekday() == time.Sunday {
+			count++
+			if count == nth {
+				return t
+			}
+		}
+		t = t.AddDate(0, 0, 1)
+	}
+}
+
+func getLastSunday(year int, month time.Month) time.Time {
+	t := time.Date(year, month+1, 1, 0, 0, 0, 0, time.UTC).AddDate(0, 0, -1)
+	for t.Weekday() != time.Sunday {
+		t = t.AddDate(0, 0, -1)
+	}
+	return t
+}
+
+func getDstDates(year int, rule Rule) (start time.Time, end time.Time) {
+	if rule == RuleEU {
+		return getLastSunday(year, time.March), getLastSunday(year, time.October)
+	} else if rule == RuleUS {
+		return getNthSunday(year, time.March, 2), getNthSunday(year, time.November, 1)
+	}
+	return time.Time{}, time.Time{}
+}
+
+func CalculateSmoothOffset(now time.Time, regionID string) float64 {
+	cfg, exists := Regions[regionID]
+	if !exists {
+		cfg = Regions["europe-central"]
+	}
+
+	year := now.Year()
+	tStart, tEnd := getDstDates(year, cfg.Rule)
+
+	var offset float64
+
+	if !now.Before(tStart) && now.Before(tEnd) {
+		totalSummer := tEnd.Sub(tStart).Seconds()
+		passedSummer := now.Sub(tStart).Seconds()
+		fraction := passedSummer / totalSummer
+		offset = cfg.Base + 1.0 - fraction
+	} else {
+		wStart := tEnd
+		wEnd, _ := getDstDates(year+1, cfg.Rule)
+
+		if now.Before(tStart) {
+			_, prevEnd := getDstDates(year-1, cfg.Rule)
+			wStart = prevEnd
+			wEnd = tStart
+		}
+
+		totalWinter := wEnd.Sub(wStart).Seconds()
+		passedWinter := now.Sub(wStart).Seconds()
+		fraction := passedWinter / totalWinter
+		offset = cfg.Base + fraction
+	}
+
+	return offset
+}
+
+func ApplySmoothTime(utcNow time.Time, regionID string) time.Time {
+	offsetHours := CalculateSmoothOffset(utcNow, regionID)
+	offsetDuration := time.Duration(offsetHours * float64(time.Hour))
+	return utcNow.Add(offsetDuration)
 }

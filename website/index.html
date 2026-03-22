@@ -23,9 +23,9 @@
     </div>
 
     <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-12">
-      <button onclick="switchRegion('europe-west')" id="btn-europe-west" class="px-6 py-3 rounded-2xl font-medium transition bg-zinc-800">WET/WEST (UK/IE)</button>
-      <button onclick="switchRegion('europe-central')" id="btn-europe-central" class="px-6 py-3 rounded-2xl font-medium transition bg-emerald-600">CET/CEST</button>
-      <button onclick="switchRegion('europe-east')" id="btn-europe-east" class="px-6 py-3 rounded-2xl font-medium transition bg-zinc-800">EET/EEST</button>
+      <button onclick="switchRegion('europe-west')" id="btn-europe-west" class="px-6 py-3 rounded-2xl font-medium transition bg-zinc-800">Europe Western</button>
+      <button onclick="switchRegion('europe-central')" id="btn-europe-central" class="px-6 py-3 rounded-2xl font-medium transition bg-emerald-600">Europe Central</button>
+      <button onclick="switchRegion('europe-east')" id="btn-europe-east" class="px-6 py-3 rounded-2xl font-medium transition bg-zinc-800">Europe Eastern</button>
       <button onclick="switchRegion('us-eastern')" id="btn-us-eastern" class="px-6 py-3 rounded-2xl font-medium transition bg-zinc-800">US Eastern</button>
       <button onclick="switchRegion('us-central')" id="btn-us-central" class="px-6 py-3 rounded-2xl font-medium transition bg-zinc-800">US Central</button>
       <button onclick="switchRegion('us-mountain')" id="btn-us-mountain" class="px-6 py-3 rounded-2xl font-medium transition bg-zinc-800">US Mountain</button>
@@ -51,9 +51,9 @@
 
   <script>
     const regions = {
-      "europe-west":    { name: "Western Europe (WET/WEST)", base: 0.0,  rule: "eu" },
-      "europe-central": { name: "Central Europe (CET/CEST)", base: 1.0,  rule: "eu" },
-      "europe-east":    { name: "Eastern Europe (EET/EEST)", base: 2.0,  rule: "eu" },
+      "europe-west":    { name: "Europe Western (WET/WEST)", base: 0.0,  rule: "eu" },
+      "europe-central": { name: "Europe Central (CET/CEST)", base: 1.0,  rule: "eu" },
+      "europe-east":    { name: "Europe Eastern (EET/EEST)", base: 2.0,  rule: "eu" },
       "us-eastern":     { name: "US Eastern (EST/EDT)",      base: -5.0, rule: "us" },
       "us-central":     { name: "US Central (CST/CDT)",      base: -6.0, rule: "us" },
       "us-mountain":    { name: "US Mountain (MST/MDT)",     base: -7.0, rule: "us" },
@@ -133,10 +133,19 @@
     function updateClock() {
       const offsetH = smoothOffset();
       const utcNow = new Date();
+      
+      // Calculate the new time by adding the fractional offset to the raw UTC time
       const smoothTime = new Date(utcNow.getTime() + offsetH * 3600 * 1000);
 
+      // Force output to UTC so the browser doesn't add the local system timezone
       document.getElementById("clock").textContent = 
-        smoothTime.toLocaleTimeString("en-US", { hour12: false, hour: "2-digit", minute: "2-digit", second: "2-digit" });
+        smoothTime.toLocaleTimeString("en-US", { 
+          timeZone: "UTC", 
+          hour12: false, 
+          hour: "2-digit", 
+          minute: "2-digit", 
+          second: "2-digit" 
+        });
 
       document.getElementById("region").textContent = regions[currentRegion].name;
       

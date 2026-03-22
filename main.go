@@ -3,11 +3,15 @@ package main
 import (
 	"encoding/binary"
 	"flag"
+	"fmt"
 	"log"
 	"net"
+	"net/http"
 	"strings"
 	"time"
 )
+
+// --- Configuration & Constants ---
 
 type Rule string
 
@@ -22,6 +26,7 @@ type RegionConfig struct {
 	Rule Rule
 }
 
+// Regions defines the timezone offsets and DST rules for each supported node.
 var Regions = map[string]RegionConfig{
 	"europe-west":    {"Europe Western (WET/WEST)", 0.0, RuleEU},
 	"europe-central": {"Europe Central (CET/CEST)", 1.0, RuleEU},
@@ -34,18 +39,24 @@ var Regions = map[string]RegionConfig{
 
 const ntpEpochOffset = 2208988800
 
+// --- Main Entry Point ---
+
 func main() {
-	// The new binds flag allows mapping specific IPs to specific mathematical regions
-	bindsFlag := flag.String("binds", "0.0.0.0=europe-central", "Comma-separated list of IP=region bindings (e.g. 10.0.0.1=europe-central,10.0.0.2=us-eastern)")
-	portFlag := flag.Int("ntp-port", 123, "UDP port to listen on")
+	// Flags for binding specific IPs to regions and setting the NTP port.
+	bindsFlag := flag.String("binds", "::=europe-central", "Comma-separated list of IP=region bindings")
+	portFlag := flag.Int("ntp-port", 123, "UDP port to listen on for NTP")
+	healthPort := flag.String("health-port", "8080", "TCP port for HTTP health checks")
 	flag.Parse()
 
+	// 1. Start the HTTP Health Check Server (for Cloudflare Uptime)
+	go startHealthServer(*healthPort)
+
+	// 2. Parse and start the regional NTP listeners
 	binds := strings.Split(*bindsFlag, ",")
 	if len(binds) == 0 {
-		log.Fatal("No bindings specified")
+		log.Fatal("No bindings specified via -binds flag")
 	}
 
-	// Spin up a concurrent UDP listener for every IP provided
 	for _, b := range binds {
 		parts := strings.Split(b, "=")
 		if len(parts) != 2 {
@@ -57,11 +68,26 @@ func main() {
 			log.Fatalf("Unknown region specified in bind: %s", region)
 		}
 
+		// Each IP/Region pair gets its own isolated UDP listener routine.
 		go startServer(ip, *portFlag, region)
 	}
 
-	// Block the main thread forever while the goroutines handle the UDP traffic
+	// Keep the main thread alive indefinitely.
 	select {}
+}
+
+// --- Server Components ---
+
+func startHealthServer(port string) {
+	http.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusOK)
+		fmt.Fprint(w, "OK")
+	})
+
+	log.Printf("Health Check: HTTP server active on port %s at /health", port)
+	if err := http.ListenAndServe(":"+port, nil); err != nil {
+		log.Fatalf("Failed to start health server: %v", err)
+	}
 }
 
 func startServer(ip string, port int, region string) {
@@ -75,7 +101,7 @@ func startServer(ip string, port int, region string) {
 	}
 	defer conn.Close()
 
-	log.Printf("Node Active: Listening on %s:%d routing to [%s]", ip, port, region)
+	log.Printf("Node Online: [%s] listening on %s:%d", region, ip, port)
 
 	buf := make([]byte, 48)
 	for {
@@ -83,20 +109,19 @@ func startServer(ip string, port int, region string) {
 		if err != nil || n < 48 {
 			continue
 		}
-		// Pass the specific region of this listener into the request handler
+		// Handle each incoming NTP request in a non-blocking goroutine.
 		go handleNTPRequest(conn, clientAddr, buf, region)
 	}
 }
 
 func handleNTPRequest(conn *net.UDPConn, clientAddr *net.UDPAddr, req []byte, region string) {
 	resp := make([]byte, 48)
-	
-	resp[0] = 0x1C   // LI=0, VN=3, Mode=4 (Server)
-	resp[1] = 2      // Stratum 2
-	resp[2] = req[2] // Poll interval
-	resp[3] = 0xFA   // Precision (-6)
+	resp[0] = 0x1C // LI=0, VN=3, Mode=4 (Server)
+	resp[1] = 2    // Stratum 2
+	resp[2] = req[2]
+	resp[3] = 0xFA // Precision (-6)
 
-	copy(resp[24:32], req[40:48])
+	copy(resp[24:32], req[40:48]) // Copy Transmit Timestamp to Originate Timestamp
 
 	nowUTC := time.Now().UTC()
 	smoothTime := ApplySmoothTime(nowUTC, region)
@@ -104,13 +129,15 @@ func handleNTPRequest(conn *net.UDPConn, clientAddr *net.UDPAddr, req []byte, re
 	sec := uint32(smoothTime.Unix() + ntpEpochOffset)
 	frac := uint32((smoothTime.Nanosecond() * int(1<<32)) / 1e9)
 
-	binary.BigEndian.PutUint32(resp[32:36], sec)
+	binary.BigEndian.PutUint32(resp[32:36], sec) // Receive Timestamp
 	binary.BigEndian.PutUint32(resp[36:40], frac)
-	binary.BigEndian.PutUint32(resp[40:44], sec)
+	binary.BigEndian.PutUint32(resp[40:44], sec) // Transmit Timestamp
 	binary.BigEndian.PutUint32(resp[44:48], frac)
 
 	conn.WriteToUDP(resp, clientAddr)
 }
+
+// --- Time Manipulation Logic ---
 
 func getNthSunday(year int, month time.Month, nth int) time.Time {
 	t := time.Date(year, month, 1, 0, 0, 0, 0, time.UTC)
@@ -149,7 +176,6 @@ func CalculateSmoothOffset(now time.Time, regionID string) float64 {
 	tStart, tEnd := getDstDates(year, cfg.Rule)
 
 	var offset float64
-
 	if !now.Before(tStart) && now.Before(tEnd) {
 		totalSummer := tEnd.Sub(tStart).Seconds()
 		passedSummer := now.Sub(tStart).Seconds()
@@ -158,19 +184,16 @@ func CalculateSmoothOffset(now time.Time, regionID string) float64 {
 	} else {
 		wStart := tEnd
 		wEnd, _ := getDstDates(year+1, cfg.Rule)
-
 		if now.Before(tStart) {
 			_, prevEnd := getDstDates(year-1, cfg.Rule)
 			wStart = prevEnd
 			wEnd = tStart
 		}
-
 		totalWinter := wEnd.Sub(wStart).Seconds()
 		passedWinter := now.Sub(wStart).Seconds()
 		fraction := passedWinter / totalWinter
 		offset = cfg.Base + fraction
 	}
-
 	return offset
 }
 

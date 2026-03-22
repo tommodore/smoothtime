@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>smoothtime — NTP without the trauma</title>
+  <title>smoothtime - NTP without the trauma</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     .clock { font-size: 5.5rem; font-family: monospace; letter-spacing: 0.05em; }
@@ -16,34 +16,31 @@
     <h1 class="text-6xl font-bold tracking-tighter mb-2">smoothtime</h1>
     <p class="text-emerald-400 text-xl mb-10">NTP without the twice-yearly trauma</p>
 
-    <!-- Live Clock -->
     <div class="bg-zinc-900 rounded-3xl p-10 mb-10 shadow-2xl">
       <div id="clock" class="clock text-emerald-400">00:00:00</div>
       <div id="region" class="text-zinc-400 mt-3 text-lg"></div>
       <div id="offset" class="text-emerald-500 font-mono mt-1">+1.000 h</div>
     </div>
 
-    <!-- Region Buttons -->
     <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-12">
-      <button onclick="switchRegion('uk')" id="btn-uk" class="px-6 py-3 rounded-2xl font-medium transition bg-zinc-800">UK (GMT/BST)</button>
-      <button onclick="switchRegion('cet')" id="btn-cet" class="px-6 py-3 rounded-2xl font-medium transition bg-emerald-600">CET/CEST</button>
-      <button onclick="switchRegion('eest')" id="btn-eest" class="px-6 py-3 rounded-2xl font-medium transition bg-zinc-800">EET/EEST</button>
-      <button onclick="switchRegion('us-east')" id="btn-us-east" class="px-6 py-3 rounded-2xl font-medium transition bg-zinc-800">US Eastern</button>
+      <button onclick="switchRegion('europe-west')" id="btn-europe-west" class="px-6 py-3 rounded-2xl font-medium transition bg-zinc-800">WET/WEST (UK/IE)</button>
+      <button onclick="switchRegion('europe-central')" id="btn-europe-central" class="px-6 py-3 rounded-2xl font-medium transition bg-emerald-600">CET/CEST</button>
+      <button onclick="switchRegion('europe-east')" id="btn-europe-east" class="px-6 py-3 rounded-2xl font-medium transition bg-zinc-800">EET/EEST</button>
+      <button onclick="switchRegion('us-eastern')" id="btn-us-eastern" class="px-6 py-3 rounded-2xl font-medium transition bg-zinc-800">US Eastern</button>
       <button onclick="switchRegion('us-central')" id="btn-us-central" class="px-6 py-3 rounded-2xl font-medium transition bg-zinc-800">US Central</button>
       <button onclick="switchRegion('us-mountain')" id="btn-us-mountain" class="px-6 py-3 rounded-2xl font-medium transition bg-zinc-800">US Mountain</button>
       <button onclick="switchRegion('us-pacific')" id="btn-us-pacific" class="px-6 py-3 rounded-2xl font-medium transition bg-zinc-800">US Pacific</button>
     </div>
 
-    <!-- Commands -->
     <div class="bg-zinc-900 rounded-3xl p-8 text-left max-w-md mx-auto">
       <h2 class="text-xl font-semibold mb-4">How to use it</h2>
-      <code onclick="copyCommand('uk')" id="cmd-uk" class="block bg-black p-4 rounded-2xl text-emerald-400 cursor-pointer hover:text-emerald-300 mb-3">server uk.smoothtime.io iburst</code>
-      <code onclick="copyCommand('cet')" id="cmd-cet" class="block bg-black p-4 rounded-2xl text-emerald-400 cursor-pointer hover:text-emerald-300 mb-3">server cet.smoothtime.io iburst</code>
-      <code onclick="copyCommand('eest')" id="cmd-eest" class="block bg-black p-4 rounded-2xl text-emerald-400 cursor-pointer hover:text-emerald-300 mb-3">server eest.smoothtime.io iburst</code>
-      <code onclick="copyCommand('us-east')" id="cmd-us-east" class="block bg-black p-4 rounded-2xl text-emerald-400 cursor-pointer hover:text-emerald-300 mb-3">server us-east.smoothtime.io iburst</code>
-      <code onclick="copyCommand('us-central')" id="cmd-us-central" class="block bg-black p-4 rounded-2xl text-emerald-400 cursor-pointer hover:text-emerald-300 mb-3">server us-central.smoothtime.io iburst</code>
-      <code onclick="copyCommand('us-mountain')" id="cmd-us-mountain" class="block bg-black p-4 rounded-2xl text-emerald-400 cursor-pointer hover:text-emerald-300 mb-3">server us-mountain.smoothtime.io iburst</code>
-      <code onclick="copyCommand('us-pacific')" id="cmd-us-pacific" class="block bg-black p-4 rounded-2xl text-emerald-400 cursor-pointer hover:text-emerald-300">server us-pacific.smoothtime.io iburst</code>
+      <code onclick="copyCommand('europe-west')" id="cmd-europe-west" class="hidden bg-black p-4 rounded-2xl text-emerald-400 cursor-pointer hover:text-emerald-300 mb-3">server europe-west.smoothtime.io iburst</code>
+      <code onclick="copyCommand('europe-central')" id="cmd-europe-central" class="block bg-black p-4 rounded-2xl text-emerald-400 cursor-pointer hover:text-emerald-300 mb-3">server europe-central.smoothtime.io iburst</code>
+      <code onclick="copyCommand('europe-east')" id="cmd-europe-east" class="hidden bg-black p-4 rounded-2xl text-emerald-400 cursor-pointer hover:text-emerald-300 mb-3">server europe-east.smoothtime.io iburst</code>
+      <code onclick="copyCommand('us-eastern')" id="cmd-us-eastern" class="hidden bg-black p-4 rounded-2xl text-emerald-400 cursor-pointer hover:text-emerald-300 mb-3">server us-eastern.smoothtime.io iburst</code>
+      <code onclick="copyCommand('us-central')" id="cmd-us-central" class="hidden bg-black p-4 rounded-2xl text-emerald-400 cursor-pointer hover:text-emerald-300 mb-3">server us-central.smoothtime.io iburst</code>
+      <code onclick="copyCommand('us-mountain')" id="cmd-us-mountain" class="hidden bg-black p-4 rounded-2xl text-emerald-400 cursor-pointer hover:text-emerald-300 mb-3">server us-mountain.smoothtime.io iburst</code>
+      <code onclick="copyCommand('us-pacific')" id="cmd-us-pacific" class="hidden bg-black p-4 rounded-2xl text-emerald-400 cursor-pointer hover:text-emerald-300">server us-pacific.smoothtime.io iburst</code>
     </div>
 
     <p class="text-xs text-zinc-500 mt-16">
@@ -54,28 +51,83 @@
 
   <script>
     const regions = {
-      uk:         { name: "UK (GMT/BST)",          base: 0.0,  dstEnd: "2025-10-26", dstStart: "2026-03-29" },
-      cet:        { name: "Central Europe (CET/CEST)", base: 1.0,  dstEnd: "2025-10-26", dstStart: "2026-03-29" },
-      eest:       { name: "Eastern Europe (EET/EEST)", base: 2.0,  dstEnd: "2025-10-26", dstStart: "2026-03-29" },
-      "us-east":  { name: "US Eastern (EST/EDT)",   base: -5.0, dstEnd: "2025-11-02", dstStart: "2026-03-08" },
-      "us-central":{ name: "US Central (CST/CDT)",  base: -6.0, dstEnd: "2025-11-02", dstStart: "2026-03-08" },
-      "us-mountain":{ name: "US Mountain (MST/MDT)", base: -7.0, dstEnd: "2025-11-02", dstStart: "2026-03-08" },
-      "us-pacific":{ name: "US Pacific (PST/PDT)",  base: -8.0, dstEnd: "2025-11-02", dstStart: "2026-03-08" }
+      "europe-west":    { name: "Western Europe (WET/WEST)", base: 0.0,  rule: "eu" },
+      "europe-central": { name: "Central Europe (CET/CEST)", base: 1.0,  rule: "eu" },
+      "europe-east":    { name: "Eastern Europe (EET/EEST)", base: 2.0,  rule: "eu" },
+      "us-eastern":     { name: "US Eastern (EST/EDT)",      base: -5.0, rule: "us" },
+      "us-central":     { name: "US Central (CST/CDT)",      base: -6.0, rule: "us" },
+      "us-mountain":    { name: "US Mountain (MST/MDT)",     base: -7.0, rule: "us" },
+      "us-pacific":     { name: "US Pacific (PST/PDT)",      base: -8.0, rule: "us" }
     };
 
-    let currentRegion = "cet";
+    let currentRegion = "europe-central";
 
+    // --- Dynamic Date Calculators ---
+    function getNthSunday(year, month, nth) {
+      let date = new Date(Date.UTC(year, month, 1));
+      let count = 0;
+      for (let i = 0; i < 31; i++) {
+        if (date.getUTCDay() === 0) {
+          count++;
+          if (count === nth) return date;
+        }
+        date.setUTCDate(date.getUTCDate() + 1);
+      }
+      return date;
+    }
+
+    function getLastSunday(year, month) {
+      let date = new Date(Date.UTC(year, month + 1, 0));
+      while (date.getUTCDay() !== 0) {
+        date.setUTCDate(date.getUTCDate() - 1);
+      }
+      return date;
+    }
+
+    function getDstDates(year, rule) {
+      if (rule === 'eu') {
+        return { start: getLastSunday(year, 2), end: getLastSunday(year, 9) };
+      } else if (rule === 'us') {
+        return { start: getNthSunday(year, 2, 2), end: getNthSunday(year, 10, 1) };
+      }
+      return null;
+    }
+
+    // --- Core Smoothing Logic ---
     function smoothOffset() {
       const cfg = regions[currentRegion];
-      const dstEnd   = new Date(cfg.dstEnd   + "T00:00:00Z");
-      const dstStart = new Date(cfg.dstStart + "T00:00:00Z");
-      const now      = new Date();
+      const now = new Date();
+      const year = now.getUTCFullYear();
 
-      const totalDays = (dstStart - dstEnd) / (86400000);
-      const daysPassed = (now - dstEnd) / (86400000);
-      const fraction = Math.max(0, Math.min(1, daysPassed / totalDays));
+      const dates = getDstDates(year, cfg.rule);
+      const tStart = dates.start;
+      const tEnd = dates.end;
 
-      return cfg.base + 1.0 * fraction;
+      let offset;
+
+      if (now >= tStart && now < tEnd) {
+        // Summer: Drifting down
+        const totalSummer = (tEnd - tStart);
+        const passedSummer = (now - tStart);
+        const fraction = passedSummer / totalSummer;
+        offset = cfg.base + 1.0 - fraction;
+      } else {
+        // Winter: Drifting up
+        let wStart = tEnd;
+        let wEnd = getDstDates(year + 1, cfg.rule).start;
+
+        if (now < tStart) {
+          wStart = getDstDates(year - 1, cfg.rule).end;
+          wEnd = tStart;
+        }
+
+        const totalWinter = (wEnd - wStart);
+        const passedWinter = (now - wStart);
+        const fraction = passedWinter / totalWinter;
+        offset = cfg.base + fraction;
+      }
+
+      return offset;
     }
 
     function updateClock() {
@@ -84,18 +136,30 @@
       const smoothTime = new Date(utcNow.getTime() + offsetH * 3600 * 1000);
 
       document.getElementById("clock").textContent = 
-        smoothTime.toLocaleTimeString("de-DE", { hour: "2-digit", minute: "2-digit", second: "2-digit" });
+        smoothTime.toLocaleTimeString("en-US", { hour12: false, hour: "2-digit", minute: "2-digit", second: "2-digit" });
 
       document.getElementById("region").textContent = regions[currentRegion].name;
-      document.getElementById("offset").textContent = `+${offsetH.toFixed(3)} h`;
+      
+      const sign = offsetH >= 0 ? "+" : "";
+      document.getElementById("offset").textContent = `${sign}${offsetH.toFixed(3)} h`;
     }
 
     function switchRegion(region) {
       currentRegion = region;
       Object.keys(regions).forEach(r => {
         const btn = document.getElementById(`btn-${r}`);
-        if (btn) btn.classList.toggle("bg-emerald-600", r === region);
-        if (btn) btn.classList.toggle("bg-zinc-800", r !== region);
+        const cmd = document.getElementById(`cmd-${r}`);
+        
+        if (btn) {
+          btn.classList.toggle("bg-emerald-600", r === region);
+          btn.classList.toggle("bg-zinc-800", r !== region);
+        }
+        
+        // Only show the command for the active region
+        if (cmd) {
+          cmd.classList.toggle("block", r === region);
+          cmd.classList.toggle("hidden", r !== region);
+        }
       });
       updateClock();
     }
@@ -110,15 +174,17 @@
 
     // Auto-detect region
     const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    if (["America/New_York","America/Toronto"].includes(tz)) currentRegion = "us-east";
+    if (["America/New_York","America/Toronto"].includes(tz)) currentRegion = "us-eastern";
     else if (["America/Chicago"].includes(tz)) currentRegion = "us-central";
     else if (["America/Denver"].includes(tz)) currentRegion = "us-mountain";
     else if (["America/Los_Angeles"].includes(tz)) currentRegion = "us-pacific";
-    else if (["Europe/London"].includes(tz)) currentRegion = "uk";
-    else currentRegion = ["Europe/Bucharest","Europe/Helsinki","Europe/Riga","Europe/Tallinn","Europe/Vilnius","Europe/Sofia","Europe/Athens"].includes(tz) ? "eest" : "cet";
+    else if (["Europe/London", "Europe/Dublin", "Europe/Lisbon"].includes(tz)) currentRegion = "europe-west";
+    else if (["Europe/Bucharest","Europe/Helsinki","Europe/Riga","Europe/Tallinn","Europe/Vilnius","Europe/Sofia","Europe/Athens"].includes(tz)) currentRegion = "europe-east";
+    else currentRegion = "europe-central";
 
+    // Initialize UI state based on auto-detection
+    switchRegion(currentRegion);
     setInterval(updateClock, 1000);
-    updateClock();
   </script>
 </body>
 </html>

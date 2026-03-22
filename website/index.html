@@ -128,11 +128,11 @@
       <div class="absolute inset-0 bg-primary/5 blur-[100px] md:blur-[120px] rounded-full pointer-events-none"></div>
       <div class="glass-card p-6 md:p-12 rounded-xl border border-outline-variant/10 text-center relative overflow-hidden">
         <div class="flex flex-col items-center justify-center gap-4">
-          <span id="region-name" class="text-xs font-mono text-on-surface-variant uppercase tracking-[0.2em] md:tracking-[0.3em] font-bold">Europe Central (CET/CEST)</span>
+          <span id="region-name" class="text-xs font-mono text-on-surface-variant uppercase tracking-[0.15em] md:tracking-[0.2em] font-bold">Europe Central Smoothtime (CET/CEST)</span>
           <div id="live-clock" class="text-6xl md:text-[9rem] mobile-clock-text font-bold font-headline tracking-tighter text-on-surface leading-none py-4 md:py-6">00:00:00</div>
           
           <div class="flex flex-col items-center gap-2 w-full max-w-md">
-            <span class="text-xs font-bold text-primary tracking-widest uppercase mt-2">Active Adjustment</span>
+            <span class="text-xs font-bold text-primary tracking-widest uppercase mt-2">Active UTC Adjustment</span>
             <div id="active-offset" class="text-2xl md:text-3xl font-mono font-bold text-primary mb-4">+1.000 h</div>
             <div class="bg-surface-container-lowest h-1.5 w-full rounded-full overflow-hidden relative mb-8 md:mb-10">
               <div id="offset-progress" class="absolute inset-y-0 left-0 bg-primary w-0 rounded-full shadow-[0_0_15px_rgba(78,222,163,0.5)] transition-all duration-1000"></div>
@@ -161,14 +161,22 @@
           <div>
             <h3 class="text-2xl font-bold mb-4">The Problem with Jumping Time</h3>
             <p class="text-on-surface-variant text-base md:text-lg leading-relaxed mb-4">
-              Nature does not execute sudden jumps. Yet, twice a year, we force a jarring 60-minute time shift on ourselves and our technology.
+              Nature does not execute sudden jumps. In the field of chronobiology, researchers have shown that the human body naturally synchronizes its internal circadian rhythm to the gradual, daily shift of the sunrise. 
             </p>
             <p class="text-on-surface-variant text-base md:text-lg leading-relaxed mb-4">
-              For humans, this sudden jump causes "social jetlag" - we lose sleep, miss meetings, and feel out of sync. For our digital devices, it is even worse. Smart home alarms trigger an hour late, automated daily routines crash, and servers log duplicate data when the clock falls back.
+              Twice a year, however, we force a jarring 60-minute time shift on ourselves. This abrupt transition severs the alignment between our biological "sun clock" and our "social clock," causing what scientists call <strong>Social Jetlag</strong>. This artificial shift is linked to acute sleep loss, increased cardiovascular events, and massive disruptions to digital infrastructure (like smart alarms triggering late or automated routines overlapping).
             </p>
-            <p class="text-on-surface-variant text-base md:text-lg leading-relaxed">
-              <strong>smoothtime.io</strong> solves this by making tiny, imperceptible adjustments of just fractions of a second each day. Your computers, routers, and smart devices stay perfectly aligned with the seasons, naturally - without ever experiencing the shock of a sudden jump.
+            <p class="text-on-surface-variant text-base md:text-lg leading-relaxed mb-6">
+              <strong>smoothtime.io</strong> solves this by mimicking nature's gradual "astro-shift" on your network. By spreading the transition across the entire season—adjusting just a fraction of a second each day—your devices stay perfectly aligned with Daylight Saving Time without ever experiencing the shock of a sudden jump.
             </p>
+
+            <div class="p-4 rounded-lg bg-surface-container-highest border border-outline-variant/10">
+              <h4 class="text-sm font-bold text-primary mb-2">The Science of Social Jetlag</h4>
+              <ul class="text-sm text-on-surface-variant space-y-2">
+                <li><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC7954020/" target="_blank" rel="noopener noreferrer" class="hover:text-primary transition-colors hover:underline flex items-center gap-2"><span class="material-symbols-outlined text-[16px]">science</span> AASM Position Statement on Daylight Saving Time Risks</a></li>
+                <li><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC10204006/" target="_blank" rel="noopener noreferrer" class="hover:text-primary transition-colors hover:underline flex items-center gap-2"><span class="material-symbols-outlined text-[16px]">science</span> How Social Jetlag Affects Health (NIH Research)</a></li>
+              </ul>
+            </div>
           </div>
           <div class="bg-surface-container-lowest rounded-xl p-8 border border-outline-variant/20 flex flex-col items-center justify-center text-center">
             <div class="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mb-6 text-primary">
@@ -283,13 +291,13 @@ pool pool.ntp.org iburst</span></pre>
 
   <script>
     const regions = {
-      "europe-west":    { name: "Europe Western (WET/WEST)", base: 0.0,  rule: "eu" },
-      "europe-central": { name: "Europe Central (CET/CEST)", base: 1.0,  rule: "eu" },
-      "europe-east":    { name: "Europe Eastern (EET/EEST)", base: 2.0,  rule: "eu" },
-      "us-eastern":     { name: "US Eastern (EST/EDT)",      base: -5.0, rule: "us" },
-      "us-central":     { name: "US Central (CST/CDT)",      base: -6.0, rule: "us" },
-      "us-mountain":    { name: "US Mountain (MST/MDT)",     base: -7.0, rule: "us" },
-      "us-pacific":     { name: "US Pacific (PST/PDT)",      base: -8.0, rule: "us" }
+      "europe-west":    { name: "Europe Western Smoothtime (WET/WEST)", base: 0.0,  rule: "eu" },
+      "europe-central": { name: "Europe Central Smoothtime (CET/CEST)", base: 1.0,  rule: "eu" },
+      "europe-east":    { name: "Europe Eastern Smoothtime (EET/EEST)", base: 2.0,  rule: "eu" },
+      "us-eastern":     { name: "US Eastern Smoothtime (EST/EDT)",      base: -5.0, rule: "us" },
+      "us-central":     { name: "US Central Smoothtime (CST/CDT)",      base: -6.0, rule: "us" },
+      "us-mountain":    { name: "US Mountain Smoothtime (MST/MDT)",     base: -7.0, rule: "us" },
+      "us-pacific":     { name: "US Pacific Smoothtime (PST/PDT)",      base: -8.0, rule: "us" }
     };
 
     let currentRegion = "europe-central";

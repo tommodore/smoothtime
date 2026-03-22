@@ -13,47 +13,32 @@
 <body class="bg-zinc-950 text-white min-h-screen font-sans">
   <div class="max-w-2xl mx-auto px-6 py-16 text-center">
     
-    <!-- Hero -->
     <h1 class="text-6xl font-bold tracking-tighter mb-2">smoothtime</h1>
     <p class="text-emerald-400 text-xl mb-10">NTP without the twice-yearly trauma</p>
 
-    <!-- Live Clock -->
     <div class="bg-zinc-900 rounded-3xl p-10 mb-10 shadow-2xl">
       <div id="clock" class="clock text-emerald-400">00:00:00</div>
       <div id="region" class="text-zinc-400 mt-3 text-lg"></div>
       <div id="offset" class="text-emerald-500 font-mono mt-1">+1.508 h</div>
     </div>
 
-    <!-- Region Selector -->
     <div class="flex justify-center gap-4 mb-12">
-      <button onclick="switchRegion('cet')" id="btn-cet"
-        class="px-8 py-3 rounded-2xl font-medium transition bg-emerald-600 hover:bg-emerald-500">Central Europe</button>
-      <button onclick="switchRegion('eest')" id="btn-eest"
-        class="px-8 py-3 rounded-2xl font-medium transition bg-zinc-800 hover:bg-zinc-700">Eastern Europe</button>
+      <button onclick="switchRegion('cet')" id="btn-cet" class="px-8 py-3 rounded-2xl font-medium transition bg-emerald-600">Central Europe</button>
+      <button onclick="switchRegion('eest')" id="btn-eest" class="px-8 py-3 rounded-2xl font-medium transition bg-zinc-800">Eastern Europe</button>
     </div>
 
-    <!-- How to use -->
     <div class="bg-zinc-900 rounded-3xl p-8 text-left max-w-md mx-auto">
       <h2 class="text-xl font-semibold mb-4">How to use it</h2>
-      <p class="text-zinc-400 mb-4">Add one of these lines to your chrony.conf or ntp.conf:</p>
-      
-      <div class="mb-4">
-        <code id="cmd-cet" onclick="copyCommand('cet')" 
-          class="block bg-black p-4 rounded-2xl text-emerald-400 cursor-pointer hover:text-emerald-300 transition">
-          server cet.smoothtime.io iburst
-        </code>
-      </div>
-      
-      <div>
-        <code id="cmd-eest" onclick="copyCommand('eest')" 
-          class="block bg-black p-4 rounded-2xl text-emerald-400 cursor-pointer hover:text-emerald-300 transition">
-          server eest.smoothtime.io iburst
-        </code>
-      </div>
+      <code onclick="copyCommand('cet')" id="cmd-cet" class="block bg-black p-4 rounded-2xl text-emerald-400 cursor-pointer hover:text-emerald-300 mb-4">
+        server cet.smoothtime.io iburst
+      </code>
+      <code onclick="copyCommand('eest')" id="cmd-eest" class="block bg-black p-4 rounded-2xl text-emerald-400 cursor-pointer hover:text-emerald-300">
+        server eest.smoothtime.io iburst
+      </code>
     </div>
 
     <p class="text-xs text-zinc-500 mt-16">
-      Open Source • MIT License • 
+      Open Source • MIT • 
       <a href="https://github.com/tommodore/smoothtime" class="text-emerald-400 hover:underline">github.com/tommodore/smoothtime</a>
     </p>
   </div>
@@ -68,17 +53,22 @@
 
     function smoothOffset() {
       const cfg = regions[currentRegion];
+      const doy = new Date().getUTCDateOfYear ? 
+        Math.floor((new Date() - new Date(new Date().getUTCFullYear(), 0, 0)) / 86400000) + 1 : 
+        new Date().getUTCDayOfYear(); // fallback
+
       const now = new Date();
-      const start = new Date(Date.UTC(now.getUTCFullYear(), 0, 0));
-      const doy = Math.floor((now - start) / 86400000) + 1;
+      const startOfYear = new Date(Date.UTC(now.getUTCFullYear(), 0, 0));
+      const doy = Math.floor((now - startOfYear) / 86400000) + 1;
+
       const phase = 2 * Math.PI * (doy - cfg.phase) / 365;
       return cfg.base + 0.5 * (1 + Math.sin(phase));
     }
 
     function updateClock() {
       const offsetH = smoothOffset();
-      const now = new Date();
-      const smoothTime = new Date(now.getTime() + offsetH * 3600 * 1000);
+      const utcNow = new Date(); // base time is always UTC
+      const smoothTime = new Date(utcNow.getTime() + offsetH * 3600 * 1000);
 
       document.getElementById("clock").textContent = 
         smoothTime.toLocaleTimeString("de-DE", { hour: "2-digit", minute: "2-digit", second: "2-digit" });
@@ -97,24 +87,17 @@
     }
 
     function copyCommand(region) {
-      const text = `server ${region}.smoothtime.io iburst`;
-      navigator.clipboard.writeText(text);
-      
+      navigator.clipboard.writeText(`server ${region}.smoothtime.io iburst`);
       const el = document.getElementById(`cmd-${region}`);
-      const original = el.textContent;
+      const orig = el.textContent;
       el.textContent = "✅ Copied!";
-      setTimeout(() => el.textContent = original, 1500);
+      setTimeout(() => el.textContent = orig, 1500);
     }
 
-    // Auto-detect region based on browser timezone
-    function detectRegion() {
-      const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
-      const eastern = ["Europe/Bucharest","Europe/Helsinki","Europe/Riga","Europe/Tallinn","Europe/Vilnius","Europe/Sofia","Europe/Athens"];
-      currentRegion = eastern.includes(tz) ? "eest" : "cet";
-    }
+    // Auto-detect region
+    const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    currentRegion = ["Europe/Bucharest","Europe/Helsinki","Europe/Riga","Europe/Tallinn","Europe/Vilnius","Europe/Sofia","Europe/Athens"].includes(tz) ? "eest" : "cet";
 
-    // Init
-    detectRegion();
     setInterval(updateClock, 1000);
     updateClock();
   </script>

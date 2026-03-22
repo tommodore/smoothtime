@@ -1,5 +1,4 @@
 # smoothtime
-
 **NTP without the twice-yearly trauma.**
 
 [![Go Version](https://img.shields.io/badge/Go-1.22+-00ADD8?logo=go&logoColor=white)](https://go.dev)
@@ -10,33 +9,34 @@
 ![GitHub issues](https://img.shields.io/github/issues/tommodore/smoothtime)
 ![GitHub last commit](https://img.shields.io/github/last-commit/tommodore/smoothtime)
 
-A public NTP server that replaces the traditional hard +1 h / -1 h Daylight Saving Time jumps with a **smooth sinusoidal drift** spread over months.
+A public NTP server that replaces the traditional hard +1 h / -1 h Daylight Saving Time jumps with a **smooth continuous drift** spread over months.
 
 No more sudden clock jumps on your servers, homelab, IoT devices, or anywhere NTP is used.
 
+---
+
 ## Features
 
-- Smooth sinusoidal DST transition (no discontinuities)
-- Supported regions: Central Europe (CET/CEST), Eastern Europe (EET/EEST) — easy to extend
+- Smooth continuous DST transition (no discontinuities)
+- Supported regions: Europe, US, UK - easy to extend
 - Stratum 2 NTP server (UDP 123 or custom port for testing)
 - Optional HTTP `/health` endpoint for monitoring
 - Graceful shutdown (SIGINT / SIGTERM)
-- Pure Go — zero external dependencies
+- Pure Go - zero external dependencies
 - Docker-ready
 - systemd service example included
 
+---
+
 ## How the smooth offset works
 
-The offset is calculated using this formula:
+The offset is calculated using a continuous linear drift between standard time and summer time. 
 
-```math
-offset = base + amplitude \times (1 + \sin(2\pi \times (doy - phase) / 365))
-```
+$$offset = base + \left(\frac{days\_passed}{total\_season\_days}\right)$$
 
-- `base` — winter UTC offset (e.g. 1.0 for CET)
-- `amplitude` — half the DST swing (usually 0.5 → ±1 hour)
-- `phase` — shifts the peak to align with real summer time
-- `doy` — day of year (1–365/366)
+- **base:** winter UTC offset (e.g. 1.0 for CET)
+- **days_passed:** time elapsed since the last seasonal transition
+- **total_season_days:** total duration of the current summer or winter period
 
 This produces a gentle, continuous curve instead of abrupt steps.
 
@@ -69,32 +69,32 @@ chronyd -q 'server 127.0.0.1 port 1123 iburst'
 ### From source
 
 ```bash
-git clone https://github.com/tommodore/smoothtime.git
+git clone [https://github.com/tommodore/smoothtime.git](https://github.com/tommodore/smoothtime.git)
 cd smoothtime
 go build -o smoothtime
-sudo ./smoothtime -region cet -ntp-port 123
+sudo ./smoothtime -region europe-central -ntp-port 123
 ```
 
 ### Docker
 
 ```bash
 docker build -t tommodore/smoothtime .
-docker run --network host --cap-add=NET_BIND_SERVICE tommodore/smoothtime -region cet
+docker run --network host --cap-add=NET_BIND_SERVICE tommodore/smoothtime -region europe-central
 ```
 
 See `docker-compose.yml` for multi-region setup.
 
 ### systemd (production)
 
-Create `/etc/systemd/system/smoothtime-cet.service`:
+Create `/etc/systemd/system/smoothtime.service`:
 
 ```ini
 [Unit]
-Description=smoothtime NTP Server – Central Europe
+Description=smoothtime NTP Server
 After=network.target
 
 [Service]
-ExecStart=/usr/local/bin/smoothtime -region cet -ntp-port 123
+ExecStart=/usr/local/bin/smoothtime -region europe-central -ntp-port 123
 Restart=always
 User=nobody
 Group=nogroup
@@ -107,7 +107,7 @@ WantedBy=multi-user.target
 
 ```bash
 sudo systemctl daemon-reload
-sudo systemctl enable --now smoothtime-cet
+sudo systemctl enable --now smoothtime
 ```
 
 ## Monitoring
@@ -129,10 +129,3 @@ MIT © 2026 tommodore & contributors
 
 See [LICENSE](LICENSE) for details.
 ```
-
-Copy everything above (including the first `# smoothtime` line) and paste it directly into your `README.md`.  
-The badges will work instantly after you push.  
-
-You’re all set! 🚀  
-
-Ready for the next step (CI workflow, more regions, or launch plan)? Just say the word.

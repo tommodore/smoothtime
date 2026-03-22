@@ -87,11 +87,18 @@
         box-shadow: 0 0 30px rgba(78,222,163,0.3);
         border-color: transparent !important;
     }
+    
+    /* Mobile text scaling safeguards */
+    @media (max-width: 640px) {
+      .mobile-clock-text { font-size: 4rem !important; line-height: 1 !important; }
+      .mobile-hero-text { font-size: 3.5rem !important; line-height: 1.1 !important; }
+    }
   </style>
 </head>
 <body class="font-body text-on-surface selection:bg-primary selection:text-on-primary">
-  <nav class="fixed top-0 w-full z-50 bg-[#131315]/60 backdrop-blur-xl border-b border-outline-variant/10 shadow-[0_20px_50px_rgba(16,185,129,0.05)]">
-    <div class="flex justify-between items-center px-8 h-20 max-w-7xl mx-auto">
+  
+  <nav class="fixed top-0 w-full z-50 bg-[#131315]/80 backdrop-blur-xl border-b border-outline-variant/10 shadow-[0_20px_50px_rgba(16,185,129,0.05)]">
+    <div class="flex justify-between items-center px-6 md:px-8 h-20 max-w-7xl mx-auto">
       <div class="text-2xl font-bold tracking-tighter text-[#e5e1e4] font-headline">smoothtime</div>
       <div class="hidden md:flex gap-8 items-center">
         <a class="text-[#bbcabf] hover:text-[#e5e1e4] transition-colors font-headline tracking-tight" href="https://github.com/tommodore/smoothtime/blob/main/README.md" target="_blank">Docs</a>
@@ -101,137 +108,149 @@
     </div>
   </nav>
 
-  <main class="pt-32 pb-24 px-6 max-w-7xl mx-auto">
+  <main class="pt-28 md:pt-32 pb-24 px-4 md:px-6 max-w-7xl mx-auto">
+    
     <section class="text-center mb-16">
-      <div class="inline-flex items-center gap-2 bg-surface-container-low px-4 py-1 rounded-full border border-outline-variant/10 mb-8">
+      <div class="inline-flex items-center gap-2 bg-surface-container-low px-4 py-1.5 rounded-full border border-outline-variant/10 mb-6 md:mb-8">
         <span class="relative flex h-2 w-2">
           <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
           <span class="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
         </span>
         <span class="text-xs font-bold text-primary tracking-widest uppercase">Stratum-2 Live</span>
       </div>
-      <h1 class="font-headline text-7xl md:text-8xl font-bold tracking-tighter text-on-surface mb-6">smoothtime</h1>
-      <p class="text-xl md:text-2xl text-on-surface-variant max-w-2xl mx-auto font-light leading-relaxed">
+      <h1 class="font-headline text-5xl md:text-8xl mobile-hero-text font-bold tracking-tighter text-on-surface mb-6">smoothtime</h1>
+      <p class="text-lg md:text-2xl text-on-surface-variant max-w-2xl mx-auto font-light leading-relaxed">
           NTP without the twice-yearly trauma. <br>
           <span class="text-primary/80">Continuous linear drift compensation.</span>
       </p>
     </section>
 
-    <section id="regions" class="mb-32 relative">
-      <div class="absolute inset-0 bg-primary/5 blur-[120px] rounded-full pointer-events-none"></div>
-      <div class="glass-card p-8 md:p-12 rounded-xl border border-outline-variant/10 text-center relative overflow-hidden">
+    <section id="regions" class="mb-24 md:mb-32 relative">
+      <div class="absolute inset-0 bg-primary/5 blur-[100px] md:blur-[120px] rounded-full pointer-events-none"></div>
+      <div class="glass-card p-6 md:p-12 rounded-xl border border-outline-variant/10 text-center relative overflow-hidden">
         <div class="flex flex-col items-center justify-center gap-4">
-          <span id="region-name" class="text-xs font-mono text-on-surface-variant uppercase tracking-[0.3em] font-bold">Europe Central (CET/CEST)</span>
-          <div id="live-clock" class="text-6xl md:text-[9rem] font-bold font-headline tracking-tighter text-on-surface leading-none py-6">00:00:00</div>
+          <span id="region-name" class="text-xs font-mono text-on-surface-variant uppercase tracking-[0.2em] md:tracking-[0.3em] font-bold">Europe Central (CET/CEST)</span>
+          <div id="live-clock" class="text-6xl md:text-[9rem] mobile-clock-text font-bold font-headline tracking-tighter text-on-surface leading-none py-4 md:py-6">00:00:00</div>
           
           <div class="flex flex-col items-center gap-2 w-full max-w-md">
             <span class="text-xs font-bold text-primary tracking-widest uppercase mt-2">Active Offset</span>
-            <div id="active-offset" class="text-3xl font-mono font-bold text-primary mb-4">+1.000 h</div>
-            <div class="bg-surface-container-lowest h-1.5 w-full rounded-full overflow-hidden relative mb-10">
+            <div id="active-offset" class="text-2xl md:text-3xl font-mono font-bold text-primary mb-4">+1.000 h</div>
+            <div class="bg-surface-container-lowest h-1.5 w-full rounded-full overflow-hidden relative mb-8 md:mb-10">
               <div id="offset-progress" class="absolute inset-y-0 left-0 bg-primary w-0 rounded-full shadow-[0_0_15px_rgba(78,222,163,0.5)] transition-all duration-1000"></div>
             </div>
           </div>
 
-          <div class="grid grid-cols-2 md:grid-cols-4 gap-3 w-full">
-            <button onclick="switchRegion('europe-west')" id="btn-europe-west" class="region-btn group relative px-4 py-3 bg-surface-container-highest text-on-surface text-sm font-bold border border-outline-variant/20 rounded-lg hover:bg-surface-bright transition-all">Europe Western</button>
-            <button onclick="switchRegion('europe-central')" id="btn-europe-central" class="region-btn group relative px-4 py-3 bg-surface-container-highest text-on-surface text-sm font-bold border border-outline-variant/20 rounded-lg hover:bg-surface-bright transition-all btn-active">Europe Central</button>
-            <button onclick="switchRegion('europe-east')" id="btn-europe-east" class="region-btn group relative px-4 py-3 bg-surface-container-highest text-on-surface text-sm font-bold border border-outline-variant/20 rounded-lg hover:bg-surface-bright transition-all">Europe Eastern</button>
-            <button onclick="switchRegion('us-eastern')" id="btn-us-eastern" class="region-btn group relative px-4 py-3 bg-surface-container-highest text-on-surface text-sm font-bold border border-outline-variant/20 rounded-lg hover:bg-surface-bright transition-all">US Eastern</button>
-            <button onclick="switchRegion('us-central')" id="btn-us-central" class="region-btn group relative px-4 py-3 bg-surface-container-highest text-on-surface text-sm font-bold border border-outline-variant/20 rounded-lg hover:bg-surface-bright transition-all">US Central</button>
-            <button onclick="switchRegion('us-mountain')" id="btn-us-mountain" class="region-btn group relative px-4 py-3 bg-surface-container-highest text-on-surface text-sm font-bold border border-outline-variant/20 rounded-lg hover:bg-surface-bright transition-all">US Mountain</button>
-            <button onclick="switchRegion('us-pacific')" id="btn-us-pacific" class="region-btn group relative px-4 py-3 bg-surface-container-highest text-on-surface text-sm font-bold border border-outline-variant/20 rounded-lg hover:bg-surface-bright transition-all">US Pacific</button>
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-3 w-full">
+            <button onclick="switchRegion('europe-west')" id="btn-europe-west" class="region-btn group relative px-2 md:px-4 py-3 bg-surface-container-highest text-on-surface text-xs md:text-sm font-bold border border-outline-variant/20 rounded-lg hover:bg-surface-bright transition-all">Europe West</button>
+            <button onclick="switchRegion('europe-central')" id="btn-europe-central" class="region-btn group relative px-2 md:px-4 py-3 bg-surface-container-highest text-on-surface text-xs md:text-sm font-bold border border-outline-variant/20 rounded-lg hover:bg-surface-bright transition-all btn-active">Europe Central</button>
+            <button onclick="switchRegion('europe-east')" id="btn-europe-east" class="region-btn group relative px-2 md:px-4 py-3 bg-surface-container-highest text-on-surface text-xs md:text-sm font-bold border border-outline-variant/20 rounded-lg hover:bg-surface-bright transition-all">Europe East</button>
+            <button onclick="switchRegion('us-eastern')" id="btn-us-eastern" class="region-btn group relative px-2 md:px-4 py-3 bg-surface-container-highest text-on-surface text-xs md:text-sm font-bold border border-outline-variant/20 rounded-lg hover:bg-surface-bright transition-all">US Eastern</button>
+            <button onclick="switchRegion('us-central')" id="btn-us-central" class="region-btn group relative px-2 md:px-4 py-3 bg-surface-container-highest text-on-surface text-xs md:text-sm font-bold border border-outline-variant/20 rounded-lg hover:bg-surface-bright transition-all">US Central</button>
+            <button onclick="switchRegion('us-mountain')" id="btn-us-mountain" class="region-btn group relative px-2 md:px-4 py-3 bg-surface-container-highest text-on-surface text-xs md:text-sm font-bold border border-outline-variant/20 rounded-lg hover:bg-surface-bright transition-all">US Mountain</button>
+            <button onclick="switchRegion('us-pacific')" id="btn-us-pacific" class="region-btn group relative px-2 md:px-4 py-3 bg-surface-container-highest text-on-surface text-xs md:text-sm font-bold border border-outline-variant/20 rounded-lg hover:bg-surface-bright transition-all">US Pacific</button>
           </div>
         </div>
       </div>
     </section>
 
-    <section class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-32">
-        <div class="md:col-span-2 glass-card p-10 rounded-xl border border-outline-variant/10 hover:border-primary/30 transition-all group">
+    <section id="why" class="mb-24 md:mb-32">
+      <h2 class="text-3xl md:text-4xl font-headline font-bold mb-8 md:mb-12 flex items-center gap-4">
+        <span class="text-primary font-mono text-xl">01.</span> Why this matters
+      </h2>
+      <div class="glass-card p-6 md:p-12 rounded-xl border border-outline-variant/10">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 items-center">
+          <div>
+            <h3 class="text-2xl font-bold mb-4">The Natural "Astro-Shift"</h3>
+            <p class="text-on-surface-variant text-base md:text-lg leading-relaxed mb-4">
+              Nature does not execute sudden jumps. Animals naturally synchronize their internal clocks to the gradual daily shift of the sunrise. 
+            </p>
+            <p class="text-on-surface-variant text-base md:text-lg leading-relaxed mb-4">
+              Humans, however, force a jarring 60-minute jump on a single Sunday. This abrupt adjustment causes "social jetlag" in our bodies and wreaks havoc on digital infrastructure - causing cron jobs to skip, logs to overlap, and IoT devices to crash.
+            </p>
+            <p class="text-on-surface-variant text-base md:text-lg leading-relaxed">
+              <strong>smoothtime.io</strong> brings nature's gradual "Astro-Shift" to your network. By spreading the transition across the entire season - adjusting just a fraction of a second each day - your systems stay perfectly aligned with Daylight Saving Time without ever experiencing the trauma of a sudden jump.
+            </p>
+          </div>
+          <div class="bg-surface-container-lowest rounded-xl p-8 border border-outline-variant/20 flex flex-col items-center justify-center text-center">
+            <div class="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mb-6 text-primary">
+              <span class="material-symbols-outlined text-3xl">psychology</span>
+            </div>
+            <h4 class="text-xl font-bold text-on-surface mb-2">Zero Discontinuities</h4>
+            <p class="text-sm text-on-surface-variant mb-6">No missed server events. No duplicate database timestamps.</p>
+            <div class="w-full h-1.5 bg-outline-variant/20 rounded-full overflow-hidden flex">
+              <div class="h-full bg-primary/40 w-1/4"></div>
+              <div class="h-full bg-primary/70 w-2/4"></div>
+              <div class="h-full bg-primary w-1/4"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="mb-24 md:mb-32">
+      <h2 class="text-3xl md:text-4xl font-headline font-bold mb-8 md:mb-12 flex items-center gap-4">
+        <span class="text-primary font-mono text-xl">02.</span> Core Architecture
+      </h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="md:col-span-2 glass-card p-8 md:p-10 rounded-xl border border-outline-variant/10 hover:border-primary/30 transition-all group">
           <div class="flex flex-col h-full justify-between">
             <div>
               <div class="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-6 text-primary">
                 <span class="material-symbols-outlined">timeline</span>
               </div>
-              <h3 class="text-2xl font-headline font-bold mb-4">Continuous Linear Drift</h3>
-              <p class="text-on-surface-variant leading-relaxed">Our open-source mathematical model spreads the 3600-second shift smoothly across the seasons, eliminating jarring step adjustments that crash legacy services.</p>
+              <h3 class="text-xl md:text-2xl font-headline font-bold mb-4">Continuous Linear Drift</h3>
+              <p class="text-on-surface-variant text-sm md:text-base leading-relaxed">Our open-source mathematical model spreads the 3600-second shift smoothly across the seasons, eliminating jarring step adjustments that crash legacy services.</p>
             </div>
-            <div class="mt-8 pt-8 border-t border-outline-variant/10 flex items-center gap-4 text-sm font-mono text-primary/60">
+            <div class="mt-8 pt-6 md:pt-8 border-t border-outline-variant/10 flex items-center gap-4 text-xs md:text-sm font-mono text-primary/60">
               <span>DRIFT_MODEL_V2</span>
-              <span class="h-1 w-1 bg-outline-variant rounded-full"></span>
-              <span>OFFSET_PRECISION_99.9%</span>
+              <span class="h-1 w-1 bg-outline-variant rounded-full hidden md:block"></span>
+              <span class="hidden md:block">OFFSET_PRECISION_99.9%</span>
             </div>
           </div>
         </div>
-        <div class="glass-card p-10 rounded-xl border border-outline-variant/10 hover:border-primary/30 transition-all">
+        <div class="glass-card p-8 md:p-10 rounded-xl border border-outline-variant/10 hover:border-primary/30 transition-all">
           <div class="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-6 text-primary">
             <span class="material-symbols-outlined">devices</span>
           </div>
-          <h3 class="text-2xl font-headline font-bold mb-4">Works Anywhere</h3>
-          <p class="text-on-surface-variant leading-relaxed">Compatible with any standard NTP client. No plugins, no wrappers, no nonsense.</p>
+          <h3 class="text-xl md:text-2xl font-headline font-bold mb-4">Works Anywhere</h3>
+          <p class="text-on-surface-variant text-sm md:text-base leading-relaxed">Compatible with any standard NTP client via UDP Port 123. No plugins, no wrappers, no nonsense.</p>
         </div>
-        <div class="glass-card p-10 rounded-xl border border-outline-variant/10 hover:border-primary/30 transition-all">
-          <div class="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-6 text-primary">
-            <span class="material-symbols-outlined">public</span>
-          </div>
-          <h3 class="text-2xl font-headline font-bold mb-4">Multiple Regions</h3>
-          <p class="text-on-surface-variant leading-relaxed">Edge nodes configured for specific geopolitical transition rules and base offsets.</p>
-        </div>
-        <div class="md:col-span-2 glass-card p-10 rounded-xl border border-outline-variant/10 flex flex-col md:flex-row gap-10 items-center overflow-hidden">
-          <div class="flex-1">
-            <h3 class="text-2xl font-headline font-bold mb-4">Real-time Visualization</h3>
-            <p class="text-on-surface-variant leading-relaxed mb-6">Monitor the micro-adjustments in real-time. Our dashboard provides full transparency into the mathematical smoothing process.</p>
-            <a href="https://github.com/tommodore/smoothtime" target="_blank" class="flex items-center gap-2 text-primary font-bold cursor-pointer hover:underline decoration-2 underline-offset-4">
-                Explore the source <span class="material-symbols-outlined text-sm">arrow_forward</span>
-            </a>
-          </div>
-          <div class="w-full md:w-1/2 h-48 bg-surface-container-lowest rounded-lg border border-outline-variant/10 flex items-center justify-center relative group overflow-hidden">
-            <div class="absolute inset-0 bg-gradient-to-t from-primary/10 to-transparent"></div>
-            <div class="flex items-end gap-1 h-24">
-              <div class="w-2 bg-primary/20 h-1/4 rounded-full"></div>
-              <div class="w-2 bg-primary/40 h-2/4 rounded-full"></div>
-              <div class="w-2 bg-primary/60 h-3/4 rounded-full"></div>
-              <div class="w-2 bg-primary h-full rounded-full"></div>
-              <div class="w-2 bg-primary/60 h-3/4 rounded-full"></div>
-              <div class="w-2 bg-primary/40 h-2/4 rounded-full"></div>
-              <div class="w-2 bg-primary/20 h-1/4 rounded-full"></div>
-            </div>
-          </div>
-        </div>
-      </section>
+      </div>
+    </section>
 
-    <section id="how-to-use" class="mb-32">
-      <h2 class="text-4xl font-headline font-bold mb-12 flex items-center gap-4">
-        <span class="text-primary font-mono text-xl">01.</span> How to Use
+    <section id="how-to-use" class="mb-16">
+      <h2 class="text-3xl md:text-4xl font-headline font-bold mb-8 md:mb-12 flex items-center gap-4">
+        <span class="text-primary font-mono text-xl">03.</span> How to Use
       </h2>
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12">
         <div>
-          <p class="text-on-surface-variant text-lg leading-relaxed mb-8">
+          <p class="text-on-surface-variant text-base md:text-lg leading-relaxed mb-8">
               Integration is seamless. Swap your default NTP server address with ours. We recommend configuring a standard pool as a fallback.
           </p>
           <ul class="space-y-6">
             <li class="flex items-start gap-4">
-              <div class="mt-1 w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center text-primary">
+              <div class="mt-1 w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center text-primary flex-shrink-0">
                 <span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">check</span>
               </div>
               <div>
                 <h4 class="font-bold text-on-surface">Standard Protocol</h4>
-                <p class="text-sm text-on-surface-variant">Uses standard UDP port 123.</p>
+                <p class="text-sm text-on-surface-variant">Operates on native network protocols without requiring elevated system permissions to install.</p>
               </div>
             </li>
             <li class="flex items-start gap-4">
-              <div class="mt-1 w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center text-primary">
+              <div class="mt-1 w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center text-primary flex-shrink-0">
                 <span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">check</span>
               </div>
               <div>
                 <h4 class="font-bold text-on-surface">Anycast Routing</h4>
-                <p class="text-sm text-on-surface-variant">Connect to the nearest node automatically.</p>
+                <p class="text-sm text-on-surface-variant">Connect to the nearest regional node automatically via smoothtime.io subdomains.</p>
               </div>
             </li>
           </ul>
         </div>
         
-        <div class="bg-surface-container-lowest rounded-xl border border-outline-variant/20 overflow-hidden">
-          <div class="px-6 py-3 border-b border-outline-variant/10 flex items-center justify-between bg-surface-container-low">
+        <div class="bg-surface-container-lowest rounded-xl border border-outline-variant/20 overflow-hidden shadow-2xl">
+          <div class="px-4 md:px-6 py-3 border-b border-outline-variant/10 flex items-center justify-between bg-surface-container-low">
             <div class="flex gap-1.5">
               <div class="w-3 h-3 rounded-full bg-error/40"></div>
               <div class="w-3 h-3 rounded-full bg-secondary-container"></div>
@@ -239,14 +258,14 @@
             </div>
             <span class="text-xs font-mono text-on-surface-variant">ntp.conf</span>
           </div>
-          <div class="p-8 font-mono text-sm relative group">
-            <pre class="text-on-surface-variant whitespace-pre-wrap"><span class="text-primary"># Use smoothtime pool</span>
+          <div class="p-6 md:p-8 font-mono text-xs md:text-sm relative group overflow-x-auto">
+            <pre class="text-on-surface-variant whitespace-pre-wrap min-w-[300px]"><span class="text-primary"># Use smoothtime pool</span>
 <span id="cmd-server">server europe-central.smoothtime.io iburst</span>
 
 <span class="text-primary"># Fallback pool</span>
 pool pool.ntp.org iburst</pre>
-            <button onclick="copyCommand()" class="absolute top-6 right-6 p-2 bg-surface-container-high rounded text-on-surface-variant hover:text-primary transition-colors">
-              <span id="copy-icon" class="material-symbols-outlined text-lg">content_copy</span>
+            <button onclick="copyCommand()" class="absolute top-4 md:top-6 right-4 md:right-6 p-2 bg-surface-container-high rounded text-on-surface-variant hover:text-primary transition-colors focus:outline-none">
+              <span id="copy-icon" class="material-symbols-outlined text-base md:text-lg">content_copy</span>
             </button>
           </div>
         </div>
@@ -255,17 +274,17 @@ pool pool.ntp.org iburst</pre>
   </main>
 
   <footer class="bg-[#131315] w-full py-12 border-t border-[#3c4a42]/15">
-    <div class="flex flex-col md:flex-row justify-between items-center px-8 max-w-7xl mx-auto gap-6 font-body text-sm">
+    <div class="flex flex-col md:flex-row justify-between items-center px-6 md:px-8 max-w-7xl mx-auto gap-8 font-body text-sm">
       <div class="flex flex-col gap-2 text-center md:text-left">
-        <div class="text-lg font-mono text-[#4edea3]">smoothtime</div>
+        <div class="text-lg font-mono text-[#4edea3]">smoothtime.io</div>
         <div class="text-[#bbcabf]">© 2026 smoothtime.</div>
       </div>
-      <div class="flex flex-wrap justify-center gap-8">
+      <div class="flex flex-col md:flex-row items-center gap-4 md:gap-8">
         <a class="text-[#bbcabf] hover:text-[#4edea3] transition-colors" href="https://github.com/tommodore/smoothtime" target="_blank">GitHub</a>
         <a class="text-[#bbcabf] hover:text-[#4edea3] transition-colors" href="https://github.com/tommodore/smoothtime/blob/main/README.md" target="_blank">Documentation</a>
         <a class="text-[#bbcabf] hover:text-[#4edea3] transition-colors" href="https://status.smoothtime.io" target="_blank">Status Page</a>
       </div>
-      <div class="text-xs text-outline-variant uppercase tracking-widest font-bold">
+      <div class="text-xs text-outline-variant uppercase tracking-widest font-bold text-center md:text-right">
           MIT Licensed Open Source
       </div>
     </div>

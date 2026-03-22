@@ -5,6 +5,7 @@ import (
 	"flag"
 	"log"
 	"net"
+	"strings"
 	"time"
 )
 
@@ -31,25 +32,50 @@ var Regions = map[string]RegionConfig{
 	"us-pacific":     {"US Pacific (PST/PDT)", -8.0, RuleUS},
 }
 
-// Seconds between NTP epoch (1900) and Unix epoch (1970)
 const ntpEpochOffset = 2208988800
 
 func main() {
-	regionFlag := flag.String("region", "europe-central", "Region for DST rules (e.g., europe-central, us-eastern)")
+	// The new binds flag allows mapping specific IPs to specific mathematical regions
+	bindsFlag := flag.String("binds", "0.0.0.0=europe-central", "Comma-separated list of IP=region bindings (e.g. 10.0.0.1=europe-central,10.0.0.2=us-eastern)")
 	portFlag := flag.Int("ntp-port", 123, "UDP port to listen on")
 	flag.Parse()
 
+	binds := strings.Split(*bindsFlag, ",")
+	if len(binds) == 0 {
+		log.Fatal("No bindings specified")
+	}
+
+	// Spin up a concurrent UDP listener for every IP provided
+	for _, b := range binds {
+		parts := strings.Split(b, "=")
+		if len(parts) != 2 {
+			log.Fatalf("Invalid bind format: %s. Expected IP=region", b)
+		}
+		ip, region := parts[0], parts[1]
+
+		if _, exists := Regions[region]; !exists {
+			log.Fatalf("Unknown region specified in bind: %s", region)
+		}
+
+		go startServer(ip, *portFlag, region)
+	}
+
+	// Block the main thread forever while the goroutines handle the UDP traffic
+	select {}
+}
+
+func startServer(ip string, port int, region string) {
 	addr := net.UDPAddr{
-		Port: *portFlag,
-		IP:   net.ParseIP("0.0.0.0"),
+		Port: port,
+		IP:   net.ParseIP(ip),
 	}
 	conn, err := net.ListenUDP("udp", &addr)
 	if err != nil {
-		log.Fatalf("Failed to listen on port %d: %v", *portFlag, err)
+		log.Fatalf("Failed to listen on %s:%d - %v", ip, port, err)
 	}
 	defer conn.Close()
 
-	log.Printf("smoothtime server listening on udp :%d for region %s", *portFlag, *regionFlag)
+	log.Printf("Node Active: Listening on %s:%d routing to [%s]", ip, port, region)
 
 	buf := make([]byte, 48)
 	for {
@@ -57,35 +83,29 @@ func main() {
 		if err != nil || n < 48 {
 			continue
 		}
-
-		go handleNTPRequest(conn, clientAddr, buf, *regionFlag)
+		// Pass the specific region of this listener into the request handler
+		go handleNTPRequest(conn, clientAddr, buf, region)
 	}
 }
 
 func handleNTPRequest(conn *net.UDPConn, clientAddr *net.UDPAddr, req []byte, region string) {
 	resp := make([]byte, 48)
 	
-	// Set NTP protocol headers
 	resp[0] = 0x1C   // LI=0, VN=3, Mode=4 (Server)
 	resp[1] = 2      // Stratum 2
-	resp[2] = req[2] // Poll interval copied from request
+	resp[2] = req[2] // Poll interval
 	resp[3] = 0xFA   // Precision (-6)
 
-	// Copy Originate Timestamp directly from the client's Transmit Timestamp
 	copy(resp[24:32], req[40:48])
 
 	nowUTC := time.Now().UTC()
 	smoothTime := ApplySmoothTime(nowUTC, region)
 
-	// Convert smoothTime into NTP 64-bit timestamp format
 	sec := uint32(smoothTime.Unix() + ntpEpochOffset)
 	frac := uint32((smoothTime.Nanosecond() * int(1<<32)) / 1e9)
 
-	// Set Receive Timestamp
 	binary.BigEndian.PutUint32(resp[32:36], sec)
 	binary.BigEndian.PutUint32(resp[36:40], frac)
-
-	// Set Transmit Timestamp
 	binary.BigEndian.PutUint32(resp[40:44], sec)
 	binary.BigEndian.PutUint32(resp[44:48], frac)
 
@@ -124,11 +144,7 @@ func getDstDates(year int, rule Rule) (start time.Time, end time.Time) {
 }
 
 func CalculateSmoothOffset(now time.Time, regionID string) float64 {
-	cfg, exists := Regions[regionID]
-	if !exists {
-		cfg = Regions["europe-central"]
-	}
-
+	cfg := Regions[regionID]
 	year := now.Year()
 	tStart, tEnd := getDstDates(year, cfg.Rule)
 

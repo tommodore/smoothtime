@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>404 — smoothtime</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .big404 { font-size: 12rem; font-family: monospace; line-height: 1; }
+    @media (max-width: 640px) { .big404 { font-size: 7rem; } }
+  </style>
+</head>
+<body class="bg-zinc-950 text-white min-h-screen font-sans flex items-center justify-center">
+  <div class="max-w-2xl mx-auto px-6 text-center">
+    
+    <!-- Big 404 -->
+    <div class="big404 text-emerald-400/10 select-none">404</div>
+    
+    <h1 class="text-5xl font-bold tracking-tighter -mt-12 mb-4">Page not found</h1>
+    <p class="text-xl text-zinc-400 mb-10 max-w-md mx-auto">
+      Looks like this page got lost in the smooth time drift.
+    </p>
+
+    <!-- Fun live clock -->
+    <div class="bg-zinc-900 rounded-3xl p-8 inline-block mb-10">
+      <div id="clock" class="text-5xl font-mono text-emerald-400">00:00:00</div>
+      <div class="text-zinc-500 text-sm mt-2">current smooth time</div>
+    </div>
+
+    <!-- Back button -->
+    <a href="/" 
+       class="inline-block bg-emerald-600 hover:bg-emerald-500 transition px-10 py-4 rounded-2xl text-lg font-medium">
+      ← Back to smoothtime
+    </a>
+
+    <p class="text-xs text-zinc-500 mt-16">
+      Open Source • MIT • 
+      <a href="https://github.com/tommodore/smoothtime" class="text-emerald-400 hover:underline">github.com/tommodore/smoothtime</a>
+    </p>
+  </div>
+
+  <script>
+    function updateClock() {
+      const now = new Date();
+      document.getElementById("clock").textContent = 
+        now.toLocaleTimeString("de-DE", { hour: "2-digit", minute: "2-digit", second: "2-digit" });
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+  </script>
+</body>
+</html>

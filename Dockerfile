@@ -3,7 +3,7 @@ WORKDIR /app
 COPY go.mod go.sum ./
 RUN go mod download
 COPY . .
-RUN CGO_ENABLED=0 GOOS=linux go build -o /smoothtime
+RUN CGO_ENABLED=0 GOOS=linux go build -o smoothtime .
 FROM alpine
 COPY --from=builder /smoothtime /smoothtime
 EXPOSE 123/udp 8080

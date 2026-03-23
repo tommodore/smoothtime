@@ -6,3 +6,4 @@ FROM alpine
 COPY --from=builder /smoothtime /smoothtime
 EXPOSE 123/udp 8080
 CMD ["/smoothtime", "-ntp-port", "123"]
+LABEL org.opencontainers.image.source=https://github.com/tommodore/smoothtime

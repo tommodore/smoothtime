@@ -1,17 +1,17 @@
-# --- Build Stage ---
-# Drop the "1.22" and just use latest alpine to avoid version conflicts
-FROM golang:alpine AS builder
+# 1. Tell Docker to ALWAYS use the native speed of the GitHub runner (AMD64) for the builder
+FROM --platform=$BUILDPLATFORM golang:alpine AS builder
+
+# 2. These variables are automatically injected by Buildx (e.g., linux and arm64)
+ARG TARGETOS
+ARG TARGETARCH
 
 WORKDIR /app
-
-# Copy everything in the repository (including main.go and go.mod)
 COPY . .
 
-# Build the binary directly. 
-# We can skip 'go mod download' because you have no external dependencies.
-RUN CGO_ENABLED=0 GOOS=linux go build -o /smoothtime .
+# 3. Cross-compile instantly using Go's native engine!
+RUN CGO_ENABLED=0 GOOS=$TARGETOS GOARCH=$TARGETARCH go build -o /smoothtime .
 
-# --- Final Stage ---
+# 4. Put the finished binary into the correct final container
 FROM alpine:latest
 COPY --from=builder /smoothtime /smoothtime
 

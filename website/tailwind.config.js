@@ -1,0 +1,67 @@
+/** @type {import('tailwindcss').Config} */
+module.exports = {
+  content: ["./*.html"],
+  darkMode: "class",
+  theme: {
+    extend: {
+      colors: {
+        "error-container": "#93000a",
+        "surface-container-lowest": "#0e0e10",
+        "outline": "#86948a",
+        "on-secondary-container": "#91c4a8",
+        "tertiary-fixed-dim": "#ffb3af",
+        "background": "#131315",
+        "on-secondary": "#013824",
+        "on-surface": "#e5e1e4",
+        "on-surface-variant": "#bbcabf",
+        "on-background": "#e5e1e4",
+        "surface-dim": "#131315",
+        "primary-fixed": "#6ffbbe",
+        "tertiary-fixed": "#ffdad7",
+        "secondary-container": "#21523c",
+        "tertiary": "#ffb3af",
+        "surface-container": "#201f22",
+        "error": "#ffb4ab",
+        "on-tertiary-container": "#711419",
+        "surface-container-high": "#2a2a2c",
+        "on-secondary-fixed": "#002113",
+        "on-primary-fixed-variant": "#005236",
+        "on-error": "#690005",
+        "on-error-container": "#ffdad6",
+        "surface-variant": "#353437",
+        "tertiary-container": "#fc7c78",
+        "secondary-fixed-dim": "#9ed2b5",
+        "on-primary": "#003824",
+        "surface-container-low": "#1c1b1d",
+        "surface-bright": "#39393b",
+        "on-tertiary-fixed-variant": "#842225",
+        "outline-variant": "#3c4a42",
+        "secondary-fixed": "#baeed1",
+        "on-tertiary-fixed": "#410005",
+        "primary-fixed-dim": "#4edea3",
+        "on-primary-container": "#00422b",
+        "surface-container-highest": "#353437",
+        "inverse-on-surface": "#313032",
+        "on-secondary-fixed-variant": "#1e4f3a",
+        "surface-tint": "#4edea3",
+        "on-tertiary": "#650911",
+        "surface": "#131315",
+        "primary": "#4edea3",
+        "inverse-surface": "#e5e1e4",
+        "secondary": "#9ed2b5",
+        "primary-container": "#10b981",
+        "inverse-primary": "#006c49",
+        "on-primary-fixed": "#002113"
+      },
+      fontFamily: {
+        "headline": ["Space Grotesk", "sans-serif"],
+        "body": ["Manrope", "sans-serif"],
+        "mono": ["ui-monospace", "SFMono-Regular", "Menlo", "Monaco", "Consolas", "Liberation Mono", "Courier New", "monospace"]
+      }
+    }
+  },
+  plugins: [
+    require('@tailwindcss/forms'),
+    require('@tailwindcss/container-queries'),
+  ],
+}

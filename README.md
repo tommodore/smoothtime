@@ -24,13 +24,29 @@ Choose the server closest to your actual timezone:
 
 | Region                  | Subdomain                          | NTP Command |
 |-------------------------|------------------------------------|-------------|
-| UK (WET/WEST)           | `europe-west.smoothtime.io`        | `server europe-west.smoothtime.io iburst` |
+| Western Europe (WET/WEST)           | `europe-west.smoothtime.io`        | `server europe-west.smoothtime.io iburst` |
 | Central Europe (CET/CEST) | `europe-central.smoothtime.io`   | `server europe-central.smoothtime.io iburst` |
 | Eastern Europe (EET/EEST) | `europe-east.smoothtime.io`      | `server europe-east.smoothtime.io iburst` |
 | US Eastern (EST/EDT)    | `us-eastern.smoothtime.io`         | `server us-eastern.smoothtime.io iburst` |
 | US Central (CST/CDT)    | `us-central.smoothtime.io`         | `server us-central.smoothtime.io iburst` |
 | US Mountain (MST/MDT)   | `us-mountain.smoothtime.io`        | `server us-mountain.smoothtime.io iburst` |
 | US Pacific (PST/PDT)    | `us-pacific.smoothtime.io`         | `server us-pacific.smoothtime.io iburst` |
+
+## How the smooth offset works
+
+After summer time ends, the offset increases **linearly** until it reaches exactly +2 hours (or the equivalent for other zones) on the next DST start date — with **no jumps**.
+
+The formula used is:
+
+```math
+offset = base + \frac{days\_passed}{total\_days} \times 1.0
+```
+
+- `base` = winter offset (e.g. 1.0 for CET)
+- `days_passed` = days since the last DST end
+- `total_days` = number of days between last DST end and next DST start
+
+This guarantees a perfectly smooth transition without any discontinuity.
 
 ## Quick Start
 
@@ -57,10 +73,6 @@ ntpdate -q 127.0.0.1 -p 1123       # Linux
 - Docker and systemd ready
 - Clean status page (UptimeFlare)
 
-## How the smooth offset works
-
-After summer time ends, the offset gradually increases linearly until it reaches exactly +1 hours (or the equivalent for other zones) on the next DST start date — with **no jumps**.
-
 ## Deployment
 
 See:
@@ -79,8 +91,3 @@ Pull requests are welcome! Especially:
 MIT © 2026 tommodore & contributors
 
 See [LICENSE](LICENSE) for details.
-```
-
-**Ready to use** — just replace the entire content of your `README.md` with the text above.
-
-Would you like me to also update the Go code / config to match these new subdomain names (`europe-central`, `europe-west`, etc.)?

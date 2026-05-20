@@ -50,7 +50,7 @@ const ntpEpochOffset = 2208988800
 
 func main() {
 	// Flags for binding specific IPs to regions and setting the NTP port.
-	bindsFlag := flag.String("binds", "::=europe-central", "Comma-separated list of IP=region bindings")
+	bindsFlag := flag.String("binds", "::=europe-central", "Comma-separated list of IP=region bindings (e.g. 2a01:4f8:c2c:a4a5::9=australia-sydney,::=europe-central)")
 	portFlag := flag.Int("ntp-port", 123, "UDP port to listen on for NTP")
 	healthPort := flag.String("health-port", "8080", "TCP port for HTTP health checks")
 	flag.Parse()
@@ -148,7 +148,7 @@ func handleNTPRequest(conn *net.UDPConn, clientAddr *net.UDPAddr, req []byte, re
 
 func getNthSunday(year int, month time.Month, nth int) time.Time {
 	t := time.Date(year, month, 1, 0, 0, 0, 0, time.UTC)
-	count := 0
+	count := 0;
 	for {
 		if t.Weekday() == time.Sunday {
 			count++

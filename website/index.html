@@ -213,12 +213,12 @@
       </div>
     </section>
 
-    <!-- CORRECTED SIMULATOR -->
+    <!-- FINAL SIMULATOR WITH TICKING CLOCKS -->
     <section id="simulator" class="reveal mb-24 md:mb-32">
       <h2 class="text-3xl md:text-4xl font-headline font-bold mb-4 flex items-center gap-4">
         <span class="text-primary font-mono text-xl">Interactive Demo</span> DST Transition Simulator
       </h2>
-      <p class="text-on-surface-variant max-w-2xl mb-8">See what the current local time would be vs smoothtime at any point in the season. The clocks show the correct local time.</p>
+      <p class="text-on-surface-variant max-w-2xl mb-8">See what the current local time would be vs smoothtime at any point in the season. Both clocks tick live.</p>
       
       <div class="glass-card p-8 md:p-12 rounded-2xl border border-outline-variant/10">
         <div class="max-w-5xl mx-auto">
@@ -256,7 +256,7 @@
             </div>
           </div>
 
-          <!-- Two Clocks -->
+          <!-- Two Ticking Clocks -->
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             
             <!-- Official Local Time -->
@@ -300,7 +300,7 @@
           </div>
 
           <div class="mt-6 text-center text-xs text-on-surface-variant font-mono">
-            Official = real current local time &nbsp;&nbsp;|&nbsp;&nbsp; smoothtime = real local time + smooth offset
+            Both clocks tick live every second.
           </div>
 
         </div>
@@ -509,6 +509,7 @@ pool pool.ntp.org iburst</span></pre>
 
     let currentRegion = "europe-central";
     let simRegion = "europe-central";
+    let currentDiffOffset = 0; // difference between simulated and real smooth offset
 
     function updateClock() {
       const offsetH = smoothOffset();
@@ -558,7 +559,7 @@ pool pool.ntp.org iburst</span></pre>
       }, 1500);
     }
 
-    // --- CORRECT SIMULATOR (real local time + simulated difference) ---
+    // --- Update simulator when region or slider changes ---
     function updateSimulator() {
       const regionKey = document.getElementById('sim-region').value;
       const days = parseInt(document.getElementById('days-slider').value);
@@ -569,9 +570,34 @@ pool pool.ntp.org iburst</span></pre>
       const totalDays = 180;
       const fraction = Math.min(1, Math.max(0, days / totalDays));
 
+      // Get real current smooth offset
+      const realSmoothOffset = calculateCurrentSmoothOffset(regionKey);
+
+      // Simulated smooth offset based on slider
+      const simulatedSmoothOffset = cfg.base + 1.0 - fraction;
+
+      // Store the difference for ticking
+      currentDiffOffset = simulatedSmoothOffset - realSmoothOffset;
+
+      // Update static labels
+      document.getElementById('official-offset').textContent = `+${realSmoothOffset.toFixed(3)} h (real)`;
+      document.getElementById('smoothtime-offset').textContent = `+${simulatedSmoothOffset.toFixed(3)} h (sim)`;
+
+      // Update difference label
+      const diffMinutes = Math.round(currentDiffOffset * 60);
+      document.getElementById('time-difference').textContent = `${diffMinutes >= 0 ? '+' : ''}${diffMinutes} minutes`;
+
+      // Initial clock update
+      tickSimulatorClocks();
+    }
+
+    // --- Tick both clocks every second ---
+    function tickSimulatorClocks() {
+      const regionKey = document.getElementById('sim-region').value;
+      const cfg = regions[regionKey];
       const now = new Date();
 
-      // Official = real current local time (already includes real DST)
+      // Official = real current local time
       const officialTimeStr = now.toLocaleTimeString("en-US", {
         timeZone: cfg.iana,
         hour12: false,
@@ -581,15 +607,8 @@ pool pool.ntp.org iburst</span></pre>
       });
       document.getElementById('official-clock').textContent = officialTimeStr;
 
-      // Get real current smooth offset
-      const realSmoothOffset = calculateCurrentSmoothOffset(regionKey);
-
-      // Simulated smooth offset based on slider
-      const simulatedSmoothOffset = cfg.base + 1.0 - fraction;
-
-      // Apply only the difference to the real local time
-      const diffOffset = simulatedSmoothOffset - realSmoothOffset;
-      const smoothTime = new Date(now.getTime() + diffOffset * 3600 * 1000);
+      // smoothtime = real local time + currentDiffOffset
+      const smoothTime = new Date(now.getTime() + currentDiffOffset * 3600 * 1000);
       const smoothTimeStr = smoothTime.toLocaleTimeString("en-US", {
         timeZone: cfg.iana,
         hour12: false,
@@ -598,14 +617,6 @@ pool pool.ntp.org iburst</span></pre>
         second: "2-digit"
       });
       document.getElementById('smoothtime-clock').textContent = smoothTimeStr;
-
-      // Show offsets
-      document.getElementById('official-offset').textContent = `+${realSmoothOffset.toFixed(3)} h (real)`;
-      document.getElementById('smoothtime-offset').textContent = `+${simulatedSmoothOffset.toFixed(3)} h (sim)`;
-
-      // Difference
-      const diffMinutes = Math.round(diffOffset * 60);
-      document.getElementById('time-difference').textContent = `${diffMinutes >= 0 ? '+' : ''}${diffMinutes} minutes`;
     }
 
     function calculateCurrentSmoothOffset(regionKey) {
@@ -704,6 +715,9 @@ pool pool.ntp.org iburst</span></pre>
         updateSimulator();
         slider.oninput = updateSimulator;
         document.getElementById('sim-region').onchange = updateSimulator;
+
+        // Tick both clocks every second
+        setInterval(tickSimulatorClocks, 1000);
       }
     }
 

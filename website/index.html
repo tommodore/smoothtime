@@ -131,26 +131,19 @@
       .mobile-hero-text { font-size: 3.5rem !important; line-height: 1.1 !important; }
     }
 
-    /* New demo styles */
-    .simulator-bar {
-      height: 8px;
-      background: linear-gradient(to right, #4edea3, #22c55e);
-      transition: width 0.3s ease;
+    /* Simulator styles */
+    .clock-display {
+      font-family: 'Space Grotesk', system-ui, sans-serif;
+      font-size: 2.75rem;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      line-height: 1;
     }
-    .abrupt-jump {
-      position: relative;
-    }
-    .abrupt-jump::after {
-      content: 'JUMP';
-      position: absolute;
-      top: -18px;
-      right: 0;
-      font-size: 10px;
-      font-weight: bold;
-      color: #ef4444;
-      background: #3f1f1f;
-      padding: 1px 6px;
-      border-radius: 4px;
+    .time-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
     }
   </style>
 </head>
@@ -226,20 +219,20 @@
       </div>
     </section>
 
-    <!-- NEW: Interactive DST Transition Simulator -->
+    <!-- IMPROVED: Interactive DST Transition Simulator -->
     <section id="simulator" class="reveal mb-24 md:mb-32">
-      <h2 class="text-3xl md:text-4xl font-headline font-bold mb-8 md:mb-12 flex items-center gap-4">
+      <h2 class="text-3xl md:text-4xl font-headline font-bold mb-4 flex items-center gap-4">
         <span class="text-primary font-mono text-xl">Interactive Demo</span> DST Transition Simulator
       </h2>
+      <p class="text-on-surface-variant max-w-2xl mb-8">See exactly what your clock would show on a normal day vs with smoothtime. Move the slider to simulate any point in the season.</p>
       
       <div class="glass-card p-8 md:p-12 rounded-2xl border border-outline-variant/10">
-        <div class="max-w-4xl mx-auto">
-          <p class="text-on-surface-variant mb-8 text-lg">See the difference: Standard DST makes an instant 1-hour jump. smoothtime spreads it gradually over ~6 months using the exact linear drift formula used by our servers.</p>
+        <div class="max-w-5xl mx-auto">
           
-          <!-- Region & Slider -->
-          <div class="flex flex-col md:flex-row gap-6 mb-8">
+          <!-- Controls -->
+          <div class="flex flex-col md:flex-row gap-6 mb-10">
             <div class="flex-1">
-              <label class="text-xs font-bold text-primary tracking-widest uppercase block mb-2">Select Region</label>
+              <label class="text-xs font-bold text-primary tracking-widest uppercase block mb-2">Region</label>
               <select id="sim-region" onchange="updateSimulator()" class="w-full bg-surface-container-highest border border-outline-variant/20 rounded-xl px-4 py-3 text-on-surface font-mono text-sm">
                 <option value="europe-central">Europe Central (CET/CEST)</option>
                 <option value="europe-west">Europe West (WET/WEST)</option>
@@ -248,7 +241,6 @@
                 <option value="us-central">US Central (CST/CDT)</option>
                 <option value="us-mountain">US Mountain (MST/MDT)</option>
                 <option value="us-pacific">US Pacific (PST/PDT)</option>
-                <!-- New regions -->
                 <option value="australia-sydney">Australia Sydney (AEST/AEDT)</option>
                 <option value="new-zealand">New Zealand (NZST/NZDT)</option>
                 <option value="chile">Chile (CLT/CLST)</option>
@@ -257,48 +249,73 @@
             </div>
             
             <div class="flex-1">
-              <label class="text-xs font-bold text-primary tracking-widest uppercase block mb-2">Days since last DST end <span id="slider-value" class="font-mono text-primary">90</span>/180</label>
+              <div class="flex justify-between items-baseline mb-1">
+                <label class="text-xs font-bold text-primary tracking-widest uppercase">Days into transition season</label>
+                <span id="slider-value" class="font-mono text-sm text-primary font-bold">90 / 180</span>
+              </div>
               <input type="range" id="days-slider" min="0" max="180" value="90" step="1" oninput="updateSimulator()" class="w-full accent-primary">
+              <div class="flex justify-between text-[10px] text-on-surface-variant mt-1 font-mono">
+                <div>Start of season</div>
+                <div>Mid season</div>
+                <div>End of season</div>
+              </div>
             </div>
           </div>
 
-          <!-- Comparison Cards -->
+          <!-- Two Clocks Side by Side -->
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <!-- Standard Abrupt -->
+            
+            <!-- Official / Standard Time -->
             <div class="glass-card p-6 rounded-2xl border border-error/30">
               <div class="flex items-center gap-3 mb-4">
-                <span class="material-symbols-outlined text-error">warning</span>
-                <h4 class="font-bold text-lg">Standard DST (Abrupt Jump)</h4>
+                <span class="material-symbols-outlined text-error">schedule</span>
+                <div>
+                  <div class="font-bold text-lg">Official Time</div>
+                  <div class="text-xs text-on-surface-variant">What a normal NTP server shows</div>
+                </div>
               </div>
-              <div class="h-3 bg-error/20 rounded-full mb-4 overflow-hidden">
-                <div id="abrupt-bar" class="h-3 bg-error w-0 transition-all duration-300"></div>
-              </div>
-              <div class="text-center">
-                <div class="text-4xl font-mono font-bold text-error mb-1" id="abrupt-offset">+1.000 h</div>
-                <div class="text-xs text-on-surface-variant">Instant jump at transition day</div>
+              
+              <div class="text-center py-6">
+                <div id="official-clock" class="clock-display tabular-nums text-error">14:30:00</div>
+                <div class="mt-2 text-sm">
+                  <span class="font-mono text-error" id="official-offset">+1.000 h</span>
+                  <span class="text-xs text-on-surface-variant ml-1">(already jumped)</span>
+                </div>
               </div>
             </div>
 
-            <!-- Smoothtime Smooth -->
+            <!-- smoothtime -->
             <div class="glass-card p-6 rounded-2xl border border-primary/30">
               <div class="flex items-center gap-3 mb-4">
                 <span class="material-symbols-outlined text-primary">timeline</span>
-                <h4 class="font-bold text-lg">smoothtime (Smooth Drift)</h4>
+                <div>
+                  <div class="font-bold text-lg">smoothtime</div>
+                  <div class="text-xs text-on-surface-variant">What this server shows</div>
+                </div>
               </div>
-              <div class="h-3 bg-primary/20 rounded-full mb-4 overflow-hidden">
-                <div id="smooth-bar" class="simulator-bar w-0 transition-all duration-300"></div>
-              </div>
-              <div class="text-center">
-                <div class="text-4xl font-mono font-bold text-primary mb-1" id="smooth-offset">+0.500 h</div>
-                <div class="text-xs text-on-surface-variant">Linear ramp — no shock</div>
+              
+              <div class="text-center py-6">
+                <div id="smoothtime-clock" class="clock-display tabular-nums text-primary">14:00:00</div>
+                <div class="mt-2 text-sm">
+                  <span class="font-mono text-primary" id="smoothtime-offset">+0.500 h</span>
+                  <span class="text-xs text-on-surface-variant ml-1">(smoothly drifting)</span>
+                </div>
               </div>
             </div>
           </div>
 
-          <div class="mt-8 p-4 bg-surface-container-lowest rounded-xl text-xs font-mono text-on-surface-variant border border-outline-variant/10">
-            <strong>Formula used:</strong> offset = base + (days_passed / total_days) × 1.0<br>
-            <span class="text-primary">This is the exact math running on our production NTP servers (now with Southern Hemisphere support).</span>
+          <!-- Difference highlight -->
+          <div class="mt-6 p-4 bg-surface-container-lowest rounded-2xl border border-outline-variant/10 text-center">
+            <div class="text-sm text-on-surface-variant">On this day your clock would be</div>
+            <div class="text-3xl font-bold font-mono text-primary mt-1" id="time-difference">+30 minutes</div>
+            <div class="text-xs text-on-surface-variant mt-1">behind official time</div>
           </div>
+
+          <div class="mt-8 text-xs text-on-surface-variant font-mono text-center">
+            Formula: offset = base + (days / 180) × 1.0 hour<br>
+            This is exactly what our production NTP servers calculate in real time.
+          </div>
+
         </div>
       </div>
     </section>
@@ -497,7 +514,6 @@ pool pool.ntp.org iburst</span></pre>
       "us-central":     { name: "US Central Smoothtime (CST/CDT)",      base: -6.0, rule: "us" },
       "us-mountain":    { name: "US Mountain Smoothtime (MST/MDT)",     base: -7.0, rule: "us" },
       "us-pacific":     { name: "US Pacific Smoothtime (PST/PDT)",      base: -8.0, rule: "us" },
-      // New Southern Hemisphere regions
       "australia-sydney": { name: "Australia Sydney Smoothtime (AEST/AEDT)", base: -10.0, rule: "au" },
       "new-zealand":      { name: "New Zealand Smoothtime (NZST/NZDT)", base: 12.0, rule: "au" },
       "chile":            { name: "Chile Smoothtime (CLT/CLST)", base: -4.0, rule: "cl" },
@@ -533,13 +549,10 @@ pool pool.ntp.org iburst</span></pre>
       } else if (rule === 'us') {
         return { start: getNthSunday(year, 2, 2), end: getNthSunday(year, 10, 1) };
       } else if (rule === 'au') {
-        // Southern: Oct start, Apr end (next year)
         return { start: getNthSunday(year, 9, 1), end: getNthSunday(year + 1, 3, 1) };
       } else if (rule === 'cl') {
-        // Chile: Sep start, Apr end
         return { start: getNthSunday(year, 8, 1), end: getNthSunday(year + 1, 3, 1) };
       }
-      // No DST (Argentina)
       return { start: new Date(0), end: new Date(0) };
     }
 
@@ -551,9 +564,7 @@ pool pool.ntp.org iburst</span></pre>
       const tStart = dates.start;
       const tEnd = dates.end;
 
-      if (tStart.getTime() === 0) {
-        return cfg.base; // No DST
-      }
+      if (tStart.getTime() === 0) return cfg.base;
 
       let offset;
       if (now >= tStart && now < tEnd) {
@@ -620,28 +631,49 @@ pool pool.ntp.org iburst</span></pre>
       }, 1500);
     }
 
-    // --- NEW: DST Transition Simulator ---
+    // --- IMPROVED DST Transition Simulator ---
     function updateSimulator() {
       const regionKey = document.getElementById('sim-region').value;
       const days = parseInt(document.getElementById('days-slider').value);
-      document.getElementById('slider-value').textContent = days;
+      
+      document.getElementById('slider-value').textContent = `${days} / 180`;
 
       const cfg = regions[regionKey];
       const totalDays = 180;
-      const fraction = days / totalDays;
+      const fraction = Math.min(1, Math.max(0, days / totalDays));
 
-      // Standard abrupt: full 1h jump after ~90 days
-      const abruptOffset = (days > 90 && cfg.rule !== 'none') ? cfg.base + 1.0 : cfg.base;
-      document.getElementById('abrupt-offset').textContent = `${abruptOffset >= 0 ? '+' : ''}${abruptOffset.toFixed(3)} h`;
-      document.getElementById('abrupt-bar').style.width = (days > 90 && cfg.rule !== 'none' ? '100%' : '0%');
+      const now = new Date();
+      const baseOffset = cfg.base;
 
-      // Smoothtime smooth linear
-      const smoothOffsetVal = cfg.base + fraction * (cfg.rule === 'none' ? 0 : 1.0);
-      document.getElementById('smooth-offset').textContent = `${smoothOffsetVal >= 0 ? '+' : ''}${smoothOffsetVal.toFixed(3)} h`;
-      document.getElementById('smooth-bar').style.width = `${fraction * 100}%`;
+      // Official time (abrupt jump after day 90 for demo purposes)
+      const officialOffset = (days > 90 && cfg.rule !== 'none') ? baseOffset + 1.0 : baseOffset;
+      const officialTime = new Date(now.getTime() + officialOffset * 3600 * 1000);
+      
+      // smoothtime (smooth)
+      const smoothOffsetVal = baseOffset + fraction * (cfg.rule === 'none' ? 0 : 1.0);
+      const smoothTime = new Date(now.getTime() + smoothOffsetVal * 3600 * 1000);
+
+      // Update clocks
+      document.getElementById('official-clock').textContent = 
+        officialTime.toLocaleTimeString("en-US", { hour12: false, hour: "2-digit", minute: "2-digit", second: "2-digit" });
+      document.getElementById('smoothtime-clock').textContent = 
+        smoothTime.toLocaleTimeString("en-US", { hour12: false, hour: "2-digit", minute: "2-digit", second: "2-digit" });
+
+      // Update offsets
+      const sign1 = officialOffset >= 0 ? "+" : "";
+      document.getElementById('official-offset').textContent = `${sign1}${officialOffset.toFixed(3)} h`;
+      
+      const sign2 = smoothOffsetVal >= 0 ? "+" : "";
+      document.getElementById('smoothtime-offset').textContent = `${sign2}${smoothOffsetVal.toFixed(3)} h`;
+
+      // Time difference
+      const diffMinutes = Math.round((officialOffset - smoothOffsetVal) * 60);
+      const diffText = diffMinutes === 0 ? "0 minutes" : 
+                       (diffMinutes > 0 ? `+${diffMinutes} minutes` : `${diffMinutes} minutes`);
+      document.getElementById('time-difference').textContent = diffText;
     }
 
-    // Initialize simulator on load
+    // Initialize simulator
     setTimeout(() => {
       const slider = document.getElementById('days-slider');
       if (slider) {
@@ -649,7 +681,7 @@ pool pool.ntp.org iburst</span></pre>
         document.getElementById('sim-region').value = 'europe-central';
         updateSimulator();
       }
-    }, 500);
+    }, 300);
 
     const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
     if (["America/New_York","America/Toronto"].includes(tz)) currentRegion = "us-eastern";

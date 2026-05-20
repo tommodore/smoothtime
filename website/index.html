@@ -213,12 +213,12 @@
       </div>
     </section>
 
-    <!-- FIXED SIMULATOR: Real local time + simulated transition -->
+    <!-- CORRECTED SIMULATOR -->
     <section id="simulator" class="reveal mb-24 md:mb-32">
       <h2 class="text-3xl md:text-4xl font-headline font-bold mb-4 flex items-center gap-4">
         <span class="text-primary font-mono text-xl">Interactive Demo</span> DST Transition Simulator
       </h2>
-      <p class="text-on-surface-variant max-w-2xl mb-8">See what the current local time would be vs smoothtime at any point in the season. Move the slider to simulate the transition.</p>
+      <p class="text-on-surface-variant max-w-2xl mb-8">See what the current local time would be vs smoothtime at any point in the season. The clocks show the correct local time.</p>
       
       <div class="glass-card p-8 md:p-12 rounded-2xl border border-outline-variant/10">
         <div class="max-w-5xl mx-auto">
@@ -259,19 +259,19 @@
           <!-- Two Clocks -->
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             
-            <!-- Official Local Time + simulated offset -->
+            <!-- Official Local Time -->
             <div class="glass-card p-6 rounded-2xl border border-error/30">
               <div class="flex items-center gap-3 mb-4">
                 <span class="material-symbols-outlined text-error">schedule</span>
                 <div>
                   <div class="font-bold text-lg">Official Time</div>
-                  <div class="text-xs text-on-surface-variant">Current local time + full summer jump</div>
+                  <div class="text-xs text-on-surface-variant">Current local time (real)</div>
                 </div>
               </div>
               
               <div class="text-center py-4">
                 <div id="official-clock" class="clock-display tabular-nums text-error">--:--:--</div>
-                <div class="mt-3 text-sm font-mono text-error" id="official-offset">+2.000 h</div>
+                <div class="mt-3 text-sm font-mono text-error" id="official-offset">+2.000 h (CEST)</div>
               </div>
             </div>
 
@@ -281,7 +281,7 @@
                 <span class="material-symbols-outlined text-primary">timeline</span>
                 <div>
                   <div class="font-bold text-lg">smoothtime</div>
-                  <div class="text-xs text-on-surface-variant">Current local time + smooth offset</div>
+                  <div class="text-xs text-on-surface-variant">What this server would show</div>
                 </div>
               </div>
               
@@ -300,8 +300,7 @@
           </div>
 
           <div class="mt-6 text-center text-xs text-on-surface-variant font-mono">
-            The clocks show what the time would be right now if we were at this point in the season.<br>
-            Formula: offset = base + (days / 180) × 1.0 hour
+            Official = real current local time &nbsp;&nbsp;|&nbsp;&nbsp; smoothtime = real local time + smooth offset
           </div>
 
         </div>
@@ -559,7 +558,7 @@ pool pool.ntp.org iburst</span></pre>
       }, 1500);
     }
 
-    // --- CORRECTED SIMULATOR ---
+    // --- CORRECT SIMULATOR (real local time + simulated difference) ---
     function updateSimulator() {
       const regionKey = document.getElementById('sim-region').value;
       const days = parseInt(document.getElementById('days-slider').value);
@@ -572,10 +571,8 @@ pool pool.ntp.org iburst</span></pre>
 
       const now = new Date();
 
-      // Official = current local time + full summer offset (base + 1)
-      const officialOffset = cfg.base + 1.0;
-      const officialTime = new Date(now.getTime() + officialOffset * 3600 * 1000);
-      const officialTimeStr = officialTime.toLocaleTimeString("en-US", {
+      // Official = real current local time (already includes real DST)
+      const officialTimeStr = now.toLocaleTimeString("en-US", {
         timeZone: cfg.iana,
         hour12: false,
         hour: "2-digit",
@@ -583,11 +580,16 @@ pool pool.ntp.org iburst</span></pre>
         second: "2-digit"
       });
       document.getElementById('official-clock').textContent = officialTimeStr;
-      document.getElementById('official-offset').textContent = `+${officialOffset.toFixed(3)} h`;
 
-      // smoothtime = current local time + smooth offset
-      const smoothOffsetVal = cfg.base + 1.0 - fraction;
-      const smoothTime = new Date(now.getTime() + smoothOffsetVal * 3600 * 1000);
+      // Get real current smooth offset
+      const realSmoothOffset = calculateCurrentSmoothOffset(regionKey);
+
+      // Simulated smooth offset based on slider
+      const simulatedSmoothOffset = cfg.base + 1.0 - fraction;
+
+      // Apply only the difference to the real local time
+      const diffOffset = simulatedSmoothOffset - realSmoothOffset;
+      const smoothTime = new Date(now.getTime() + diffOffset * 3600 * 1000);
       const smoothTimeStr = smoothTime.toLocaleTimeString("en-US", {
         timeZone: cfg.iana,
         hour12: false,
@@ -596,11 +598,41 @@ pool pool.ntp.org iburst</span></pre>
         second: "2-digit"
       });
       document.getElementById('smoothtime-clock').textContent = smoothTimeStr;
-      document.getElementById('smoothtime-offset').textContent = `+${smoothOffsetVal.toFixed(3)} h`;
+
+      // Show offsets
+      document.getElementById('official-offset').textContent = `+${realSmoothOffset.toFixed(3)} h (real)`;
+      document.getElementById('smoothtime-offset').textContent = `+${simulatedSmoothOffset.toFixed(3)} h (sim)`;
 
       // Difference
-      const diffMinutes = Math.round((officialOffset - smoothOffsetVal) * 60);
-      document.getElementById('time-difference').textContent = `-${diffMinutes} minutes`;
+      const diffMinutes = Math.round(diffOffset * 60);
+      document.getElementById('time-difference').textContent = `${diffMinutes >= 0 ? '+' : ''}${diffMinutes} minutes`;
+    }
+
+    function calculateCurrentSmoothOffset(regionKey) {
+      const cfg = regions[regionKey];
+      const now = new Date();
+      const year = now.getUTCFullYear();
+      const dates = getDstDates(year, cfg.rule);
+      const tStart = dates.start;
+      const tEnd = dates.end;
+
+      if (tStart.getTime() === 0) return cfg.base;
+
+      let offset;
+      if (now >= tStart && now < tEnd) {
+        const fraction = (now - tStart) / (tEnd - tStart);
+        offset = cfg.base + 1.0 - fraction;
+      } else {
+        let wStart = tEnd;
+        let wEnd = getDstDates(year + 1, cfg.rule).start;
+        if (now < tStart) {
+          wStart = getDstDates(year - 1, cfg.rule).end;
+          wEnd = tStart;
+        }
+        const fraction = (now - wStart) / (wEnd - wStart);
+        offset = cfg.base + fraction;
+      }
+      return offset;
     }
 
     function getNthSunday(year, month, nth) {

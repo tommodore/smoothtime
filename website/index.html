@@ -213,50 +213,65 @@
       </div>
     </section>
 
-    <!-- IMPROVED SIMULATOR: Real local time vs smoothtime -->
+    <!-- FIXED SIMULATOR: Real local time + simulated transition -->
     <section id="simulator" class="reveal mb-24 md:mb-32">
       <h2 class="text-3xl md:text-4xl font-headline font-bold mb-4 flex items-center gap-4">
         <span class="text-primary font-mono text-xl">Interactive Demo</span> DST Transition Simulator
       </h2>
-      <p class="text-on-surface-variant max-w-2xl mb-8">See the real current time in your timezone vs what smoothtime would show right now. The clocks tick live.</p>
+      <p class="text-on-surface-variant max-w-2xl mb-8">See what the current local time would be vs smoothtime at any point in the season. Move the slider to simulate the transition.</p>
       
       <div class="glass-card p-8 md:p-12 rounded-2xl border border-outline-variant/10">
         <div class="max-w-5xl mx-auto">
           
-          <!-- Region Selector -->
-          <div class="mb-8">
-            <label class="text-xs font-bold text-primary tracking-widest uppercase block mb-2">Select your region</label>
-            <select id="sim-region" onchange="updateSimulatorRegion()" class="w-full max-w-md bg-surface-container-highest border border-outline-variant/20 rounded-xl px-4 py-3 text-on-surface font-mono text-sm">
-              <option value="europe-central">Europe Central (CET/CEST)</option>
-              <option value="europe-west">Europe West (WET/WEST)</option>
-              <option value="europe-east">Europe East (EET/EEST)</option>
-              <option value="us-eastern">US Eastern (EST/EDT)</option>
-              <option value="us-central">US Central (CST/CDT)</option>
-              <option value="us-mountain">US Mountain (MST/MDT)</option>
-              <option value="us-pacific">US Pacific (PST/PDT)</option>
-              <option value="australia-sydney">Australia Sydney (AEST/AEDT)</option>
-              <option value="new-zealand">New Zealand (NZST/NZDT)</option>
-              <option value="chile">Chile (CLT/CLST)</option>
-              <option value="argentina">Argentina (ART)</option>
-            </select>
+          <!-- Controls -->
+          <div class="flex flex-col md:flex-row gap-8 mb-10">
+            <div class="flex-1">
+              <label class="text-xs font-bold text-primary tracking-widest uppercase block mb-2">Region</label>
+              <select id="sim-region" onchange="updateSimulator()" class="w-full bg-surface-container-highest border border-outline-variant/20 rounded-xl px-4 py-3 text-on-surface font-mono text-sm">
+                <option value="europe-central">Europe Central (CET/CEST)</option>
+                <option value="europe-west">Europe West (WET/WEST)</option>
+                <option value="europe-east">Europe East (EET/EEST)</option>
+                <option value="us-eastern">US Eastern (EST/EDT)</option>
+                <option value="us-central">US Central (CST/CDT)</option>
+                <option value="us-mountain">US Mountain (MST/MDT)</option>
+                <option value="us-pacific">US Pacific (PST/PDT)</option>
+                <option value="australia-sydney">Australia Sydney (AEST/AEDT)</option>
+                <option value="new-zealand">New Zealand (NZST/NZDT)</option>
+                <option value="chile">Chile (CLT/CLST)</option>
+                <option value="argentina">Argentina (ART)</option>
+              </select>
+            </div>
+            
+            <div class="flex-1">
+              <div class="flex justify-between items-baseline mb-1">
+                <label class="text-xs font-bold text-primary tracking-widest uppercase">Days into transition season</label>
+                <span id="slider-value" class="font-mono text-sm text-primary font-bold">90 / 180</span>
+              </div>
+              <input type="range" id="days-slider" min="0" max="180" value="90" step="1" oninput="updateSimulator()" class="w-full accent-primary">
+              <div class="flex justify-between text-[10px] text-on-surface-variant mt-1 font-mono">
+                <div>Start</div>
+                <div>Mid</div>
+                <div>End</div>
+              </div>
+            </div>
           </div>
 
-          <!-- Two Live Clocks -->
+          <!-- Two Clocks -->
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             
-            <!-- Official Local Time -->
+            <!-- Official Local Time + simulated offset -->
             <div class="glass-card p-6 rounded-2xl border border-error/30">
               <div class="flex items-center gap-3 mb-4">
                 <span class="material-symbols-outlined text-error">schedule</span>
                 <div>
                   <div class="font-bold text-lg">Official Time</div>
-                  <div class="text-xs text-on-surface-variant">Current time in this timezone</div>
+                  <div class="text-xs text-on-surface-variant">Current local time + full summer jump</div>
                 </div>
               </div>
               
               <div class="text-center py-4">
                 <div id="official-clock" class="clock-display tabular-nums text-error">--:--:--</div>
-                <div class="mt-3 text-sm font-mono text-error" id="official-offset">+2.000 h (CEST)</div>
+                <div class="mt-3 text-sm font-mono text-error" id="official-offset">+2.000 h</div>
               </div>
             </div>
 
@@ -266,27 +281,27 @@
                 <span class="material-symbols-outlined text-primary">timeline</span>
                 <div>
                   <div class="font-bold text-lg">smoothtime</div>
-                  <div class="text-xs text-on-surface-variant">What this server shows right now</div>
+                  <div class="text-xs text-on-surface-variant">Current local time + smooth offset</div>
                 </div>
               </div>
               
               <div class="text-center py-4">
                 <div id="smoothtime-clock" class="clock-display tabular-nums text-primary">--:--:--</div>
-                <div class="mt-3 text-sm font-mono text-primary" id="smoothtime-offset">+1.500 h (smooth)</div>
+                <div class="mt-3 text-sm font-mono text-primary" id="smoothtime-offset">+1.500 h</div>
               </div>
             </div>
           </div>
 
           <!-- Difference -->
           <div class="mt-6 p-4 bg-surface-container-lowest rounded-2xl border border-outline-variant/10 text-center">
-            <div class="text-sm text-on-surface-variant">Right now, smoothtime is</div>
+            <div class="text-sm text-on-surface-variant">On this simulated day, your clock would be</div>
             <div class="text-4xl font-bold font-mono text-primary mt-1" id="time-difference">-30 minutes</div>
             <div class="text-xs text-on-surface-variant mt-1">behind official time</div>
           </div>
 
           <div class="mt-6 text-center text-xs text-on-surface-variant font-mono">
-            This demo shows the real-time difference between standard time and smoothtime.<br>
-            The clocks update every second.
+            The clocks show what the time would be right now if we were at this point in the season.<br>
+            Formula: offset = base + (days / 180) × 1.0 hour
           </div>
 
         </div>
@@ -478,7 +493,7 @@ pool pool.ntp.org iburst</span></pre>
       observer.observe(element);
     });
 
-    // --- Regions with IANA timezone names for correct local time ---
+    // --- Regions ---
     const regions = {
       "europe-west":    { name: "Europe Western Smoothtime (WET/WEST)", iana: "Europe/Lisbon", base: 0.0,  rule: "eu" },
       "europe-central": { name: "Europe Central Smoothtime (CET/CEST)", iana: "Europe/Berlin", base: 1.0,  rule: "eu" },
@@ -496,7 +511,6 @@ pool pool.ntp.org iburst</span></pre>
     let currentRegion = "europe-central";
     let simRegion = "europe-central";
 
-    // --- Live main clock ---
     function updateClock() {
       const offsetH = smoothOffset();
       const utcNow = new Date();
@@ -545,18 +559,23 @@ pool pool.ntp.org iburst</span></pre>
       }, 1500);
     }
 
-    // --- Simulator with real local time ---
-    function updateSimulatorRegion() {
-      simRegion = document.getElementById('sim-region').value;
-      updateSimulatorClocks();
-    }
+    // --- CORRECTED SIMULATOR ---
+    function updateSimulator() {
+      const regionKey = document.getElementById('sim-region').value;
+      const days = parseInt(document.getElementById('days-slider').value);
+      
+      document.getElementById('slider-value').textContent = `${days} / 180`;
 
-    function updateSimulatorClocks() {
-      const cfg = regions[simRegion];
+      const cfg = regions[regionKey];
+      const totalDays = 180;
+      const fraction = Math.min(1, Math.max(0, days / totalDays));
+
       const now = new Date();
 
-      // Official local time in the selected timezone
-      const officialTimeStr = now.toLocaleTimeString("en-US", {
+      // Official = current local time + full summer offset (base + 1)
+      const officialOffset = cfg.base + 1.0;
+      const officialTime = new Date(now.getTime() + officialOffset * 3600 * 1000);
+      const officialTimeStr = officialTime.toLocaleTimeString("en-US", {
         timeZone: cfg.iana,
         hour12: false,
         hour: "2-digit",
@@ -564,10 +583,11 @@ pool pool.ntp.org iburst</span></pre>
         second: "2-digit"
       });
       document.getElementById('official-clock').textContent = officialTimeStr;
+      document.getElementById('official-offset').textContent = `+${officialOffset.toFixed(3)} h`;
 
-      // Calculate current smooth offset
-      const smoothOffsetH = calculateCurrentSmoothOffset(simRegion);
-      const smoothTime = new Date(now.getTime() + smoothOffsetH * 3600 * 1000);
+      // smoothtime = current local time + smooth offset
+      const smoothOffsetVal = cfg.base + 1.0 - fraction;
+      const smoothTime = new Date(now.getTime() + smoothOffsetVal * 3600 * 1000);
       const smoothTimeStr = smoothTime.toLocaleTimeString("en-US", {
         timeZone: cfg.iana,
         hour12: false,
@@ -576,41 +596,11 @@ pool pool.ntp.org iburst</span></pre>
         second: "2-digit"
       });
       document.getElementById('smoothtime-clock').textContent = smoothTimeStr;
-
-      // Show offsets
-      document.getElementById('official-offset').textContent = `${smoothOffsetH >= 0 ? '+' : ''}${smoothOffsetH.toFixed(3)} h (official)`;
-      document.getElementById('smoothtime-offset').textContent = `${smoothOffsetH >= 0 ? '+' : ''}${smoothOffsetH.toFixed(3)} h (smoothtime)`;
+      document.getElementById('smoothtime-offset').textContent = `+${smoothOffsetVal.toFixed(3)} h`;
 
       // Difference
-      const diffMinutes = Math.round(smoothOffsetH * 60);
-      document.getElementById('time-difference').textContent = `${diffMinutes >= 0 ? '+' : ''}${diffMinutes} minutes`;
-    }
-
-    function calculateCurrentSmoothOffset(regionKey) {
-      const cfg = regions[regionKey];
-      const now = new Date();
-      const year = now.getUTCFullYear();
-      const dates = getDstDates(year, cfg.rule);
-      const tStart = dates.start;
-      const tEnd = dates.end;
-
-      if (tStart.getTime() === 0) return cfg.base;
-
-      let offset;
-      if (now >= tStart && now < tEnd) {
-        const fraction = (now - tStart) / (tEnd - tStart);
-        offset = cfg.base + 1.0 - fraction;
-      } else {
-        let wStart = tEnd;
-        let wEnd = getDstDates(year + 1, cfg.rule).start;
-        if (now < tStart) {
-          wStart = getDstDates(year - 1, cfg.rule).end;
-          wEnd = tStart;
-        }
-        const fraction = (now - wStart) / (wEnd - wStart);
-        offset = cfg.base + fraction;
-      }
-      return offset;
+      const diffMinutes = Math.round((officialOffset - smoothOffsetVal) * 60);
+      document.getElementById('time-difference').textContent = `-${diffMinutes} minutes`;
     }
 
     function getNthSunday(year, month, nth) {
@@ -674,18 +664,26 @@ pool pool.ntp.org iburst</span></pre>
       return offset;
     }
 
-    // Initialize everything
+    function initSimulator() {
+      const slider = document.getElementById('days-slider');
+      if (slider) {
+        slider.value = 90;
+        document.getElementById('sim-region').value = 'europe-central';
+        updateSimulator();
+        slider.oninput = updateSimulator;
+        document.getElementById('sim-region').onchange = updateSimulator;
+      }
+    }
+
     function init() {
       // Main live clock
       switchRegion(currentRegion);
       setInterval(updateClock, 1000);
 
       // Simulator
-      document.getElementById('sim-region').value = simRegion;
-      updateSimulatorClocks();
-      setInterval(updateSimulatorClocks, 1000);
+      initSimulator();
 
-      // Auto-detect timezone
+      // Auto-detect
       const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
       if (["America/New_York","America/Toronto"].includes(tz)) currentRegion = "us-eastern";
       else if (["America/Chicago"].includes(tz)) currentRegion = "us-central";

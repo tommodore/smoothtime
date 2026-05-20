@@ -134,16 +134,10 @@
     /* Simulator styles */
     .clock-display {
       font-family: 'Space Grotesk', system-ui, sans-serif;
-      font-size: 2.75rem;
+      font-size: 2.5rem;
       font-weight: 600;
       letter-spacing: -0.02em;
       line-height: 1;
-    }
-    .time-label {
-      font-size: 0.75rem;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
     }
   </style>
 </head>
@@ -219,68 +213,50 @@
       </div>
     </section>
 
-    <!-- FIXED: Interactive DST Transition Simulator -->
+    <!-- IMPROVED SIMULATOR: Real local time vs smoothtime -->
     <section id="simulator" class="reveal mb-24 md:mb-32">
       <h2 class="text-3xl md:text-4xl font-headline font-bold mb-4 flex items-center gap-4">
         <span class="text-primary font-mono text-xl">Interactive Demo</span> DST Transition Simulator
       </h2>
-      <p class="text-on-surface-variant max-w-2xl mb-8">See exactly what your clock would show on a normal day vs with smoothtime. Move the slider to simulate any point in the season.</p>
+      <p class="text-on-surface-variant max-w-2xl mb-8">See the real current time in your timezone vs what smoothtime would show right now. The clocks tick live.</p>
       
       <div class="glass-card p-8 md:p-12 rounded-2xl border border-outline-variant/10">
         <div class="max-w-5xl mx-auto">
           
-          <!-- Controls -->
-          <div class="flex flex-col md:flex-row gap-6 mb-10">
-            <div class="flex-1">
-              <label class="text-xs font-bold text-primary tracking-widest uppercase block mb-2">Region</label>
-              <select id="sim-region" onchange="updateSimulator()" class="w-full bg-surface-container-highest border border-outline-variant/20 rounded-xl px-4 py-3 text-on-surface font-mono text-sm">
-                <option value="europe-central">Europe Central (CET/CEST)</option>
-                <option value="europe-west">Europe West (WET/WEST)</option>
-                <option value="europe-east">Europe East (EET/EEST)</option>
-                <option value="us-eastern">US Eastern (EST/EDT)</option>
-                <option value="us-central">US Central (CST/CDT)</option>
-                <option value="us-mountain">US Mountain (MST/MDT)</option>
-                <option value="us-pacific">US Pacific (PST/PDT)</option>
-                <option value="australia-sydney">Australia Sydney (AEST/AEDT)</option>
-                <option value="new-zealand">New Zealand (NZST/NZDT)</option>
-                <option value="chile">Chile (CLT/CLST)</option>
-                <option value="argentina">Argentina (ART - no DST)</option>
-              </select>
-            </div>
-            
-            <div class="flex-1">
-              <div class="flex justify-between items-baseline mb-1">
-                <label class="text-xs font-bold text-primary tracking-widest uppercase">Days into transition season</label>
-                <span id="slider-value" class="font-mono text-sm text-primary font-bold">90 / 180</span>
-              </div>
-              <input type="range" id="days-slider" min="0" max="180" value="90" step="1" oninput="updateSimulator()" class="w-full accent-primary">
-              <div class="flex justify-between text-[10px] text-on-surface-variant mt-1 font-mono">
-                <div>Start of season</div>
-                <div>Mid season</div>
-                <div>End of season</div>
-              </div>
-            </div>
+          <!-- Region Selector -->
+          <div class="mb-8">
+            <label class="text-xs font-bold text-primary tracking-widest uppercase block mb-2">Select your region</label>
+            <select id="sim-region" onchange="updateSimulatorRegion()" class="w-full max-w-md bg-surface-container-highest border border-outline-variant/20 rounded-xl px-4 py-3 text-on-surface font-mono text-sm">
+              <option value="europe-central">Europe Central (CET/CEST)</option>
+              <option value="europe-west">Europe West (WET/WEST)</option>
+              <option value="europe-east">Europe East (EET/EEST)</option>
+              <option value="us-eastern">US Eastern (EST/EDT)</option>
+              <option value="us-central">US Central (CST/CDT)</option>
+              <option value="us-mountain">US Mountain (MST/MDT)</option>
+              <option value="us-pacific">US Pacific (PST/PDT)</option>
+              <option value="australia-sydney">Australia Sydney (AEST/AEDT)</option>
+              <option value="new-zealand">New Zealand (NZST/NZDT)</option>
+              <option value="chile">Chile (CLT/CLST)</option>
+              <option value="argentina">Argentina (ART)</option>
+            </select>
           </div>
 
-          <!-- Two Clocks Side by Side -->
+          <!-- Two Live Clocks -->
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             
-            <!-- Official / Standard Time -->
+            <!-- Official Local Time -->
             <div class="glass-card p-6 rounded-2xl border border-error/30">
               <div class="flex items-center gap-3 mb-4">
                 <span class="material-symbols-outlined text-error">schedule</span>
                 <div>
                   <div class="font-bold text-lg">Official Time</div>
-                  <div class="text-xs text-on-surface-variant">What a normal NTP server shows</div>
+                  <div class="text-xs text-on-surface-variant">Current time in this timezone</div>
                 </div>
               </div>
               
-              <div class="text-center py-6">
-                <div id="official-clock" class="clock-display tabular-nums text-error">09:53:01</div>
-                <div class="mt-2 text-sm">
-                  <span class="font-mono text-error" id="official-offset">+2.000 h</span>
-                  <span class="text-xs text-on-surface-variant ml-1">(already jumped)</span>
-                </div>
+              <div class="text-center py-4">
+                <div id="official-clock" class="clock-display tabular-nums text-error">--:--:--</div>
+                <div class="mt-3 text-sm font-mono text-error" id="official-offset">+2.000 h (CEST)</div>
               </div>
             </div>
 
@@ -290,30 +266,27 @@
                 <span class="material-symbols-outlined text-primary">timeline</span>
                 <div>
                   <div class="font-bold text-lg">smoothtime</div>
-                  <div class="text-xs text-on-surface-variant">What this server shows</div>
+                  <div class="text-xs text-on-surface-variant">What this server shows right now</div>
                 </div>
               </div>
               
-              <div class="text-center py-6">
-                <div id="smoothtime-clock" class="clock-display tabular-nums text-primary">09:23:01</div>
-                <div class="mt-2 text-sm">
-                  <span class="font-mono text-primary" id="smoothtime-offset">+1.500 h</span>
-                  <span class="text-xs text-on-surface-variant ml-1">(smoothly drifting back)</span>
-                </div>
+              <div class="text-center py-4">
+                <div id="smoothtime-clock" class="clock-display tabular-nums text-primary">--:--:--</div>
+                <div class="mt-3 text-sm font-mono text-primary" id="smoothtime-offset">+1.500 h (smooth)</div>
               </div>
             </div>
           </div>
 
-          <!-- Difference highlight -->
+          <!-- Difference -->
           <div class="mt-6 p-4 bg-surface-container-lowest rounded-2xl border border-outline-variant/10 text-center">
-            <div class="text-sm text-on-surface-variant">On this day your clock would be</div>
-            <div class="text-3xl font-bold font-mono text-primary mt-1" id="time-difference">-30 minutes</div>
+            <div class="text-sm text-on-surface-variant">Right now, smoothtime is</div>
+            <div class="text-4xl font-bold font-mono text-primary mt-1" id="time-difference">-30 minutes</div>
             <div class="text-xs text-on-surface-variant mt-1">behind official time</div>
           </div>
 
-          <div class="mt-8 text-xs text-on-surface-variant font-mono text-center">
-            Formula: offset = base + (days / 180) × 1.0 hour<br>
-            This is exactly what our production NTP servers calculate in real time.
+          <div class="mt-6 text-center text-xs text-on-surface-variant font-mono">
+            This demo shows the real-time difference between standard time and smoothtime.<br>
+            The clocks update every second.
           </div>
 
         </div>
@@ -505,22 +478,140 @@ pool pool.ntp.org iburst</span></pre>
       observer.observe(element);
     });
 
-    // --- Core Smoothtime Logic ---
+    // --- Regions with IANA timezone names for correct local time ---
     const regions = {
-      "europe-west":    { name: "Europe Western Smoothtime (WET/WEST)", base: 1.0,  rule: "eu" },
-      "europe-central": { name: "Europe Central Smoothtime (CET/CEST)", base: 1.0,  rule: "eu" },
-      "europe-east":    { name: "Europe Eastern Smoothtime (EET/EEST)", base: 2.0,  rule: "eu" },
-      "us-eastern":     { name: "US Eastern Smoothtime (EST/EDT)",      base: -5.0, rule: "us" },
-      "us-central":     { name: "US Central Smoothtime (CST/CDT)",      base: -6.0, rule: "us" },
-      "us-mountain":    { name: "US Mountain Smoothtime (MST/MDT)",     base: -7.0, rule: "us" },
-      "us-pacific":     { name: "US Pacific Smoothtime (PST/PDT)",      base: -8.0, rule: "us" },
-      "australia-sydney": { name: "Australia Sydney Smoothtime (AEST/AEDT)", base: -10.0, rule: "au" },
-      "new-zealand":      { name: "New Zealand Smoothtime (NZST/NZDT)", base: 12.0, rule: "au" },
-      "chile":            { name: "Chile Smoothtime (CLT/CLST)", base: -4.0, rule: "cl" },
-      "argentina":        { name: "Argentina Smoothtime (ART - constant)", base: -3.0, rule: "none" }
+      "europe-west":    { name: "Europe Western Smoothtime (WET/WEST)", iana: "Europe/Lisbon", base: 0.0,  rule: "eu" },
+      "europe-central": { name: "Europe Central Smoothtime (CET/CEST)", iana: "Europe/Berlin", base: 1.0,  rule: "eu" },
+      "europe-east":    { name: "Europe Eastern Smoothtime (EET/EEST)", iana: "Europe/Kiev", base: 2.0,  rule: "eu" },
+      "us-eastern":     { name: "US Eastern Smoothtime (EST/EDT)",      iana: "America/New_York", base: -5.0, rule: "us" },
+      "us-central":     { name: "US Central Smoothtime (CST/CDT)",      iana: "America/Chicago", base: -6.0, rule: "us" },
+      "us-mountain":    { name: "US Mountain Smoothtime (MST/MDT)",     iana: "America/Denver", base: -7.0, rule: "us" },
+      "us-pacific":     { name: "US Pacific Smoothtime (PST/PDT)",      iana: "America/Los_Angeles", base: -8.0, rule: "us" },
+      "australia-sydney": { name: "Australia Sydney Smoothtime (AEST/AEDT)", iana: "Australia/Sydney", base: -10.0, rule: "au" },
+      "new-zealand":      { name: "New Zealand Smoothtime (NZST/NZDT)", iana: "Pacific/Auckland", base: 12.0, rule: "au" },
+      "chile":            { name: "Chile Smoothtime (CLT/CLST)", iana: "America/Santiago", base: -4.0, rule: "cl" },
+      "argentina":        { name: "Argentina Smoothtime (ART)", iana: "America/Argentina/Buenos_Aires", base: -3.0, rule: "none" }
     };
 
     let currentRegion = "europe-central";
+    let simRegion = "europe-central";
+
+    // --- Live main clock ---
+    function updateClock() {
+      const offsetH = smoothOffset();
+      const utcNow = new Date();
+      const smoothTime = new Date(utcNow.getTime() + offsetH * 3600 * 1000);
+
+      document.getElementById("live-clock").textContent = 
+        smoothTime.toLocaleTimeString("en-US", { timeZone: "UTC", hour12: false, hour: "2-digit", minute: "2-digit", second: "2-digit" });
+
+      const sign = offsetH >= 0 ? "+" : "";
+      document.getElementById("active-offset").textContent = `${sign}${offsetH.toFixed(4)} h`;
+      
+      const progressPercent = Math.max(0, Math.min(100, (offsetH - regions[currentRegion].base) * 100));
+      document.getElementById("offset-progress").style.width = `${progressPercent}%`;
+    }
+
+    function switchRegion(region) {
+      currentRegion = region;
+      document.querySelectorAll('.region-btn').forEach(btn => {
+        btn.classList.toggle('btn-active', btn.id === `btn-${region}`);
+      });
+      
+      const nameEl = document.getElementById("region-name");
+      nameEl.style.opacity = 0;
+      setTimeout(() => {
+        nameEl.textContent = regions[currentRegion].name;
+        nameEl.style.opacity = 1;
+      }, 150);
+      
+      document.getElementById('cmd-server').textContent = `${region}.smoothtime.io`;
+      
+      const confBlock = document.querySelector('.text-on-surface-variant.whitespace-pre-wrap').innerHTML;
+      const newBlock = confBlock.replace(/server .*\.smoothtime\.io iburst/, `server ${region}.smoothtime.io iburst`);
+      document.querySelector('.text-on-surface-variant.whitespace-pre-wrap').innerHTML = newBlock;
+      
+      updateClock();
+    }
+
+    function copyCommand() {
+      navigator.clipboard.writeText(document.getElementById('cmd-server').textContent);
+      const icon = document.getElementById('copy-icon');
+      icon.textContent = "check";
+      icon.classList.add('text-primary');
+      setTimeout(() => {
+        icon.textContent = "content_copy";
+        icon.classList.remove('text-primary');
+      }, 1500);
+    }
+
+    // --- Simulator with real local time ---
+    function updateSimulatorRegion() {
+      simRegion = document.getElementById('sim-region').value;
+      updateSimulatorClocks();
+    }
+
+    function updateSimulatorClocks() {
+      const cfg = regions[simRegion];
+      const now = new Date();
+
+      // Official local time in the selected timezone
+      const officialTimeStr = now.toLocaleTimeString("en-US", {
+        timeZone: cfg.iana,
+        hour12: false,
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit"
+      });
+      document.getElementById('official-clock').textContent = officialTimeStr;
+
+      // Calculate current smooth offset
+      const smoothOffsetH = calculateCurrentSmoothOffset(simRegion);
+      const smoothTime = new Date(now.getTime() + smoothOffsetH * 3600 * 1000);
+      const smoothTimeStr = smoothTime.toLocaleTimeString("en-US", {
+        timeZone: cfg.iana,
+        hour12: false,
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit"
+      });
+      document.getElementById('smoothtime-clock').textContent = smoothTimeStr;
+
+      // Show offsets
+      document.getElementById('official-offset').textContent = `${smoothOffsetH >= 0 ? '+' : ''}${smoothOffsetH.toFixed(3)} h (official)`;
+      document.getElementById('smoothtime-offset').textContent = `${smoothOffsetH >= 0 ? '+' : ''}${smoothOffsetH.toFixed(3)} h (smoothtime)`;
+
+      // Difference
+      const diffMinutes = Math.round(smoothOffsetH * 60);
+      document.getElementById('time-difference').textContent = `${diffMinutes >= 0 ? '+' : ''}${diffMinutes} minutes`;
+    }
+
+    function calculateCurrentSmoothOffset(regionKey) {
+      const cfg = regions[regionKey];
+      const now = new Date();
+      const year = now.getUTCFullYear();
+      const dates = getDstDates(year, cfg.rule);
+      const tStart = dates.start;
+      const tEnd = dates.end;
+
+      if (tStart.getTime() === 0) return cfg.base;
+
+      let offset;
+      if (now >= tStart && now < tEnd) {
+        const fraction = (now - tStart) / (tEnd - tStart);
+        offset = cfg.base + 1.0 - fraction;
+      } else {
+        let wStart = tEnd;
+        let wEnd = getDstDates(year + 1, cfg.rule).start;
+        if (now < tStart) {
+          wStart = getDstDates(year - 1, cfg.rule).end;
+          wEnd = tStart;
+        }
+        const fraction = (now - wStart) / (wEnd - wStart);
+        offset = cfg.base + fraction;
+      }
+      return offset;
+    }
 
     function getNthSunday(year, month, nth) {
       let date = new Date(Date.UTC(year, month, 1));
@@ -583,116 +674,35 @@ pool pool.ntp.org iburst</span></pre>
       return offset;
     }
 
-    function updateClock() {
-      const offsetH = smoothOffset();
-      const utcNow = new Date();
-      const smoothTime = new Date(utcNow.getTime() + offsetH * 3600 * 1000);
+    // Initialize everything
+    function init() {
+      // Main live clock
+      switchRegion(currentRegion);
+      setInterval(updateClock, 1000);
 
-      document.getElementById("live-clock").textContent = 
-        smoothTime.toLocaleTimeString("en-US", { timeZone: "UTC", hour12: false, hour: "2-digit", minute: "2-digit", second: "2-digit" });
+      // Simulator
+      document.getElementById('sim-region').value = simRegion;
+      updateSimulatorClocks();
+      setInterval(updateSimulatorClocks, 1000);
 
-      const sign = offsetH >= 0 ? "+" : "";
-      document.getElementById("active-offset").textContent = `${sign}${offsetH.toFixed(4)} h`;
-      
-      const progressPercent = Math.max(0, Math.min(100, (offsetH - regions[currentRegion].base) * 100));
-      document.getElementById("offset-progress").style.width = `${progressPercent}%`;
+      // Auto-detect timezone
+      const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+      if (["America/New_York","America/Toronto"].includes(tz)) currentRegion = "us-eastern";
+      else if (["America/Chicago"].includes(tz)) currentRegion = "us-central";
+      else if (["America/Denver"].includes(tz)) currentRegion = "us-mountain";
+      else if (["America/Los_Angeles"].includes(tz)) currentRegion = "us-pacific";
+      else if (["Europe/London", "Europe/Dublin", "Europe/Lisbon"].includes(tz)) currentRegion = "europe-west";
+      else if (["Europe/Bucharest","Europe/Helsinki","Europe/Riga","Europe/Tallinn","Europe/Vilnius","Europe/Sofia","Europe/Athens"].includes(tz)) currentRegion = "europe-east";
+      else if (["Australia/Sydney", "Australia/Melbourne"].includes(tz)) currentRegion = "australia-sydney";
+      else if (["Pacific/Auckland"].includes(tz)) currentRegion = "new-zealand";
+      else if (["America/Santiago"].includes(tz)) currentRegion = "chile";
+      else if (["America/Argentina/Buenos_Aires"].includes(tz)) currentRegion = "argentina";
+      else currentRegion = "europe-central";
+
+      switchRegion(currentRegion);
     }
 
-    function switchRegion(region) {
-      currentRegion = region;
-      document.querySelectorAll('.region-btn').forEach(btn => {
-        btn.classList.toggle('btn-active', btn.id === `btn-${region}`);
-      });
-      
-      const nameEl = document.getElementById("region-name");
-      nameEl.style.opacity = 0;
-      setTimeout(() => {
-        nameEl.textContent = regions[currentRegion].name;
-        nameEl.style.opacity = 1;
-      }, 150);
-      
-      document.getElementById('cmd-server').textContent = `${region}.smoothtime.io`;
-      
-      const confBlock = document.querySelector('.text-on-surface-variant.whitespace-pre-wrap').innerHTML;
-      const newBlock = confBlock.replace(/server .*\.smoothtime\.io iburst/, `server ${region}.smoothtime.io iburst`);
-      document.querySelector('.text-on-surface-variant.whitespace-pre-wrap').innerHTML = newBlock;
-      
-      updateClock();
-    }
-
-    function copyCommand() {
-      navigator.clipboard.writeText(document.getElementById('cmd-server').textContent);
-      const icon = document.getElementById('copy-icon');
-      icon.textContent = "check";
-      icon.classList.add('text-primary');
-      setTimeout(() => {
-        icon.textContent = "content_copy";
-        icon.classList.remove('text-primary');
-      }, 1500);
-    }
-
-    // --- CORRECTED DST Simulator (Autumn transition logic) ---
-    let baseTime = new Date();
-    baseTime.setHours(14, 0, 0, 0);
-
-    function updateSimulator() {
-      const regionKey = document.getElementById('sim-region').value;
-      const days = parseInt(document.getElementById('days-slider').value);
-      
-      document.getElementById('slider-value').textContent = `${days} / 180`;
-
-      const cfg = regions[regionKey];
-      const totalDays = 180;
-      const fraction = Math.min(1, Math.max(0, days / totalDays));
-
-      // Official time is always at summer offset (base + 1)
-      const officialOffset = cfg.base + 1.0;
-      const officialTime = new Date(baseTime.getTime() + officialOffset * 3600 * 1000);
-      
-      // smoothtime ramps down from summer to winter during autumn transition
-      const smoothOffsetVal = cfg.base + 1.0 - fraction;
-      const smoothTime = new Date(baseTime.getTime() + smoothOffsetVal * 3600 * 1000);
-
-      // Update clocks
-      document.getElementById('official-clock').textContent = 
-        officialTime.toLocaleTimeString("en-US", { hour12: false, hour: "2-digit", minute: "2-digit", second: "2-digit" });
-      document.getElementById('smoothtime-clock').textContent = 
-        smoothTime.toLocaleTimeString("en-US", { hour12: false, hour: "2-digit", minute: "2-digit", second: "2-digit" });
-
-      // Update offsets
-      document.getElementById('official-offset').textContent = `+${officialOffset.toFixed(3)} h`;
-      document.getElementById('smoothtime-offset').textContent = `+${smoothOffsetVal.toFixed(3)} h`;
-
-      // Time difference (smoothtime is behind)
-      const diffMinutes = Math.round((officialOffset - smoothOffsetVal) * 60);
-      document.getElementById('time-difference').textContent = `-${diffMinutes} minutes`;
-    }
-
-    // Initialize
-    setTimeout(() => {
-      const slider = document.getElementById('days-slider');
-      if (slider) {
-        slider.value = 90;
-        document.getElementById('sim-region').value = 'europe-central';
-        updateSimulator();
-      }
-    }, 300);
-
-    const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    if (["America/New_York","America/Toronto"].includes(tz)) currentRegion = "us-eastern";
-    else if (["America/Chicago"].includes(tz)) currentRegion = "us-central";
-    else if (["America/Denver"].includes(tz)) currentRegion = "us-mountain";
-    else if (["America/Los_Angeles"].includes(tz)) currentRegion = "us-pacific";
-    else if (["Europe/London", "Europe/Dublin", "Europe/Lisbon"].includes(tz)) currentRegion = "europe-west";
-    else if (["Europe/Bucharest","Europe/Helsinki","Europe/Riga","Europe/Tallinn","Europe/Vilnius","Europe/Sofia","Europe/Athens"].includes(tz)) currentRegion = "europe-east";
-    else if (["Australia/Sydney", "Australia/Melbourne"].includes(tz)) currentRegion = "australia-sydney";
-    else if (["Pacific/Auckland"].includes(tz)) currentRegion = "new-zealand";
-    else if (["America/Santiago"].includes(tz)) currentRegion = "chile";
-    else if (["America/Argentina/Buenos_Aires"].includes(tz)) currentRegion = "argentina";
-    else currentRegion = "europe-central";
-
-    switchRegion(currentRegion);
-    setInterval(updateClock, 1000);
+    init();
   </script>
 </body>
 </html>

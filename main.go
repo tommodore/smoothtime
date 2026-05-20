@@ -18,6 +18,8 @@ type Rule string
 const (
 	RuleEU Rule = "eu"
 	RuleUS Rule = "us"
+	RuleAU Rule = "au" // Australia / New Zealand style (Southern Hemisphere: Oct start, Apr end)
+	RuleCL Rule = "cl" // Chile (Sep start, Apr end)
 )
 
 type RegionConfig struct {
@@ -28,13 +30,18 @@ type RegionConfig struct {
 
 // Regions defines the timezone offsets and DST rules for each supported node.
 var Regions = map[string]RegionConfig{
-	"europe-west":    {"Europe Western (WET/WEST)", 0.0, RuleEU},
-	"europe-central": {"Europe Central (CET/CEST)", 1.0, RuleEU},
-	"europe-east":    {"Europe Eastern (EET/EEST)", 2.0, RuleEU},
-	"us-eastern":     {"US Eastern (EST/EDT)", -5.0, RuleUS},
-	"us-central":     {"US Central (CST/CDT)", -6.0, RuleUS},
-	"us-mountain":    {"US Mountain (MST/MDT)", -7.0, RuleUS},
-	"us-pacific":     {"US Pacific (PST/PDT)", -8.0, RuleUS},
+	"europe-west":     {"Europe Western (WET/WEST)", 0.0, RuleEU},
+	"europe-central":  {"Europe Central (CET/CEST)", 1.0, RuleEU},
+	"europe-east":     {"Europe Eastern (EET/EEST)", 2.0, RuleEU},
+	"us-eastern":      {"US Eastern (EST/EDT)", -5.0, RuleUS},
+	"us-central":      {"US Central (CST/CDT)", -6.0, RuleUS},
+	"us-mountain":     {"US Mountain (MST/MDT)", -7.0, RuleUS},
+	"us-pacific":      {"US Pacific (PST/PDT)", -8.0, RuleUS},
+	// New Southern Hemisphere regions
+	"australia-sydney": {"Australia Sydney (AEST/AEDT)", -10.0, RuleAU},
+	"new-zealand":      {"New Zealand (NZST/NZDT)", 12.0, RuleAU},
+	"chile":            {"Chile (CLT/CLST)", -4.0, RuleCL},
+	"argentina":        {"Argentina (ART) - no DST", -3.0, RuleEU}, // No DST - treated as constant offset
 }
 
 const ntpEpochOffset = 2208988800
@@ -166,7 +173,14 @@ func getDstDates(year int, rule Rule) (start time.Time, end time.Time) {
 		return getLastSunday(year, time.March), getLastSunday(year, time.October)
 	} else if rule == RuleUS {
 		return getNthSunday(year, time.March, 2), getNthSunday(year, time.November, 1)
+	} else if rule == RuleAU {
+		// Southern Hemisphere: DST starts 1st Sunday October, ends 1st Sunday April (next year)
+		return getNthSunday(year, time.October, 1), getNthSunday(year+1, time.April, 1)
+	} else if rule == RuleCL {
+		// Chile: Starts 1st Sunday September, ends 1st Sunday April (next year)
+		return getNthSunday(year, time.September, 1), getNthSunday(year+1, time.April, 1)
 	}
+	// Fallback for no-DST regions (e.g. Argentina)
 	return time.Time{}, time.Time{}
 }
 
@@ -176,6 +190,10 @@ func CalculateSmoothOffset(now time.Time, regionID string) float64 {
 	tStart, tEnd := getDstDates(year, cfg.Rule)
 
 	var offset float64
+	if tStart.IsZero() || tEnd.IsZero() {
+		// No DST - constant offset
+		return cfg.Base
+	}
 	if !now.Before(tStart) && now.Before(tEnd) {
 		totalSummer := tEnd.Sub(tStart).Seconds()
 		passedSummer := now.Sub(tStart).Seconds()

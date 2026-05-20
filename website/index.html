@@ -631,7 +631,10 @@ pool pool.ntp.org iburst</span></pre>
       }, 1500);
     }
 
-    // --- IMPROVED DST Transition Simulator ---
+    // --- FIXED DST Transition Simulator (stable base time) ---
+    let baseTime = new Date();
+    baseTime.setHours(14, 0, 0, 0); // Fixed example time: 14:00:00
+
     function updateSimulator() {
       const regionKey = document.getElementById('sim-region').value;
       const days = parseInt(document.getElementById('days-slider').value);
@@ -642,18 +645,17 @@ pool pool.ntp.org iburst</span></pre>
       const totalDays = 180;
       const fraction = Math.min(1, Math.max(0, days / totalDays));
 
-      const now = new Date();
       const baseOffset = cfg.base;
 
-      // Official time (abrupt jump after day 90 for demo purposes)
+      // Official time (abrupt jump after day 90)
       const officialOffset = (days > 90 && cfg.rule !== 'none') ? baseOffset + 1.0 : baseOffset;
-      const officialTime = new Date(now.getTime() + officialOffset * 3600 * 1000);
+      const officialTime = new Date(baseTime.getTime() + officialOffset * 3600 * 1000);
       
       // smoothtime (smooth)
       const smoothOffsetVal = baseOffset + fraction * (cfg.rule === 'none' ? 0 : 1.0);
-      const smoothTime = new Date(now.getTime() + smoothOffsetVal * 3600 * 1000);
+      const smoothTime = new Date(baseTime.getTime() + smoothOffsetVal * 3600 * 1000);
 
-      // Update clocks
+      // Update clocks (stable, no ticking)
       document.getElementById('official-clock').textContent = 
         officialTime.toLocaleTimeString("en-US", { hour12: false, hour: "2-digit", minute: "2-digit", second: "2-digit" });
       document.getElementById('smoothtime-clock').textContent = 
@@ -666,7 +668,7 @@ pool pool.ntp.org iburst</span></pre>
       const sign2 = smoothOffsetVal >= 0 ? "+" : "";
       document.getElementById('smoothtime-offset').textContent = `${sign2}${smoothOffsetVal.toFixed(3)} h`;
 
-      // Time difference
+      // Time difference in minutes
       const diffMinutes = Math.round((officialOffset - smoothOffsetVal) * 60);
       const diffText = diffMinutes === 0 ? "0 minutes" : 
                        (diffMinutes > 0 ? `+${diffMinutes} minutes` : `${diffMinutes} minutes`);

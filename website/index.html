@@ -219,7 +219,7 @@
       </div>
     </section>
 
-    <!-- IMPROVED: Interactive DST Transition Simulator -->
+    <!-- FIXED: Interactive DST Transition Simulator -->
     <section id="simulator" class="reveal mb-24 md:mb-32">
       <h2 class="text-3xl md:text-4xl font-headline font-bold mb-4 flex items-center gap-4">
         <span class="text-primary font-mono text-xl">Interactive Demo</span> DST Transition Simulator
@@ -276,9 +276,9 @@
               </div>
               
               <div class="text-center py-6">
-                <div id="official-clock" class="clock-display tabular-nums text-error">14:30:00</div>
+                <div id="official-clock" class="clock-display tabular-nums text-error">09:53:01</div>
                 <div class="mt-2 text-sm">
-                  <span class="font-mono text-error" id="official-offset">+1.000 h</span>
+                  <span class="font-mono text-error" id="official-offset">+2.000 h</span>
                   <span class="text-xs text-on-surface-variant ml-1">(already jumped)</span>
                 </div>
               </div>
@@ -295,10 +295,10 @@
               </div>
               
               <div class="text-center py-6">
-                <div id="smoothtime-clock" class="clock-display tabular-nums text-primary">14:00:00</div>
+                <div id="smoothtime-clock" class="clock-display tabular-nums text-primary">09:23:01</div>
                 <div class="mt-2 text-sm">
-                  <span class="font-mono text-primary" id="smoothtime-offset">+0.500 h</span>
-                  <span class="text-xs text-on-surface-variant ml-1">(smoothly drifting)</span>
+                  <span class="font-mono text-primary" id="smoothtime-offset">+1.500 h</span>
+                  <span class="text-xs text-on-surface-variant ml-1">(smoothly drifting back)</span>
                 </div>
               </div>
             </div>
@@ -307,7 +307,7 @@
           <!-- Difference highlight -->
           <div class="mt-6 p-4 bg-surface-container-lowest rounded-2xl border border-outline-variant/10 text-center">
             <div class="text-sm text-on-surface-variant">On this day your clock would be</div>
-            <div class="text-3xl font-bold font-mono text-primary mt-1" id="time-difference">+30 minutes</div>
+            <div class="text-3xl font-bold font-mono text-primary mt-1" id="time-difference">-30 minutes</div>
             <div class="text-xs text-on-surface-variant mt-1">behind official time</div>
           </div>
 
@@ -507,7 +507,7 @@ pool pool.ntp.org iburst</span></pre>
 
     // --- Core Smoothtime Logic ---
     const regions = {
-      "europe-west":    { name: "Europe Western Smoothtime (WET/WEST)", base: 0.0,  rule: "eu" },
+      "europe-west":    { name: "Europe Western Smoothtime (WET/WEST)", base: 1.0,  rule: "eu" },
       "europe-central": { name: "Europe Central Smoothtime (CET/CEST)", base: 1.0,  rule: "eu" },
       "europe-east":    { name: "Europe Eastern Smoothtime (EET/EEST)", base: 2.0,  rule: "eu" },
       "us-eastern":     { name: "US Eastern Smoothtime (EST/EDT)",      base: -5.0, rule: "us" },
@@ -631,9 +631,9 @@ pool pool.ntp.org iburst</span></pre>
       }, 1500);
     }
 
-    // --- FIXED DST Transition Simulator (stable base time) ---
+    // --- CORRECTED DST Simulator (Autumn transition logic) ---
     let baseTime = new Date();
-    baseTime.setHours(14, 0, 0, 0); // Fixed example time: 14:00:00
+    baseTime.setHours(14, 0, 0, 0);
 
     function updateSimulator() {
       const regionKey = document.getElementById('sim-region').value;
@@ -645,37 +645,30 @@ pool pool.ntp.org iburst</span></pre>
       const totalDays = 180;
       const fraction = Math.min(1, Math.max(0, days / totalDays));
 
-      const baseOffset = cfg.base;
-
-      // Official time (abrupt jump after day 90)
-      const officialOffset = (days > 90 && cfg.rule !== 'none') ? baseOffset + 1.0 : baseOffset;
+      // Official time is always at summer offset (base + 1)
+      const officialOffset = cfg.base + 1.0;
       const officialTime = new Date(baseTime.getTime() + officialOffset * 3600 * 1000);
       
-      // smoothtime (smooth)
-      const smoothOffsetVal = baseOffset + fraction * (cfg.rule === 'none' ? 0 : 1.0);
+      // smoothtime ramps down from summer to winter during autumn transition
+      const smoothOffsetVal = cfg.base + 1.0 - fraction;
       const smoothTime = new Date(baseTime.getTime() + smoothOffsetVal * 3600 * 1000);
 
-      // Update clocks (stable, no ticking)
+      // Update clocks
       document.getElementById('official-clock').textContent = 
         officialTime.toLocaleTimeString("en-US", { hour12: false, hour: "2-digit", minute: "2-digit", second: "2-digit" });
       document.getElementById('smoothtime-clock').textContent = 
         smoothTime.toLocaleTimeString("en-US", { hour12: false, hour: "2-digit", minute: "2-digit", second: "2-digit" });
 
       // Update offsets
-      const sign1 = officialOffset >= 0 ? "+" : "";
-      document.getElementById('official-offset').textContent = `${sign1}${officialOffset.toFixed(3)} h`;
-      
-      const sign2 = smoothOffsetVal >= 0 ? "+" : "";
-      document.getElementById('smoothtime-offset').textContent = `${sign2}${smoothOffsetVal.toFixed(3)} h`;
+      document.getElementById('official-offset').textContent = `+${officialOffset.toFixed(3)} h`;
+      document.getElementById('smoothtime-offset').textContent = `+${smoothOffsetVal.toFixed(3)} h`;
 
-      // Time difference in minutes
+      // Time difference (smoothtime is behind)
       const diffMinutes = Math.round((officialOffset - smoothOffsetVal) * 60);
-      const diffText = diffMinutes === 0 ? "0 minutes" : 
-                       (diffMinutes > 0 ? `+${diffMinutes} minutes` : `${diffMinutes} minutes`);
-      document.getElementById('time-difference').textContent = diffText;
+      document.getElementById('time-difference').textContent = `-${diffMinutes} minutes`;
     }
 
-    // Initialize simulator
+    // Initialize
     setTimeout(() => {
       const slider = document.getElementById('days-slider');
       if (slider) {

@@ -3,7 +3,24 @@
 <head>
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
-  <title>smoothtime | The Natural Time Server</title>
+  <title>smoothtime | The Natural Time Server — Smooth DST Without Jumps</title>
+  
+  <meta name="description" content="The first public NTP server that replaces abrupt Daylight Saving Time (DST) jumps with a smooth linear drift. Prevent social jetlag, protect circadian rhythms, and avoid server disruptions. Free, open-source natural time for Europe and US regions.">
+  <meta name="keywords" content="smooth DST, natural time server, social jetlag, DST transition, NTP server without jumps, smoothtime, gradual time change, chronobiology, DST smear">
+  
+  <!-- Open Graph / Social -->
+  <meta property="og:title" content="smoothtime | The Natural Time Server — Smooth DST Without Jumps">
+  <meta property="og:description" content="Spread the 1-hour DST jump smoothly across the season. The first public NTP server for natural time. Open source, free, for homelabs, servers & IoT.">
+  <meta property="og:url" content="https://smoothtime.io">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://smoothtime.io/og-image.png">
+  
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="smoothtime | Smooth DST NTP Server">
+  <meta name="twitter:description" content="No more twice-yearly clock trauma. Natural, gradual time transitions via public NTP.">
+  
+  <link rel="canonical" href="https://smoothtime.io">
   
   <link rel="icon" type="image/svg+xml" href="./favicon.svg">
   <link href="./output.css" rel="stylesheet">
@@ -113,6 +130,28 @@
       .mobile-clock-text { font-size: 4rem !important; line-height: 1 !important; }
       .mobile-hero-text { font-size: 3.5rem !important; line-height: 1.1 !important; }
     }
+
+    /* New demo styles */
+    .simulator-bar {
+      height: 8px;
+      background: linear-gradient(to right, #4edea3, #22c55e);
+      transition: width 0.3s ease;
+    }
+    .abrupt-jump {
+      position: relative;
+    }
+    .abrupt-jump::after {
+      content: 'JUMP';
+      position: absolute;
+      top: -18px;
+      right: 0;
+      font-size: 10px;
+      font-weight: bold;
+      color: #ef4444;
+      background: #3f1f1f;
+      padding: 1px 6px;
+      border-radius: 4px;
+    }
   </style>
 </head>
 <body class="font-body text-on-surface selection:bg-primary selection:text-on-primary">
@@ -175,6 +214,78 @@
             <button onclick="switchRegion('us-central')" id="btn-us-central" class="region-btn group relative px-2 md:px-4 py-3 bg-surface-container-highest text-on-surface text-xs md:text-sm font-bold border border-outline-variant/20 rounded-xl hover:bg-surface-bright transition-all duration-300 hover:-translate-y-0.5">US Central</button>
             <button onclick="switchRegion('us-mountain')" id="btn-us-mountain" class="region-btn group relative px-2 md:px-4 py-3 bg-surface-container-highest text-on-surface text-xs md:text-sm font-bold border border-outline-variant/20 rounded-xl hover:bg-surface-bright transition-all duration-300 hover:-translate-y-0.5">US Mountain</button>
             <button onclick="switchRegion('us-pacific')" id="btn-us-pacific" class="region-btn group relative px-2 md:px-4 py-3 bg-surface-container-highest text-on-surface text-xs md:text-sm font-bold border border-outline-variant/20 rounded-xl hover:bg-surface-bright transition-all duration-300 hover:-translate-y-0.5">US Pacific</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- NEW: Interactive DST Transition Simulator -->
+    <section id="simulator" class="reveal mb-24 md:mb-32">
+      <h2 class="text-3xl md:text-4xl font-headline font-bold mb-8 md:mb-12 flex items-center gap-4">
+        <span class="text-primary font-mono text-xl">Interactive Demo</span> DST Transition Simulator
+      </h2>
+      
+      <div class="glass-card p-8 md:p-12 rounded-2xl border border-outline-variant/10">
+        <div class="max-w-4xl mx-auto">
+          <p class="text-on-surface-variant mb-8 text-lg">See the difference: Standard DST makes an instant 1-hour jump. smoothtime spreads it gradually over ~6 months using the exact linear drift formula used by our servers.</p>
+          
+          <!-- Region & Slider -->
+          <div class="flex flex-col md:flex-row gap-6 mb-8">
+            <div class="flex-1">
+              <label class="text-xs font-bold text-primary tracking-widest uppercase block mb-2">Select Region</label>
+              <select id="sim-region" onchange="updateSimulator()" class="w-full bg-surface-container-highest border border-outline-variant/20 rounded-xl px-4 py-3 text-on-surface font-mono text-sm">
+                <option value="europe-central">Europe Central (CET/CEST)</option>
+                <option value="europe-west">Europe West (WET/WEST)</option>
+                <option value="europe-east">Europe East (EET/EEST)</option>
+                <option value="us-eastern">US Eastern (EST/EDT)</option>
+                <option value="us-central">US Central (CST/CDT)</option>
+                <option value="us-mountain">US Mountain (MST/MDT)</option>
+                <option value="us-pacific">US Pacific (PST/PDT)</option>
+              </select>
+            </div>
+            
+            <div class="flex-1">
+              <label class="text-xs font-bold text-primary tracking-widest uppercase block mb-2">Days since last DST end <span id="slider-value" class="font-mono text-primary">90</span>/180</label>
+              <input type="range" id="days-slider" min="0" max="180" value="90" step="1" oninput="updateSimulator()" class="w-full accent-primary">
+            </div>
+          </div>
+
+          <!-- Comparison Cards -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Standard Abrupt -->
+            <div class="glass-card p-6 rounded-2xl border border-error/30">
+              <div class="flex items-center gap-3 mb-4">
+                <span class="material-symbols-outlined text-error">warning</span>
+                <h4 class="font-bold text-lg">Standard DST (Abrupt Jump)</h4>
+              </div>
+              <div class="h-3 bg-error/20 rounded-full mb-4 overflow-hidden">
+                <div id="abrupt-bar" class="h-3 bg-error w-0 transition-all duration-300"></div>
+              </div>
+              <div class="text-center">
+                <div class="text-4xl font-mono font-bold text-error mb-1" id="abrupt-offset">+1.000 h</div>
+                <div class="text-xs text-on-surface-variant">Instant jump at transition day</div>
+              </div>
+            </div>
+
+            <!-- Smoothtime Smooth -->
+            <div class="glass-card p-6 rounded-2xl border border-primary/30">
+              <div class="flex items-center gap-3 mb-4">
+                <span class="material-symbols-outlined text-primary">timeline</span>
+                <h4 class="font-bold text-lg">smoothtime (Smooth Drift)</h4>
+              </div>
+              <div class="h-3 bg-primary/20 rounded-full mb-4 overflow-hidden">
+                <div id="smooth-bar" class="simulator-bar w-0 transition-all duration-300"></div>
+              </div>
+              <div class="text-center">
+                <div class="text-4xl font-mono font-bold text-primary mb-1" id="smooth-offset">+0.500 h</div>
+                <div class="text-xs text-on-surface-variant">Linear ramp — no shock</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-8 p-4 bg-surface-container-lowest rounded-xl text-xs font-mono text-on-surface-variant border border-outline-variant/10">
+            <strong>Formula used:</strong> offset = base + (days_passed / total_days) × 1.0<br>
+            <span class="text-primary">This is the exact math running on our production NTP servers.</span>
           </div>
         </div>
       </div>
@@ -480,6 +591,37 @@ pool pool.ntp.org iburst</span></pre>
         icon.classList.remove('text-primary');
       }, 1500);
     }
+
+    // --- NEW: DST Transition Simulator ---
+    function updateSimulator() {
+      const regionKey = document.getElementById('sim-region').value;
+      const days = parseInt(document.getElementById('days-slider').value);
+      document.getElementById('slider-value').textContent = days;
+
+      const cfg = regions[regionKey];
+      const totalDays = 180; // Approximate season length
+      const fraction = days / totalDays;
+
+      // Standard abrupt: full 1h jump after ~90 days (mid season for demo)
+      const abruptOffset = (days > 90) ? cfg.base + 1.0 : cfg.base;
+      document.getElementById('abrupt-offset').textContent = `${abruptOffset >= 0 ? '+' : ''}${abruptOffset.toFixed(3)} h`;
+      document.getElementById('abrupt-bar').style.width = (days > 90 ? '100%' : '0%');
+
+      // Smoothtime smooth linear
+      const smoothOffsetVal = cfg.base + fraction * 1.0;
+      document.getElementById('smooth-offset').textContent = `${smoothOffsetVal >= 0 ? '+' : ''}${smoothOffsetVal.toFixed(3)} h`;
+      document.getElementById('smooth-bar').style.width = `${fraction * 100}%`;
+    }
+
+    // Initialize simulator on load
+    setTimeout(() => {
+      const slider = document.getElementById('days-slider');
+      if (slider) {
+        slider.value = 90;
+        document.getElementById('sim-region').value = 'europe-central';
+        updateSimulator();
+      }
+    }, 500);
 
     const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
     if (["America/New_York","America/Toronto"].includes(tz)) currentRegion = "us-eastern";

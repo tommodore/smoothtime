@@ -5,20 +5,20 @@
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
   <title>smoothtime | The Natural Time Server — Smooth DST Without Jumps</title>
   
-  <meta name="description" content="The first public NTP server that replaces abrupt Daylight Saving Time (DST) jumps with a smooth linear drift. Prevent social jetlag, protect circadian rhythms, and avoid server disruptions. Free, open-source natural time for Europe and US regions.">
-  <meta name="keywords" content="smooth DST, natural time server, social jetlag, DST transition, NTP server without jumps, smoothtime, gradual time change, chronobiology, DST smear">
+  <meta name="description" content="The first public NTP server that replaces abrupt Daylight Saving Time (DST) jumps with a smooth linear drift. Prevent social jetlag, protect circadian rhythms, and avoid server disruptions. Free, open-source natural time for Europe, US, Australia, New Zealand, Chile & Argentina.">
+  <meta name="keywords" content="smooth DST, natural time server, social jetlag, DST transition, NTP server without jumps, smoothtime, gradual time change, chronobiology, DST smear, australia ntp, new zealand time server, chile ntp">
   
   <!-- Open Graph / Social -->
   <meta property="og:title" content="smoothtime | The Natural Time Server — Smooth DST Without Jumps">
-  <meta property="og:description" content="Spread the 1-hour DST jump smoothly across the season. The first public NTP server for natural time. Open source, free, for homelabs, servers & IoT.">
+  <meta property="og:description" content="Spread the 1-hour DST jump smoothly across the season. Now with Australia, New Zealand, Chile & Argentina. Open source, free, for homelabs, servers & IoT worldwide.">
   <meta property="og:url" content="https://smoothtime.io">
   <meta property="og:type" content="website">
   <meta property="og:image" content="https://smoothtime.io/og-image.png">
   
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="smoothtime | Smooth DST NTP Server">
-  <meta name="twitter:description" content="No more twice-yearly clock trauma. Natural, gradual time transitions via public NTP.">
+  <meta name="twitter:title" content="smoothtime | Smooth DST NTP Server (now global)">
+  <meta name="twitter:description" content="No more twice-yearly clock trauma. Natural, gradual time transitions via public NTP — now supporting Southern Hemisphere too.">
   
   <link rel="canonical" href="https://smoothtime.io">
   
@@ -182,12 +182,12 @@
           <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
           <span class="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
         </span>
-        <span class="text-xs font-bold text-primary tracking-widest uppercase">Public Time Server</span>
+        <span class="text-xs font-bold text-primary tracking-widest uppercase">Public Time Server • Now Global</span>
       </div>
       <h1 class="reveal delay-100 font-headline text-5xl md:text-8xl mobile-hero-text font-bold tracking-tighter text-on-surface mb-6 drop-shadow-2xl">smoothtime</h1>
       <p class="reveal delay-200 text-lg md:text-2xl text-on-surface-variant max-w-2xl mx-auto font-light leading-relaxed">
           Time without the twice-yearly trauma. <br>
-          <span class="text-primary/80 font-medium">We spread the 1-hour jump smoothly across the entire season.</span>
+          <span class="text-primary/80 font-medium">We spread the 1-hour jump smoothly across the entire season — now with Australia, New Zealand, Chile & Argentina.</span>
       </p>
     </section>
 
@@ -207,13 +207,20 @@
           </div>
 
           <div class="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-3 w-full">
+            <!-- Europe -->
             <button onclick="switchRegion('europe-west')" id="btn-europe-west" class="region-btn group relative px-2 md:px-4 py-3 bg-surface-container-highest text-on-surface text-xs md:text-sm font-bold border border-outline-variant/20 rounded-xl hover:bg-surface-bright transition-all duration-300 hover:-translate-y-0.5">Europe West</button>
             <button onclick="switchRegion('europe-central')" id="btn-europe-central" class="region-btn group relative px-2 md:px-4 py-3 bg-surface-container-highest text-on-surface text-xs md:text-sm font-bold border border-outline-variant/20 rounded-xl hover:bg-surface-bright transition-all duration-300 hover:-translate-y-0.5 btn-active">Europe Central</button>
             <button onclick="switchRegion('europe-east')" id="btn-europe-east" class="region-btn group relative px-2 md:px-4 py-3 bg-surface-container-highest text-on-surface text-xs md:text-sm font-bold border border-outline-variant/20 rounded-xl hover:bg-surface-bright transition-all duration-300 hover:-translate-y-0.5">Europe East</button>
+            <!-- US -->
             <button onclick="switchRegion('us-eastern')" id="btn-us-eastern" class="region-btn group relative px-2 md:px-4 py-3 bg-surface-container-highest text-on-surface text-xs md:text-sm font-bold border border-outline-variant/20 rounded-xl hover:bg-surface-bright transition-all duration-300 hover:-translate-y-0.5">US Eastern</button>
             <button onclick="switchRegion('us-central')" id="btn-us-central" class="region-btn group relative px-2 md:px-4 py-3 bg-surface-container-highest text-on-surface text-xs md:text-sm font-bold border border-outline-variant/20 rounded-xl hover:bg-surface-bright transition-all duration-300 hover:-translate-y-0.5">US Central</button>
             <button onclick="switchRegion('us-mountain')" id="btn-us-mountain" class="region-btn group relative px-2 md:px-4 py-3 bg-surface-container-highest text-on-surface text-xs md:text-sm font-bold border border-outline-variant/20 rounded-xl hover:bg-surface-bright transition-all duration-300 hover:-translate-y-0.5">US Mountain</button>
             <button onclick="switchRegion('us-pacific')" id="btn-us-pacific" class="region-btn group relative px-2 md:px-4 py-3 bg-surface-container-highest text-on-surface text-xs md:text-sm font-bold border border-outline-variant/20 rounded-xl hover:bg-surface-bright transition-all duration-300 hover:-translate-y-0.5">US Pacific</button>
+            <!-- New Southern Hemisphere -->
+            <button onclick="switchRegion('australia-sydney')" id="btn-australia-sydney" class="region-btn group relative px-2 md:px-4 py-3 bg-surface-container-highest text-on-surface text-xs md:text-sm font-bold border border-outline-variant/20 rounded-xl hover:bg-surface-bright transition-all duration-300 hover:-translate-y-0.5">Australia Sydney</button>
+            <button onclick="switchRegion('new-zealand')" id="btn-new-zealand" class="region-btn group relative px-2 md:px-4 py-3 bg-surface-container-highest text-on-surface text-xs md:text-sm font-bold border border-outline-variant/20 rounded-xl hover:bg-surface-bright transition-all duration-300 hover:-translate-y-0.5">New Zealand</button>
+            <button onclick="switchRegion('chile')" id="btn-chile" class="region-btn group relative px-2 md:px-4 py-3 bg-surface-container-highest text-on-surface text-xs md:text-sm font-bold border border-outline-variant/20 rounded-xl hover:bg-surface-bright transition-all duration-300 hover:-translate-y-0.5">Chile</button>
+            <button onclick="switchRegion('argentina')" id="btn-argentina" class="region-btn group relative px-2 md:px-4 py-3 bg-surface-container-highest text-on-surface text-xs md:text-sm font-bold border border-outline-variant/20 rounded-xl hover:bg-surface-bright transition-all duration-300 hover:-translate-y-0.5">Argentina</button>
           </div>
         </div>
       </div>
@@ -241,6 +248,11 @@
                 <option value="us-central">US Central (CST/CDT)</option>
                 <option value="us-mountain">US Mountain (MST/MDT)</option>
                 <option value="us-pacific">US Pacific (PST/PDT)</option>
+                <!-- New regions -->
+                <option value="australia-sydney">Australia Sydney (AEST/AEDT)</option>
+                <option value="new-zealand">New Zealand (NZST/NZDT)</option>
+                <option value="chile">Chile (CLT/CLST)</option>
+                <option value="argentina">Argentina (ART - no DST)</option>
               </select>
             </div>
             
@@ -285,7 +297,7 @@
 
           <div class="mt-8 p-4 bg-surface-container-lowest rounded-xl text-xs font-mono text-on-surface-variant border border-outline-variant/10">
             <strong>Formula used:</strong> offset = base + (days_passed / total_days) × 1.0<br>
-            <span class="text-primary">This is the exact math running on our production NTP servers.</span>
+            <span class="text-primary">This is the exact math running on our production NTP servers (now with Southern Hemisphere support).</span>
           </div>
         </div>
       </div>
@@ -349,7 +361,7 @@
             <div class="mt-8 pt-6 md:pt-8 border-t border-outline-variant/10 flex items-center gap-4 text-xs md:text-sm font-mono text-primary/60">
               <span>MATHEMATICAL_DRIFT</span>
               <span class="h-1 w-1 bg-outline-variant rounded-full hidden md:block"></span>
-              <span class="hidden md:block">100% OPEN SOURCE</span>
+              <span class="hidden md:block">100% OPEN SOURCE • NOW GLOBAL</span>
             </div>
           </div>
         </div>
@@ -358,7 +370,7 @@
             <span class="material-symbols-outlined">devices</span>
           </div>
           <h3 class="text-xl md:text-2xl font-headline font-bold mb-4">Compatible with Everything</h3>
-          <p class="text-on-surface-variant text-sm md:text-base leading-relaxed">It works out-of-the-box with any standard device that connects to the internet to check the time. No special software needed.</p>
+          <p class="text-on-surface-variant text-sm md:text-base leading-relaxed">It works out-of-the-box with any standard device that connects to the internet to check the time. No special software needed. Now supports Southern Hemisphere timezones too.</p>
         </div>
       </div>
     </section>
@@ -450,7 +462,7 @@ pool pool.ntp.org iburst</span></pre>
         <a class="text-sm text-on-surface-variant hover:text-primary transition-colors" href="/legal.html">Legal & Privacy</a>
       </div>
       <div class="text-xs text-outline-variant uppercase tracking-widest font-bold text-center md:text-right">
-          MIT Licensed Open Source
+          MIT Licensed Open Source • 11 Regions Worldwide
       </div>
     </div>
   </footer>
@@ -484,7 +496,12 @@ pool pool.ntp.org iburst</span></pre>
       "us-eastern":     { name: "US Eastern Smoothtime (EST/EDT)",      base: -5.0, rule: "us" },
       "us-central":     { name: "US Central Smoothtime (CST/CDT)",      base: -6.0, rule: "us" },
       "us-mountain":    { name: "US Mountain Smoothtime (MST/MDT)",     base: -7.0, rule: "us" },
-      "us-pacific":     { name: "US Pacific Smoothtime (PST/PDT)",      base: -8.0, rule: "us" }
+      "us-pacific":     { name: "US Pacific Smoothtime (PST/PDT)",      base: -8.0, rule: "us" },
+      // New Southern Hemisphere regions
+      "australia-sydney": { name: "Australia Sydney Smoothtime (AEST/AEDT)", base: -10.0, rule: "au" },
+      "new-zealand":      { name: "New Zealand Smoothtime (NZST/NZDT)", base: 12.0, rule: "au" },
+      "chile":            { name: "Chile Smoothtime (CLT/CLST)", base: -4.0, rule: "cl" },
+      "argentina":        { name: "Argentina Smoothtime (ART - constant)", base: -3.0, rule: "none" }
     };
 
     let currentRegion = "europe-central";
@@ -515,8 +532,15 @@ pool pool.ntp.org iburst</span></pre>
         return { start: getLastSunday(year, 2), end: getLastSunday(year, 9) };
       } else if (rule === 'us') {
         return { start: getNthSunday(year, 2, 2), end: getNthSunday(year, 10, 1) };
+      } else if (rule === 'au') {
+        // Southern: Oct start, Apr end (next year)
+        return { start: getNthSunday(year, 9, 1), end: getNthSunday(year + 1, 3, 1) };
+      } else if (rule === 'cl') {
+        // Chile: Sep start, Apr end
+        return { start: getNthSunday(year, 8, 1), end: getNthSunday(year + 1, 3, 1) };
       }
-      return null;
+      // No DST (Argentina)
+      return { start: new Date(0), end: new Date(0) };
     }
 
     function smoothOffset() {
@@ -526,6 +550,10 @@ pool pool.ntp.org iburst</span></pre>
       const dates = getDstDates(year, cfg.rule);
       const tStart = dates.start;
       const tEnd = dates.end;
+
+      if (tStart.getTime() === 0) {
+        return cfg.base; // No DST
+      }
 
       let offset;
       if (now >= tStart && now < tEnd) {
@@ -599,16 +627,16 @@ pool pool.ntp.org iburst</span></pre>
       document.getElementById('slider-value').textContent = days;
 
       const cfg = regions[regionKey];
-      const totalDays = 180; // Approximate season length
+      const totalDays = 180;
       const fraction = days / totalDays;
 
-      // Standard abrupt: full 1h jump after ~90 days (mid season for demo)
-      const abruptOffset = (days > 90) ? cfg.base + 1.0 : cfg.base;
+      // Standard abrupt: full 1h jump after ~90 days
+      const abruptOffset = (days > 90 && cfg.rule !== 'none') ? cfg.base + 1.0 : cfg.base;
       document.getElementById('abrupt-offset').textContent = `${abruptOffset >= 0 ? '+' : ''}${abruptOffset.toFixed(3)} h`;
-      document.getElementById('abrupt-bar').style.width = (days > 90 ? '100%' : '0%');
+      document.getElementById('abrupt-bar').style.width = (days > 90 && cfg.rule !== 'none' ? '100%' : '0%');
 
       // Smoothtime smooth linear
-      const smoothOffsetVal = cfg.base + fraction * 1.0;
+      const smoothOffsetVal = cfg.base + fraction * (cfg.rule === 'none' ? 0 : 1.0);
       document.getElementById('smooth-offset').textContent = `${smoothOffsetVal >= 0 ? '+' : ''}${smoothOffsetVal.toFixed(3)} h`;
       document.getElementById('smooth-bar').style.width = `${fraction * 100}%`;
     }
@@ -630,6 +658,10 @@ pool pool.ntp.org iburst</span></pre>
     else if (["America/Los_Angeles"].includes(tz)) currentRegion = "us-pacific";
     else if (["Europe/London", "Europe/Dublin", "Europe/Lisbon"].includes(tz)) currentRegion = "europe-west";
     else if (["Europe/Bucharest","Europe/Helsinki","Europe/Riga","Europe/Tallinn","Europe/Vilnius","Europe/Sofia","Europe/Athens"].includes(tz)) currentRegion = "europe-east";
+    else if (["Australia/Sydney", "Australia/Melbourne"].includes(tz)) currentRegion = "australia-sydney";
+    else if (["Pacific/Auckland"].includes(tz)) currentRegion = "new-zealand";
+    else if (["America/Santiago"].includes(tz)) currentRegion = "chile";
+    else if (["America/Argentina/Buenos_Aires"].includes(tz)) currentRegion = "argentina";
     else currentRegion = "europe-central";
 
     switchRegion(currentRegion);

@@ -6,7 +6,7 @@
   <title>smoothtime | The Natural Time Server — Smooth DST Without Jumps</title>
   
   <meta name="description" content="The first public NTP server that replaces abrupt Daylight Saving Time (DST) jumps with a smooth linear drift. Prevent social jetlag, protect circadian rhythms, and avoid server disruptions. Free, open-source natural time for Europe, US, Australia, New Zealand, Chile & Argentina.">
-  <meta name="keywords" content="smooth DST, natural time server, social jetlag, DST transition, NTP server without jumps, smoothtime, gradual time change, chronobiology, DST smear, australia ntp, new zealand time server, chile ntp">
+  <meta name="keywords" content="smooth DST, natural time server, social jetlag, DST transition, NTP server without jumps, smoothtime, gradual time change, chronobiology, DST smear, australia ntp, new zealand time server, chile ntp, chrony">
   
   <!-- Open Graph / Social -->
   <meta property="og:title" content="smoothtime | The Natural Time Server — Smooth DST Without Jumps">
@@ -397,57 +397,66 @@
       </div>
 
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12">
-        <div class="space-y-4">
-          <div class="reveal delay-200 bg-surface-container-lowest p-6 rounded-2xl border border-outline-variant/10 hover-lift">
-            <h4 class="font-bold text-on-surface mb-3 flex items-center gap-2"><span class="material-symbols-outlined text-primary text-[20px]">terminal</span> For Linux & Servers</h4>
-            <ol class="text-sm text-on-surface-variant list-decimal list-inside space-y-2">
-              <li>Set your system to pure UTC: <br><code class="bg-surface-container-highest px-2 py-0.5 mt-2 mb-1 inline-block rounded text-primary font-mono text-xs border border-outline-variant/20">sudo timedatectl set-timezone UTC</code></li>
-              <li>Add the smoothtime server address (shown right) to your <code class="text-primary font-mono text-xs">ntp.conf</code>.</li>
-              <li>Restart your NTP service to apply the change immediately.</li>
-            </ol>
-          </div>
-          
-          <div class="reveal delay-300 bg-surface-container-lowest p-6 rounded-2xl border border-outline-variant/10 hover-lift">
-            <h4 class="font-bold text-on-surface mb-3 flex items-center gap-2"><span class="material-symbols-outlined text-primary text-[20px]">laptop_mac</span> For macOS</h4>
-            <ol class="text-sm text-on-surface-variant list-decimal list-inside space-y-2">
-              <li>Open <strong>System Settings</strong> > <strong>General</strong> > <strong>Date & Time</strong>.</li>
-              <li>Turn off <strong>Set time zone automatically</strong>.</li>
-              <li>In the "Closest City" field, select <strong>UTC</strong> or <strong>GMT</strong>.</li>
-              <li>Update your Time Server address to your regional smoothtime node.</li>
-            </ol>
-          </div>
+        
+        <!-- Linux & Servers (ntpd) -->
+        <div class="reveal delay-200 bg-surface-container-lowest p-6 rounded-2xl border border-outline-variant/10 hover-lift">
+          <h4 class="font-bold text-on-surface mb-3 flex items-center gap-2"><span class="material-symbols-outlined text-primary text-[20px]">terminal</span> For Linux & Servers (ntpd)</h4>
+          <ol class="text-sm text-on-surface-variant list-decimal list-inside space-y-2">
+            <li>Set your system to pure UTC: <br><code class="bg-surface-container-highest px-2 py-0.5 mt-2 mb-1 inline-block rounded text-primary font-mono text-xs border border-outline-variant/20">sudo timedatectl set-timezone UTC</code></li>
+            <li>Add the smoothtime server to your <code class="text-primary font-mono text-xs">ntp.conf</code>.</li>
+            <li>Restart ntpd to apply the change.</li>
+          </ol>
+        </div>
 
-          <div class="reveal delay-400 bg-surface-container-lowest p-6 rounded-2xl border border-outline-variant/10 hover-lift">
-            <h4 class="font-bold text-on-surface mb-3 flex items-center gap-2"><span class="material-symbols-outlined text-primary text-[20px]">desktop_windows</span> For Windows</h4>
-            <ol class="text-sm text-on-surface-variant list-decimal list-inside space-y-2">
-              <li>Open <strong>Settings</strong> > <strong>Time & language</strong> > <strong>Date & time</strong>.</li>
-              <li>Turn off <strong>Set time zone automatically</strong>.</li>
-              <li>Change the Time zone dropdown to <strong>(UTC) Coordinated Universal Time</strong>.</li>
-              <li>Click <strong>Sync now</strong> after configuring your new server address.</li>
-            </ol>
+        <!-- chrony (NEW) -->
+        <div class="reveal delay-250 bg-surface-container-lowest p-6 rounded-2xl border border-primary/30 hover-lift">
+          <div class="flex items-center gap-2 mb-3">
+            <span class="material-symbols-outlined text-primary text-[20px]">dns</span>
+            <h4 class="font-bold text-on-surface">For chrony (recommended)</h4>
+          </div>
+          <p class="text-xs text-primary font-mono mb-3">Most modern Linux systems use chrony instead of ntpd.</p>
+          
+          <ol class="text-sm text-on-surface-variant list-decimal list-inside space-y-3">
+            <li>Set your system to pure UTC (critical!):<br>
+              <code class="bg-surface-container-highest px-2 py-0.5 mt-1 inline-block rounded text-primary font-mono text-xs border border-outline-variant/20">sudo timedatectl set-timezone UTC</code>
+            </li>
+            <li>Edit chrony config:<br>
+              <code class="bg-surface-container-highest px-2 py-0.5 mt-1 inline-block rounded text-primary font-mono text-xs border border-outline-variant/20">sudo nano /etc/chrony.conf</code>
+            </li>
+            <li>Add this line (replace with your regional server):<br>
+              <code class="bg-surface-container-highest px-3 py-1 mt-1 inline-block rounded text-primary font-mono text-xs border border-outline-variant/20">server europe-central.smoothtime.io iburst</code>
+            </li>
+            <li>Restart chrony:<br>
+              <code class="bg-surface-container-highest px-2 py-0.5 mt-1 inline-block rounded text-primary font-mono text-xs border border-outline-variant/20">sudo systemctl restart chronyd</code>
+            </li>
+          </ol>
+          
+          <div class="mt-4 p-3 bg-surface-container-high rounded-xl text-xs text-on-surface-variant">
+            <strong>Tip:</strong> You can add multiple regional servers for redundancy.<br>
+            chrony is faster and more accurate than traditional ntpd.
           </div>
         </div>
-        
-        <div class="reveal-scale delay-300 bg-surface-container-lowest rounded-2xl border border-outline-variant/20 overflow-hidden shadow-2xl h-fit sticky top-28 group hover:border-primary/30 transition-colors duration-500">
-          <div class="px-4 md:px-6 py-3 border-b border-outline-variant/10 flex items-center justify-between bg-surface-container-low">
-            <div class="flex gap-2">
-              <div class="w-3 h-3 rounded-full bg-error/80 hover:bg-error transition-colors"></div>
-              <div class="w-3 h-3 rounded-full bg-secondary-container hover:bg-primary transition-colors"></div>
-              <div class="w-3 h-3 rounded-full bg-primary/60 hover:bg-primary transition-colors"></div>
-            </div>
-            <span class="text-xs font-mono text-on-surface-variant">Server Address</span>
-          </div>
-          <div class="p-6 md:p-8 font-mono text-xs md:text-sm relative overflow-x-auto">
-            <pre class="text-on-surface-variant whitespace-pre-wrap min-w-[300px] leading-loose"><span class="text-primary/70"># Your regional smoothtime server:</span>
-<span id="cmd-server" class="text-on-surface font-bold">europe-central.smoothtime.io</span>
 
-<span class="text-outline-variant mt-4 block"># Example Linux (ntp.conf) integration:</span>
-<span class="text-on-surface-variant">server europe-central.smoothtime.io iburst
-pool pool.ntp.org iburst</span></pre>
-            <button onclick="copyCommand()" class="absolute top-4 md:top-6 right-4 md:right-6 p-2 bg-surface-container-high rounded-lg text-on-surface-variant hover:text-primary hover:bg-surface-bright transition-all duration-300 focus:outline-none active:scale-90 shadow-sm border border-transparent hover:border-outline-variant/20">
-              <span id="copy-icon" class="material-symbols-outlined text-base md:text-lg">content_copy</span>
-            </button>
-          </div>
+        <!-- macOS -->
+        <div class="reveal delay-300 bg-surface-container-lowest p-6 rounded-2xl border border-outline-variant/10 hover-lift">
+          <h4 class="font-bold text-on-surface mb-3 flex items-center gap-2"><span class="material-symbols-outlined text-primary text-[20px]">laptop_mac</span> For macOS</h4>
+          <ol class="text-sm text-on-surface-variant list-decimal list-inside space-y-2">
+            <li>Open <strong>System Settings</strong> > <strong>General</strong> > <strong>Date & Time</strong>.</li>
+            <li>Turn off <strong>Set time zone automatically</strong>.</li>
+            <li>In the "Closest City" field, select <strong>UTC</strong> or <strong>GMT</strong>.</li>
+            <li>Update your Time Server address to your regional smoothtime node.</li>
+          </ol>
+        </div>
+
+        <!-- Windows -->
+        <div class="reveal delay-400 bg-surface-container-lowest p-6 rounded-2xl border border-outline-variant/10 hover-lift">
+          <h4 class="font-bold text-on-surface mb-3 flex items-center gap-2"><span class="material-symbols-outlined text-primary text-[20px]">desktop_windows</span> For Windows</h4>
+          <ol class="text-sm text-on-surface-variant list-decimal list-inside space-y-2">
+            <li>Open <strong>Settings</strong> > <strong>Time & language</strong> > <strong>Date & time</strong>.</li>
+            <li>Turn off <strong>Set time zone automatically</strong>.</li>
+            <li>Change the Time zone dropdown to <strong>(UTC) Coordinated Universal Time</strong>.</li>
+            <li>Click <strong>Sync now</strong> after configuring your new server address.</li>
+          </ol>
         </div>
       </div>
     </section>
@@ -509,7 +518,7 @@ pool pool.ntp.org iburst</span></pre>
 
     let currentRegion = "europe-central";
     let simRegion = "europe-central";
-    let currentDiffOffset = 0; // difference between simulated and real smooth offset
+    let currentDiffOffset = 0;
 
     function updateClock() {
       const offsetH = smoothOffset();
@@ -559,7 +568,6 @@ pool pool.ntp.org iburst</span></pre>
       }, 1500);
     }
 
-    // --- Update simulator when region or slider changes ---
     function updateSimulator() {
       const regionKey = document.getElementById('sim-region').value;
       const days = parseInt(document.getElementById('days-slider').value);
@@ -570,34 +578,25 @@ pool pool.ntp.org iburst</span></pre>
       const totalDays = 180;
       const fraction = Math.min(1, Math.max(0, days / totalDays));
 
-      // Get real current smooth offset
       const realSmoothOffset = calculateCurrentSmoothOffset(regionKey);
-
-      // Simulated smooth offset based on slider
       const simulatedSmoothOffset = cfg.base + 1.0 - fraction;
 
-      // Store the difference for ticking
       currentDiffOffset = simulatedSmoothOffset - realSmoothOffset;
 
-      // Update static labels
       document.getElementById('official-offset').textContent = `+${realSmoothOffset.toFixed(3)} h (real)`;
       document.getElementById('smoothtime-offset').textContent = `+${simulatedSmoothOffset.toFixed(3)} h (sim)`;
 
-      // Update difference label
       const diffMinutes = Math.round(currentDiffOffset * 60);
       document.getElementById('time-difference').textContent = `${diffMinutes >= 0 ? '+' : ''}${diffMinutes} minutes`;
 
-      // Initial clock update
       tickSimulatorClocks();
     }
 
-    // --- Tick both clocks every second ---
     function tickSimulatorClocks() {
       const regionKey = document.getElementById('sim-region').value;
       const cfg = regions[regionKey];
       const now = new Date();
 
-      // Official = real current local time
       const officialTimeStr = now.toLocaleTimeString("en-US", {
         timeZone: cfg.iana,
         hour12: false,
@@ -607,7 +606,6 @@ pool pool.ntp.org iburst</span></pre>
       });
       document.getElementById('official-clock').textContent = officialTimeStr;
 
-      // smoothtime = real local time + currentDiffOffset
       const smoothTime = new Date(now.getTime() + currentDiffOffset * 3600 * 1000);
       const smoothTimeStr = smoothTime.toLocaleTimeString("en-US", {
         timeZone: cfg.iana,
@@ -715,21 +713,15 @@ pool pool.ntp.org iburst</span></pre>
         updateSimulator();
         slider.oninput = updateSimulator;
         document.getElementById('sim-region').onchange = updateSimulator;
-
-        // Tick both clocks every second
         setInterval(tickSimulatorClocks, 1000);
       }
     }
 
     function init() {
-      // Main live clock
       switchRegion(currentRegion);
       setInterval(updateClock, 1000);
-
-      // Simulator
       initSimulator();
 
-      // Auto-detect
       const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
       if (["America/New_York","America/Toronto"].includes(tz)) currentRegion = "us-eastern";
       else if (["America/Chicago"].includes(tz)) currentRegion = "us-central";

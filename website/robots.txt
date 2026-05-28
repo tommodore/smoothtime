@@ -1,5 +1,4 @@
 User-agent: *
 Allow: /
 
-# Optional: add later when a sitemap is there
-# Sitemap: https://smoothtime.io/sitemap.xml
+Sitemap: https://smoothtime.io/sitemap.xml

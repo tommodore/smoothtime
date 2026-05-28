@@ -542,17 +542,13 @@
       });
       
       const nameEl = document.getElementById("region-name");
-      nameEl.style.opacity = 0;
-      setTimeout(() => {
-        nameEl.textContent = regions[currentRegion].name;
-        nameEl.style.opacity = 1;
-      }, 150);
-      
-      document.getElementById('cmd-server').textContent = `${region}.smoothtime.io`;
-      
-      const confBlock = document.querySelector('.text-on-surface-variant.whitespace-pre-wrap').innerHTML;
-      const newBlock = confBlock.replace(/server .*\.smoothtime\.io iburst/, `server ${region}.smoothtime.io iburst`);
-      document.querySelector('.text-on-surface-variant.whitespace-pre-wrap').innerHTML = newBlock;
+      if (nameEl) {
+        nameEl.style.opacity = 0;
+        setTimeout(() => {
+          nameEl.textContent = regions[currentRegion].name;
+          nameEl.style.opacity = 1;
+        }, 150);
+      }
       
       updateClock();
     }

@@ -314,21 +314,21 @@
         </div>
         <div class="grid md:grid-cols-3 gap-4 md:gap-6">
           <div class="flex gap-4 p-4 rounded-xl bg-surface-container-highest/40 border border-outline-variant/10">
-            <span class="flex-shrink-0 w-8 h-8 rounded-full bg-primary flex items-center justify-center text-sm font-bold" style="color:#003824;">1</span>
+            <span class="flex-shrink-0 w-8 h-8 rounded-full bg-primary flex items-center justify-center text-sm font-bold font-mono leading-none" style="color:#003824;">1</span>
             <div class="min-w-0">
               <p class="text-sm font-bold text-on-surface mb-1">Set system to UTC</p>
               <code class="text-xs font-mono text-primary break-all select-all">sudo timedatectl set-timezone UTC</code>
             </div>
           </div>
           <div class="flex gap-4 p-4 rounded-xl bg-surface-container-highest/40 border border-outline-variant/10">
-            <span class="flex-shrink-0 w-8 h-8 rounded-full bg-primary flex items-center justify-center text-sm font-bold" style="color:#003824;">2</span>
+            <span class="flex-shrink-0 w-8 h-8 rounded-full bg-primary flex items-center justify-center text-sm font-bold font-mono leading-none" style="color:#003824;">2</span>
             <div class="min-w-0">
               <p class="text-sm font-bold text-on-surface mb-1">Add server to chrony</p>
               <code class="text-xs font-mono text-primary break-all select-all">echo "server <span id="quick-server">europe-central</span>.smoothtime.io iburst" | sudo tee -a /etc/chrony.conf</code>
             </div>
           </div>
           <div class="flex gap-4 p-4 rounded-xl bg-surface-container-highest/40 border border-outline-variant/10">
-            <span class="flex-shrink-0 w-8 h-8 rounded-full bg-primary flex items-center justify-center text-sm font-bold" style="color:#003824;">3</span>
+            <span class="flex-shrink-0 w-8 h-8 rounded-full bg-primary flex items-center justify-center text-sm font-bold font-mono leading-none" style="color:#003824;">3</span>
             <div class="min-w-0">
               <p class="text-sm font-bold text-on-surface mb-1">Restart chrony</p>
               <code class="text-xs font-mono text-primary break-all select-all">sudo systemctl restart chronyd</code>

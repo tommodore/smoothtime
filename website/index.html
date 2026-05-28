@@ -37,6 +37,9 @@
   <!-- Resource Hints -->
   <link rel="preconnect" href="https://github.com">
   <link rel="dns-prefetch" href="https://status.smoothtime.io">
+  <link rel="preload" href="./fonts/manrope-v20-latin-regular.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="./fonts/manrope-v20-latin-700.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="./fonts/space-grotesk-v22-latin-600.woff2" as="font" type="font/woff2" crossorigin>
   
   <link rel="icon" type="image/svg+xml" href="./favicon.svg">
   <link href="./output.css" rel="stylesheet">
@@ -181,6 +184,29 @@
       box-shadow: 0 20px 40px -10px rgba(78,222,163,0.1);
     }
 
+    /* Accessibility: Focus styles */
+    *:focus-visible {
+      outline: 2px solid #4edea3;
+      outline-offset: 2px;
+      border-radius: 4px;
+    }
+    .skip-link {
+      position: absolute;
+      top: -100%;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #4edea3;
+      color: #003824;
+      padding: 8px 16px;
+      border-radius: 0 0 8px 8px;
+      font-weight: 600;
+      z-index: 100;
+      transition: top 0.2s;
+    }
+    .skip-link:focus {
+      top: 0;
+    }
+
     @media (max-width: 640px) {
       .mobile-clock-text { font-size: 4rem !important; line-height: 1 !important; }
       .mobile-hero-text { font-size: 3.5rem !important; line-height: 1.1 !important; }
@@ -197,6 +223,8 @@
   </style>
 </head>
 <body class="font-body text-on-surface selection:bg-primary selection:text-on-primary">
+  
+  <a href="#main-content" class="skip-link">Skip to content</a>
   
   <nav class="fixed top-0 w-full z-50 bg-[#131315]/80 backdrop-blur-xl border-b border-outline-variant/10 shadow-[0_20px_50px_rgba(16,185,129,0.05)] transition-transform duration-500" id="navbar">
     <div class="flex justify-between items-center px-6 md:px-8 h-20 max-w-7xl mx-auto">
@@ -216,7 +244,7 @@
     </div>
   </nav>
 
-  <main class="pt-32 pb-24 px-4 md:px-6 max-w-7xl mx-auto overflow-hidden">
+  <main id="main-content" class="pt-32 pb-24 px-4 md:px-6 max-w-7xl mx-auto overflow-hidden">
     
     <section class="text-center mb-16 md:mb-24">
       <div class="reveal inline-flex items-center gap-2 bg-surface-container-low px-4 py-1.5 rounded-full border border-outline-variant/10 mb-6 md:mb-8 hover:border-primary/30 transition-colors cursor-default">
@@ -238,14 +266,22 @@
       <div class="glass-card p-6 md:p-12 rounded-2xl border border-outline-variant/10 text-center relative overflow-hidden shadow-2xl">
         <div class="flex flex-col items-center justify-center gap-4">
           <span id="region-name" class="text-xs font-mono text-on-surface-variant uppercase tracking-[0.15em] md:tracking-[0.2em] font-bold transition-all duration-300">Europe Central Smoothtime (CET/CEST)</span>
-          <div id="live-clock" class="text-6xl md:text-[9rem] mobile-clock-text font-bold font-headline tracking-tighter text-on-surface leading-none py-4 md:py-6 tabular-nums tracking-tight">00:00:00</div>
+          <div id="live-clock" class="text-6xl md:text-[9rem] mobile-clock-text font-bold font-headline tracking-tighter text-on-surface leading-none py-4 md:py-6 tabular-nums tracking-tight" aria-live="polite" aria-label="Current smoothtime">00:00:00</div>
           
           <div class="flex flex-col items-center gap-2 w-full max-w-md">
             <span class="text-xs font-bold text-primary tracking-widest uppercase mt-2">Active UTC Adjustment</span>
             <div id="active-offset" class="text-2xl md:text-3xl font-mono font-bold text-primary mb-4 tabular-nums">+1.000 h</div>
-            <div class="bg-surface-container-lowest h-2 w-full rounded-full overflow-hidden relative mb-8 md:mb-10 shadow-inner">
+            <div class="bg-surface-container-lowest h-2 w-full rounded-full overflow-hidden relative mb-4 md:mb-5 shadow-inner">
               <div id="offset-progress" class="absolute inset-y-0 left-0 bg-primary w-0 rounded-full shadow-[0_0_20px_rgba(78,222,163,0.8)] transition-all duration-1000 ease-out"></div>
             </div>
+          </div>
+
+          <!-- Server Address + Copy -->
+          <div class="flex items-center justify-center gap-2 mb-6 md:mb-8 w-full max-w-md mx-auto">
+            <code id="server-address" class="px-4 py-2.5 bg-surface-container-highest rounded-lg text-sm md:text-base font-mono text-on-surface border border-outline-variant/20 flex-1 text-center select-all">europe-central.smoothtime.io</code>
+            <button onclick="copyServerAddress()" id="copy-server-btn" class="px-4 py-2.5 bg-primary/10 hover:bg-primary/20 text-primary rounded-lg border border-primary/20 transition-all duration-200 font-medium text-sm whitespace-nowrap" aria-label="Copy server address">
+              <span id="copy-label">Copy</span>
+            </button>
           </div>
 
           <div class="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-3 w-full">
@@ -605,7 +641,29 @@
         }, 150);
       }
       
+      const serverAddr = document.getElementById('server-address');
+      if (serverAddr) {
+        serverAddr.textContent = `${region}.smoothtime.io`;
+      }
+      
       updateClock();
+    }
+
+    function copyServerAddress() {
+      const addr = document.getElementById('server-address').textContent;
+      navigator.clipboard.writeText(addr).then(() => {
+        const label = document.getElementById('copy-label');
+        label.textContent = 'Copied!';
+        setTimeout(() => { label.textContent = 'Copy'; }, 2000);
+      }).catch(() => {
+        // Fallback: select the text
+        const el = document.getElementById('server-address');
+        const range = document.createRange();
+        range.selectNodeContents(el);
+        const sel = window.getSelection();
+        sel.removeAllRanges();
+        sel.addRange(range);
+      });
     }
 
     function copyCommand() {

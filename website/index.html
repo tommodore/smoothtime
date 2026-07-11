@@ -641,7 +641,7 @@
       "us-central":     { name: "US Central Smoothtime (CST/CDT)",      iana: "America/Chicago", base: -6.0, rule: "us" },
       "us-mountain":    { name: "US Mountain Smoothtime (MST/MDT)",     iana: "America/Denver", base: -7.0, rule: "us" },
       "us-pacific":     { name: "US Pacific Smoothtime (PST/PDT)",      iana: "America/Los_Angeles", base: -8.0, rule: "us" },
-      "australia-sydney": { name: "Australia Sydney Smoothtime (AEST/AEDT)", iana: "Australia/Sydney", base: -10.0, rule: "au" },
+      "australia-sydney": { name: "Australia Sydney Smoothtime (AEST/AEDT)", iana: "Australia/Sydney", base: 10.0, rule: "au" },
       "new-zealand":      { name: "New Zealand Smoothtime (NZST/NZDT)", iana: "Pacific/Auckland", base: 12.0, rule: "au" },
       "chile":            { name: "Chile Smoothtime (CLT/CLST)", iana: "America/Santiago", base: -4.0, rule: "cl" },
       "argentina":        { name: "Argentina Smoothtime (ART)", iana: "America/Argentina/Buenos_Aires", base: -3.0, rule: "none" }
@@ -722,6 +722,17 @@
       }, 1500);
     }
 
+    function fmtOffset(h) {
+      return `${h >= 0 ? '+' : '-'}${Math.abs(h).toFixed(3)} h`;
+    }
+
+    function officialAbbrev(cfg) {
+      const m = cfg.name.match(/\(([^)]+)\)/);
+      if (!m) return '';
+      const parts = m[1].split('/');
+      return parts[parts.length - 1].trim();
+    }
+
     function updateSimulator() {
       const regionKey = document.getElementById('sim-region').value;
       const days = parseInt(document.getElementById('days-slider').value);
@@ -732,13 +743,14 @@
       const totalDays = 180;
       const fraction = Math.min(1, Math.max(0, days / totalDays));
 
-      const realSmoothOffset = calculateCurrentSmoothOffset(regionKey);
-      const simulatedSmoothOffset = cfg.base + 1.0 - fraction;
+      const hasDst = cfg.rule !== 'none';
+      const officialOffset = cfg.base + (hasDst ? 1.0 : 0.0);
+      const simulatedSmoothOffset = cfg.base + (hasDst ? 1.0 - fraction : 0.0);
 
-      currentDiffOffset = simulatedSmoothOffset - realSmoothOffset;
+      currentDiffOffset = simulatedSmoothOffset - officialOffset;
 
-      document.getElementById('official-offset').textContent = `+${realSmoothOffset.toFixed(3)} h (real)`;
-      document.getElementById('smoothtime-offset').textContent = `+${simulatedSmoothOffset.toFixed(3)} h (sim)`;
+      document.getElementById('official-offset').textContent = `${fmtOffset(officialOffset)} (${officialAbbrev(cfg)})`;
+      document.getElementById('smoothtime-offset').textContent = `${fmtOffset(simulatedSmoothOffset)} (sim)`;
 
       const diffMinutes = Math.round(currentDiffOffset * 60);
       document.getElementById('time-difference').textContent = `${diffMinutes >= 0 ? '+' : ''}${diffMinutes} minutes`;
@@ -769,33 +781,6 @@
         second: "2-digit"
       });
       document.getElementById('smoothtime-clock').textContent = smoothTimeStr;
-    }
-
-    function calculateCurrentSmoothOffset(regionKey) {
-      const cfg = regions[regionKey];
-      const now = new Date();
-      const year = now.getUTCFullYear();
-      const dates = getDstDates(year, cfg.rule);
-      const tStart = dates.start;
-      const tEnd = dates.end;
-
-      if (tStart.getTime() === 0) return cfg.base;
-
-      let offset;
-      if (now >= tStart && now < tEnd) {
-        const fraction = (now - tStart) / (tEnd - tStart);
-        offset = cfg.base + 1.0 - fraction;
-      } else {
-        let wStart = tEnd;
-        let wEnd = getDstDates(year + 1, cfg.rule).start;
-        if (now < tStart) {
-          wStart = getDstDates(year - 1, cfg.rule).end;
-          wEnd = tStart;
-        }
-        const fraction = (now - wStart) / (wEnd - wStart);
-        offset = cfg.base + fraction;
-      }
-      return offset;
     }
 
     function getNthSunday(year, month, nth) {

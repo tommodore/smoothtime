@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html class="dark" lang="en">
+<html lang="en">
 <head>
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
@@ -28,23 +28,14 @@
   <link rel="alternate" hreflang="en" href="https://smoothtime.io">
   <link rel="alternate" hreflang="x-default" href="https://smoothtime.io">
   
-  <meta name="theme-color" content="#131315">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   
   <link rel="canonical" href="https://smoothtime.io">
-  
-  <!-- Resource Hints -->
-  <link rel="preconnect" href="https://github.com">
-  <link rel="dns-prefetch" href="https://status.smoothtime.io">
-  <link rel="preload" href="./fonts/manrope-v20-latin-regular.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="preload" href="./fonts/manrope-v20-latin-700.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="preload" href="./fonts/space-grotesk-v22-latin-600.woff2" as="font" type="font/woff2" crossorigin>
-  
-  <link rel="icon" type="image/svg+xml" href="./favicon.svg">
-  <link href="./output.css" rel="stylesheet">
-  
-  <!-- JSON-LD Structured Data -->
+  <meta name="theme-color" content="#0a0a0b">
+  <link rel="preload" href="/fonts/inter-var-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/fonts/jetbrains-mono-var-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -83,807 +74,193 @@
   }
   </script>
   
-  <style>
-    /* --- Manrope (v20) --- */
-    @font-face { font-family: 'Manrope'; font-style: normal; font-weight: 200; font-display: swap; src: url('./fonts/manrope-v20-latin-200.woff2') format('woff2'); }
-    @font-face { font-family: 'Manrope'; font-style: normal; font-weight: 300; font-display: swap; src: url('./fonts/manrope-v20-latin-300.woff2') format('woff2'); }
-    @font-face { font-family: 'Manrope'; font-style: normal; font-weight: 400; font-display: swap; src: url('./fonts/manrope-v20-latin-regular.woff2') format('woff2'); }
-    @font-face { font-family: 'Manrope'; font-style: normal; font-weight: 500; font-display: swap; src: url('./fonts/manrope-v20-latin-500.woff2') format('woff2'); }
-    @font-face { font-family: 'Manrope'; font-style: normal; font-weight: 600; font-display: swap; src: url('./fonts/manrope-v20-latin-600.woff2') format('woff2'); }
-    @font-face { font-family: 'Manrope'; font-style: normal; font-weight: 700; font-display: swap; src: url('./fonts/manrope-v20-latin-700.woff2') format('woff2'); }
-    @font-face { font-family: 'Manrope'; font-style: normal; font-weight: 800; font-display: swap; src: url('./fonts/manrope-v20-latin-800.woff2') format('woff2'); }
-
-    /* --- Space Grotesk (v22) --- */
-    @font-face { font-family: 'Space Grotesk'; font-style: normal; font-weight: 300; font-display: swap; src: url('./fonts/space-grotesk-v22-latin-300.woff2') format('woff2'); }
-    @font-face { font-family: 'Space Grotesk'; font-style: normal; font-weight: 400; font-display: swap; src: url('./fonts/space-grotesk-v22-latin-regular.woff2') format('woff2'); }
-    @font-face { font-family: 'Space Grotesk'; font-style: normal; font-weight: 500; font-display: swap; src: url('./fonts/space-grotesk-v22-latin-500.woff2') format('woff2'); }
-    @font-face { font-family: 'Space Grotesk'; font-style: normal; font-weight: 600; font-display: swap; src: url('./fonts/space-grotesk-v22-latin-600.woff2') format('woff2'); }
-    @font-face { font-family: 'Space Grotesk'; font-style: normal; font-weight: 700; font-display: swap; src: url('./fonts/space-grotesk-v22-latin-700.woff2') format('woff2'); }
-
-    /* --- Material Symbols Outlined --- */
-    @font-face {
-      font-family: 'Material Symbols Outlined';
-      font-style: normal;
-      font-weight: 400;
-      font-display: block;
-      src: url('./fonts/material-symbols-subset.woff2') format('woff2');
-    }
-
-    .material-symbols-outlined {
-      font-family: 'Material Symbols Outlined';
-      font-weight: normal;
-      font-style: normal;
-      font-size: 24px;
-      line-height: 1;
-      letter-spacing: normal;
-      text-transform: none;
-      display: inline-block;
-      white-space: nowrap;
-      word-wrap: normal;
-      direction: ltr;
-      -webkit-font-feature-settings: 'liga';
-      -webkit-font-smoothing: antialiased;
-    }
-  </style>
 
   <style>
-    html { scroll-behavior: smooth; }
-    body {
-        background-color: #131315;
-        background-image: radial-gradient(circle at 2px 2px, rgba(60, 74, 66, 0.15) 1px, transparent 0);
-        background-size: 40px 40px;
-        overflow-x: hidden;
-    }
-    .glass-card {
-        background: rgba(32, 31, 34, 0.6);
-        backdrop-filter: blur(16px);
-        -webkit-backdrop-filter: blur(16px);
-    }
-    .btn-active {
-        background-color: #4edea3 !important;
-        color: #003824 !important;
-        box-shadow: 0 0 30px rgba(78,222,163,0.3);
-        border-color: transparent !important;
-        transform: scale(1.02);
-    }
-    
-    /* --- Framer-like Animation Classes --- */
-    .reveal {
-      opacity: 0;
-      transform: translateY(40px);
-      transition: all 1s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-    .reveal-scale {
-      opacity: 0;
-      transform: translateY(30px) scale(0.96);
-      transition: all 1s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-    .reveal.active, .reveal-scale.active {
-      opacity: 1;
-      transform: translateY(0) scale(1);
-    }
-    
-    .delay-100 { transition-delay: 100ms; }
-    .delay-200 { transition-delay: 200ms; }
-    .delay-300 { transition-delay: 300ms; }
-    .delay-400 { transition-delay: 400ms; }
-
-    @keyframes breathe {
-      0%, 100% { transform: scale(1); opacity: 0.4; }
-      50% { transform: scale(1.1); opacity: 0.7; }
-    }
-    .animate-breathe {
-      animation: breathe 8s ease-in-out infinite;
-    }
-
-    .hover-lift {
-      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-    .hover-lift:hover {
-      transform: translateY(-4px) scale(1.01);
-      box-shadow: 0 20px 40px -10px rgba(78,222,163,0.1);
-    }
-
-    /* Accessibility: Focus styles */
-    *:focus-visible {
-      outline: 2px solid #4edea3;
-      outline-offset: 2px;
-      border-radius: 4px;
-    }
-    .skip-link {
-      position: absolute;
-      top: -100%;
-      left: 50%;
-      transform: translateX(-50%);
-      background: #4edea3;
-      color: #003824;
-      padding: 8px 16px;
-      border-radius: 0 0 8px 8px;
-      font-weight: 600;
-      z-index: 100;
-      transition: top 0.2s;
-    }
-    .skip-link:focus {
-      top: 0;
-    }
-
-    @media (max-width: 640px) {
-      .mobile-clock-text { font-size: 4rem !important; line-height: 1 !important; }
-      .mobile-hero-text { font-size: 3.5rem !important; line-height: 1.1 !important; }
-      #server-address { white-space: nowrap; font-size: 0.75rem; padding-left: 0.75rem; padding-right: 0.75rem; min-width: 0; overflow-x: auto; justify-content: flex-start; }
-    }
-
-    /* Simulator styles */
-    .clock-display {
-      font-family: 'Space Grotesk', system-ui, sans-serif;
-      font-size: 2.5rem;
-      font-weight: 600;
-      letter-spacing: -0.02em;
-      line-height: 1;
-    }
+    @font-face{font-family:Inter;font-weight:400 700;font-display:swap;src:url(/fonts/inter-var-latin.woff2) format("woff2")}
+    @font-face{font-family:"JetBrains Mono";font-weight:400 700;font-display:swap;src:url(/fonts/jetbrains-mono-var-latin.woff2) format("woff2")}
+    :root{--bg:#0a0a0b;--panel:#111113;--line:#232327;--line2:#2e2e33;--fg:#ededef;--mute:#8b8b93;--acc:#2dd4bf;--acc-d:rgba(45,212,191,.12);--ok:#34d399;--warn:#fbbf24;--r:10px;--mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace}
+    *{box-sizing:border-box} html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+    body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.6 Inter,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+    a{color:inherit} code,.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+    .wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+    .i{width:18px;height:18px;flex:none}
+    .muted{color:var(--mute)} .sm{font-size:.85rem}
+    header{position:sticky;top:0;z-index:10;background:rgba(10,10,11,.8);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+    header .wrap{display:flex;align-items:center;justify-content:space-between;height:56px}
+    .logo{display:flex;align-items:center;gap:8px;font-weight:600;text-decoration:none;letter-spacing:-.01em}
+    nav{display:flex;gap:20px;align-items:center;font-size:.9rem} nav a{text-decoration:none;color:var(--mute)} nav a:hover{color:var(--fg)}
+    .status{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line2);border-radius:99px;padding:3px 10px;color:var(--fg)!important}
+    .dot{width:7px;height:7px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 3px rgba(52,211,153,.15)}
+    .hide-sm{} @media(max-width:640px){.hide-sm{display:none} nav{gap:14px}}
+    section{padding:72px 0;border-bottom:1px solid var(--line)}
+    .eyebrow{font:500 .75rem/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--acc);margin:0 0 14px}
+    h1{font-size:clamp(2.2rem,6vw,3.6rem);line-height:1.05;letter-spacing:-.035em;margin:0 0 16px;font-weight:650}
+    h2{font-size:clamp(1.6rem,3.5vw,2.2rem);letter-spacing:-.025em;line-height:1.15;margin:0 0 12px;font-weight:650}
+    h3{font-size:1.05rem;margin:0 0 6px;font-weight:600;letter-spacing:-.01em}
+    .lead{font-size:1.125rem;color:var(--mute);max-width:620px;margin:0}
+    .card{background:var(--panel);border:1px solid var(--line);border-radius:var(--r)}
+    .hero{padding:64px 0 56px}
+    .clocks{display:grid;grid-template-columns:1fr 1fr;margin-top:36px}
+    .clocks>div{padding:24px} .clocks>div+div{border-left:1px solid var(--line)}
+    .clk{font:600 clamp(2rem,7vw,3.75rem)/1 var(--mono);letter-spacing:-.04em;margin:10px 0 8px}
+    .clocks .lbl{font-size:.8rem;color:var(--mute);display:flex;align-items:center;gap:6px}
+    .acc{color:var(--acc)}
+    .bar{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;padding:14px 24px;border-top:1px solid var(--line)}
+    select{background:var(--bg);color:var(--fg);border:1px solid var(--line2);border-radius:8px;padding:8px 10px;font:inherit;font-size:.9rem;max-width:100%}
+    .addrbox{display:flex;align-items:center;gap:0;border:1px solid var(--line2);border-radius:8px;overflow:hidden;min-width:0;max-width:100%}
+    .addrbox code{padding:8px 12px;font-size:.85rem;min-width:0;white-space:nowrap;overflow-x:auto}
+    .btn{display:inline-flex;align-items:center;gap:6px;border:0;background:var(--acc);color:#04201c;font:600 .85rem Inter,sans-serif;padding:9px 14px;cursor:pointer;white-space:nowrap}
+    .btn:hover{filter:brightness(1.08)} .btn.ghost{background:transparent;color:var(--fg);border:1px solid var(--line2);border-radius:8px;text-decoration:none}
+    .icon-btn{background:none;border:1px solid var(--line2);color:var(--mute);border-radius:6px;padding:6px;cursor:pointer;display:inline-flex} .icon-btn:hover{color:var(--fg);border-color:var(--mute)}
+    .cta{display:flex;gap:10px;flex-wrap:wrap;margin-top:24px} .cta .btn{border-radius:8px;text-decoration:none}
+    @media(max-width:640px){.clocks{grid-template-columns:1fr} .clocks>div+div{border-left:0;border-top:1px solid var(--line)} .clocks>div{padding:18px} .bar{padding:14px 18px} .addrbox code{font-size:.75rem;padding:8px 10px} .bar select{width:100%}}
+    .chart{padding:20px;margin-top:28px} .chart svg{width:100%;height:auto;display:block}
+    .legend{display:flex;gap:18px;font-size:.8rem;color:var(--mute);margin-bottom:10px;flex-wrap:wrap} .legend i{display:inline-block;width:14px;height:2px;vertical-align:middle;margin-right:6px}
+    .tbl{width:100%;border-collapse:collapse;font-size:.9rem} .tbl th{text-align:left;font-weight:500;color:var(--mute);font-size:.75rem;text-transform:uppercase;letter-spacing:.06em;padding:12px 16px;border-bottom:1px solid var(--line)}
+    .tbl td{padding:12px 16px;border-bottom:1px solid var(--line)} .tbl tr:last-child td{border-bottom:0} .tbl code{font-size:.85rem} .num{white-space:nowrap}
+    .tblwrap{overflow-x:auto;margin-top:28px}
+    @media(max-width:640px){.tbl .c-off2{display:none} .tbl td:nth-child(4){display:none} .tbl td,.tbl th{padding:10px 10px} .tbl td:first-child .muted{display:none}}
+    .callout{display:flex;gap:12px;padding:16px 18px;border:1px solid rgba(251,191,36,.35);background:rgba(251,191,36,.06);border-radius:var(--r);margin:28px 0 20px;font-size:.92rem} .callout .i{color:var(--warn);margin-top:3px}
+    .tabs{display:flex;gap:4px;border-bottom:1px solid var(--line);padding:0 12px;overflow-x:auto}
+    .tab{background:none;border:0;color:var(--mute);font:500 .88rem Inter,sans-serif;padding:12px 12px;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;white-space:nowrap}
+    .tab[aria-selected=true]{color:var(--fg);border-color:var(--acc)}
+    .pane{padding:20px 24px} .pane[hidden]{display:none} .pane ol{margin:0;padding-left:20px} .pane li{margin:6px 0}
+    pre{position:relative;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:14px 16px;overflow-x:auto;font-size:.85rem;line-height:1.7;margin:10px 0}
+    pre .icon-btn{position:absolute;top:8px;right:8px;background:var(--panel)}
+    .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:28px} .grid3 .card{padding:22px} .grid3 .i{color:var(--acc);margin-bottom:12px;width:22px;height:22px}
+    .grid3 p{margin:0;color:var(--mute);font-size:.92rem}
+    @media(max-width:820px){.grid3{grid-template-columns:1fr}}
+    .refs{list-style:none;padding:0;margin:18px 0 0} .refs a{display:inline-flex;gap:8px;align-items:center;color:var(--mute);text-decoration:none;font-size:.92rem;padding:4px 0} .refs a:hover{color:var(--fg)}
+    details{border-bottom:1px solid var(--line);padding:16px 0} summary{cursor:pointer;font-weight:600;list-style:none;display:flex;justify-content:space-between;gap:16px} summary::after{content:"+";color:var(--mute);font-family:var(--mono)} details[open] summary::after{content:"–"}
+    details p{color:var(--mute);margin:10px 0 0;max-width:760px}
+    footer{padding:36px 0;font-size:.85rem;color:var(--mute)} footer .wrap{display:flex;gap:16px;flex-wrap:wrap;justify-content:space-between} footer a{text-decoration:none;margin-right:18px} footer a:hover{color:var(--fg)}
+    /* no scroll-reveal: content is visible immediately */
+    .skip{position:absolute;left:-9999px} .skip:focus{left:12px;top:12px;z-index:99;background:var(--acc);color:#000;padding:8px 12px;border-radius:6px}
+    :focus-visible{outline:2px solid var(--acc);outline-offset:2px}
   </style>
 </head>
-<body class="font-body text-on-surface selection:bg-primary selection:text-on-primary">
-  
-  <a href="#main-content" class="skip-link">Skip to content</a>
-  
-  <nav class="fixed top-0 w-full z-50 bg-[#131315]/80 backdrop-blur-xl border-b border-outline-variant/10 shadow-[0_20px_50px_rgba(16,185,129,0.05)] transition-transform duration-500" id="navbar">
-    <div class="flex justify-between items-center px-6 md:px-8 h-20 max-w-7xl mx-auto">
-      
-      <div class="flex items-center gap-2 cursor-pointer group" role="img" aria-label="smoothtime logo - a clock icon with a smooth drift arrow">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" class="w-8 h-8 fill-primary group-hover:rotate-180 transition-transform duration-700 ease-in-out">
-          <path d="M480-80q-75 0-140.5-28.5t-114-77q-48.5-48.5-77-114T120-440h80q0 117 81.5 198.5T480-160q117 0 198.5-81.5T760-440q0-117-81.5-198.5T480-720h-6l62 62-56 56-160-160 160-160 56 56-62 62h6q75 0 140.5 28.5t114 77q48.5 48.5 77 114T840-440q0 75-28.5 140.5t-77 114q-48.5 48.5-114 77T480-80Zm-40-120v-240h200v80H520v160h-80Z"/>
-        </svg>
-        <div class="text-2xl font-bold tracking-tighter text-[#e5e1e4] font-headline group-hover:text-primary transition-colors">smoothtime</div>
-      </div>
-
-      <div class="hidden md:flex gap-8 items-center">
-        <a class="text-[#bbcabf] hover:text-[#e5e1e4] transition-colors font-headline tracking-tight" href="https://github.com/tommodore/smoothtime/blob/main/README.md" target="_blank">Docs</a>
-        <a class="text-[#bbcabf] hover:text-[#e5e1e4] transition-colors font-headline tracking-tight" href="https://status.smoothtime.io" target="_blank">Status</a>
-        <a class="text-[#bbcabf] hover:text-[#e5e1e4] transition-colors font-headline tracking-tight" href="https://github.com/tommodore/smoothtime" target="_blank">GitHub</a>
-      </div>
-    </div>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header><div class="wrap">
+  <a class="logo" href="/"><img src="/favicon.svg" width="22" height="22" alt="">smoothtime</a>
+  <nav>
+    <a href="#setup" class="hide-sm">Setup</a>
+    <a href="#regions" class="hide-sm">Regions</a>
+    <a href="#faq" class="hide-sm">FAQ</a>
+    <a href="https://github.com/tommodore/smoothtime" target="_blank" rel="noopener" aria-label="GitHub"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.4 5.4 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></svg></a>
+    <a class="status" href="https://status.smoothtime.io" target="_blank" rel="noopener"><span class="dot"></span>Status</a>
   </nav>
+</div></header>
 
-  <main id="main-content" class="pt-32 pb-24 px-4 md:px-6 max-w-7xl mx-auto overflow-hidden">
-    
-    <section class="text-center mb-16 md:mb-24">
-      <div class="reveal inline-flex items-center gap-2 bg-surface-container-low px-4 py-1.5 rounded-full border border-outline-variant/10 mb-6 md:mb-8 hover:border-primary/30 transition-colors cursor-default">
-        <span class="relative flex h-2 w-2">
-          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
-          <span class="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
-        </span>
-        <span class="text-xs font-bold text-primary tracking-widest uppercase">Public Time Server • Now Global</span>
-      </div>
-      <h1 class="reveal delay-100 font-headline text-5xl md:text-8xl mobile-hero-text font-bold tracking-tighter text-on-surface mb-6 drop-shadow-2xl">smoothtime</h1>
-      <p class="reveal delay-200 text-lg md:text-2xl text-on-surface-variant max-w-2xl mx-auto font-light leading-relaxed">
-          Time without the twice-yearly trauma. <br>
-          <span class="text-primary/80 font-medium">We spread the 1-hour jump smoothly across the entire season — now with Australia, New Zealand, Chile & Argentina.</span>
-      </p>
-    </section>
-
-    <section id="regions" class="reveal-scale delay-300 mb-24 md:mb-32 relative">
-      <div class="absolute inset-0 bg-primary/10 blur-[120px] rounded-full pointer-events-none animate-breathe"></div>
-      <div class="glass-card p-6 md:p-12 rounded-2xl border border-outline-variant/10 text-center relative overflow-hidden shadow-2xl">
-        <div class="flex flex-col items-center justify-center gap-4">
-          <span id="region-name" class="text-xs font-mono text-on-surface-variant uppercase tracking-[0.15em] md:tracking-[0.2em] font-bold transition-all duration-300">Europe Central Smoothtime (CET/CEST)</span>
-          <div id="live-clock" class="text-6xl md:text-[9rem] mobile-clock-text font-bold font-headline tracking-tighter text-on-surface leading-none py-4 md:py-6 tabular-nums tracking-tight" aria-live="polite" aria-label="Current smoothtime">00:00:00</div>
-          
-          <div class="flex flex-col items-center gap-2 w-full max-w-md">
-            <span class="text-xs font-bold text-primary tracking-widest uppercase mt-2">Active UTC Adjustment</span>
-            <div id="active-offset" class="text-2xl md:text-3xl font-mono font-bold text-primary mb-4 tabular-nums">+1.000 h</div>
-            <div class="bg-surface-container-lowest h-2 w-full rounded-full overflow-hidden relative mb-4 md:mb-5 shadow-inner">
-              <div id="offset-progress" class="absolute inset-y-0 left-0 bg-primary w-0 rounded-full shadow-[0_0_20px_rgba(78,222,163,0.8)] transition-all duration-1000 ease-out"></div>
-            </div>
-          </div>
-
-          <!-- Server Address + Copy -->
-          <div class="flex items-stretch justify-center gap-3 mb-6 md:mb-8 w-full max-w-md mx-auto">
-            <code id="server-address" class="px-4 py-3 bg-surface-container-highest rounded-xl text-sm md:text-base font-mono text-on-surface border border-outline-variant/20 flex-1 text-center select-all flex items-center justify-center tracking-tight">europe-central.smoothtime.io</code>
-            <button onclick="copyServerAddress()" id="copy-server-btn" class="region-btn group relative px-4 md:px-5 py-3 bg-primary text-xs md:text-sm font-bold rounded-xl transition-all duration-300 hover:-translate-y-0.5 flex items-center gap-1.5 shadow-[0_0_20px_rgba(78,222,163,0.15)]" style="color:#003824 !important;" aria-label="Copy server address">
-              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
-              <span id="copy-label">Copy</span>
-            </button>
-          </div>
-
-          <div class="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-3 w-full">
-            <!-- Europe -->
-            <button onclick="switchRegion('europe-west')" id="btn-europe-west" class="region-btn group relative px-2 md:px-4 py-3 bg-surface-container-highest text-on-surface text-xs md:text-sm font-bold border border-outline-variant/20 rounded-xl hover:bg-surface-bright transition-all duration-300 hover:-translate-y-0.5">Europe West</button>
-            <button onclick="switchRegion('europe-central')" id="btn-europe-central" class="region-btn group relative px-2 md:px-4 py-3 bg-surface-container-highest text-on-surface text-xs md:text-sm font-bold border border-outline-variant/20 rounded-xl hover:bg-surface-bright transition-all duration-300 hover:-translate-y-0.5 btn-active">Europe Central</button>
-            <button onclick="switchRegion('europe-east')" id="btn-europe-east" class="region-btn group relative px-2 md:px-4 py-3 bg-surface-container-highest text-on-surface text-xs md:text-sm font-bold border border-outline-variant/20 rounded-xl hover:bg-surface-bright transition-all duration-300 hover:-translate-y-0.5">Europe East</button>
-            <!-- US -->
-            <button onclick="switchRegion('us-eastern')" id="btn-us-eastern" class="region-btn group relative px-2 md:px-4 py-3 bg-surface-container-highest text-on-surface text-xs md:text-sm font-bold border border-outline-variant/20 rounded-xl hover:bg-surface-bright transition-all duration-300 hover:-translate-y-0.5">US Eastern</button>
-            <button onclick="switchRegion('us-central')" id="btn-us-central" class="region-btn group relative px-2 md:px-4 py-3 bg-surface-container-highest text-on-surface text-xs md:text-sm font-bold border border-outline-variant/20 rounded-xl hover:bg-surface-bright transition-all duration-300 hover:-translate-y-0.5">US Central</button>
-            <button onclick="switchRegion('us-mountain')" id="btn-us-mountain" class="region-btn group relative px-2 md:px-4 py-3 bg-surface-container-highest text-on-surface text-xs md:text-sm font-bold border border-outline-variant/20 rounded-xl hover:bg-surface-bright transition-all duration-300 hover:-translate-y-0.5">US Mountain</button>
-            <button onclick="switchRegion('us-pacific')" id="btn-us-pacific" class="region-btn group relative px-2 md:px-4 py-3 bg-surface-container-highest text-on-surface text-xs md:text-sm font-bold border border-outline-variant/20 rounded-xl hover:bg-surface-bright transition-all duration-300 hover:-translate-y-0.5">US Pacific</button>
-            <!-- New Southern Hemisphere -->
-            <button onclick="switchRegion('australia-sydney')" id="btn-australia-sydney" class="region-btn group relative px-2 md:px-4 py-3 bg-surface-container-highest text-on-surface text-xs md:text-sm font-bold border border-outline-variant/20 rounded-xl hover:bg-surface-bright transition-all duration-300 hover:-translate-y-0.5">Australia Sydney</button>
-            <button onclick="switchRegion('new-zealand')" id="btn-new-zealand" class="region-btn group relative px-2 md:px-4 py-3 bg-surface-container-highest text-on-surface text-xs md:text-sm font-bold border border-outline-variant/20 rounded-xl hover:bg-surface-bright transition-all duration-300 hover:-translate-y-0.5">New Zealand</button>
-            <button onclick="switchRegion('chile')" id="btn-chile" class="region-btn group relative px-2 md:px-4 py-3 bg-surface-container-highest text-on-surface text-xs md:text-sm font-bold border border-outline-variant/20 rounded-xl hover:bg-surface-bright transition-all duration-300 hover:-translate-y-0.5">Chile</button>
-            <button onclick="switchRegion('argentina')" id="btn-argentina" class="region-btn group relative px-2 md:px-4 py-3 bg-surface-container-highest text-on-surface text-xs md:text-sm font-bold border border-outline-variant/20 rounded-xl hover:bg-surface-bright transition-all duration-300 hover:-translate-y-0.5">Argentina</button>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Quick Start CTA -->
-    <section class="reveal mb-24 md:mb-32">
-      <div class="glass-card p-6 md:p-10 rounded-2xl border border-outline-variant/10 relative overflow-hidden shadow-2xl">
-        <div class="flex items-center gap-2 mb-6 md:mb-8">
-          <svg class="w-5 h-5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
-          <h2 class="text-xl md:text-2xl font-headline font-bold">Get started in 30 seconds</h2>
-        </div>
-        <div class="grid md:grid-cols-3 gap-4 md:gap-6">
-          <div class="flex gap-4 p-4 rounded-xl bg-surface-container-highest/40 border border-outline-variant/10">
-            <span class="flex-shrink-0 w-8 h-8 rounded-full bg-primary flex items-center justify-center text-sm font-bold font-mono leading-none" style="color:#003824;">1</span>
-            <div class="min-w-0">
-              <p class="text-sm font-bold text-on-surface mb-1">Set system to UTC</p>
-              <code class="text-xs font-mono text-primary break-all select-all">sudo timedatectl set-timezone UTC</code>
-            </div>
-          </div>
-          <div class="flex gap-4 p-4 rounded-xl bg-surface-container-highest/40 border border-outline-variant/10">
-            <span class="flex-shrink-0 w-8 h-8 rounded-full bg-primary flex items-center justify-center text-sm font-bold font-mono leading-none" style="color:#003824;">2</span>
-            <div class="min-w-0">
-              <p class="text-sm font-bold text-on-surface mb-1">Add server to chrony</p>
-              <code class="text-xs font-mono text-primary break-all select-all">echo "server <span id="quick-server">europe-central</span>.smoothtime.io iburst" | sudo tee -a /etc/chrony.conf</code>
-            </div>
-          </div>
-          <div class="flex gap-4 p-4 rounded-xl bg-surface-container-highest/40 border border-outline-variant/10">
-            <span class="flex-shrink-0 w-8 h-8 rounded-full bg-primary flex items-center justify-center text-sm font-bold font-mono leading-none" style="color:#003824;">3</span>
-            <div class="min-w-0">
-              <p class="text-sm font-bold text-on-surface mb-1">Restart chrony</p>
-              <code class="text-xs font-mono text-primary break-all select-all">sudo systemctl restart chronyd</code>
-            </div>
-          </div>
-        </div>
-        <div class="mt-4 md:mt-6 text-center">
-          <a href="#how-to-use" class="inline-flex items-center gap-2 text-sm text-on-surface-variant hover:text-primary transition-colors">
-            Detailed setup guides for Linux, macOS & Windows
-            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
-          </a>
-        </div>
-      </div>
-    </section>
-
-    <!-- FINAL SIMULATOR WITH TICKING CLOCKS -->
-    <section id="simulator" class="reveal mb-24 md:mb-32">
-      <h2 class="text-3xl md:text-4xl font-headline font-bold mb-4 flex items-center gap-4">
-        <span class="text-primary font-mono text-xl">Interactive Demo</span> DST Transition Simulator
-      </h2>
-      <p class="text-on-surface-variant max-w-2xl mb-8">See what the current local time would be vs smoothtime at any point in the season. Both clocks tick live.</p>
-      
-      <div class="glass-card p-8 md:p-12 rounded-2xl border border-outline-variant/10">
-        <div class="max-w-5xl mx-auto">
-          
-          <!-- Controls -->
-          <div class="flex flex-col md:flex-row gap-8 mb-10">
-            <div class="flex-1">
-              <label class="text-xs font-bold text-primary tracking-widest uppercase block mb-2">Region</label>
-              <select id="sim-region" onchange="updateSimulator()" class="w-full bg-surface-container-highest border border-outline-variant/20 rounded-xl px-4 py-3 text-on-surface font-mono text-sm">
-                <option value="europe-central">Europe Central (CET/CEST)</option>
-                <option value="europe-west">Europe West (WET/WEST)</option>
-                <option value="europe-east">Europe East (EET/EEST)</option>
-                <option value="us-eastern">US Eastern (EST/EDT)</option>
-                <option value="us-central">US Central (CST/CDT)</option>
-                <option value="us-mountain">US Mountain (MST/MDT)</option>
-                <option value="us-pacific">US Pacific (PST/PDT)</option>
-                <option value="australia-sydney">Australia Sydney (AEST/AEDT)</option>
-                <option value="new-zealand">New Zealand (NZST/NZDT)</option>
-                <option value="chile">Chile (CLT/CLST)</option>
-                <option value="argentina">Argentina (ART)</option>
-              </select>
-            </div>
-            
-            <div class="flex-1">
-              <div class="flex justify-between items-baseline mb-1">
-                <label class="text-xs font-bold text-primary tracking-widest uppercase">Days into transition season</label>
-                <span id="slider-value" class="font-mono text-sm text-primary font-bold">90 / 180</span>
-              </div>
-              <input type="range" id="days-slider" min="0" max="180" value="90" step="1" oninput="updateSimulator()" class="w-full accent-primary">
-              <div class="flex justify-between text-[10px] text-on-surface-variant mt-1 font-mono">
-                <div>Start</div>
-                <div>Mid</div>
-                <div>End</div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Two Ticking Clocks -->
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            
-            <!-- Official Local Time -->
-            <div class="glass-card p-6 rounded-2xl border border-error/30">
-              <div class="flex items-center gap-3 mb-4">
-                <span class="material-symbols-outlined text-error">schedule</span>
-                <div>
-                  <div class="font-bold text-lg">Official Time</div>
-                  <div class="text-xs text-on-surface-variant">Current local time (real)</div>
-                </div>
-              </div>
-              
-              <div class="text-center py-4">
-                <div id="official-clock" class="clock-display tabular-nums text-error">--:--:--</div>
-                <div class="mt-3 text-sm font-mono text-error" id="official-offset">+2.000 h (CEST)</div>
-              </div>
-            </div>
-
-            <!-- smoothtime -->
-            <div class="glass-card p-6 rounded-2xl border border-primary/30">
-              <div class="flex items-center gap-3 mb-4">
-                <span class="material-symbols-outlined text-primary">timeline</span>
-                <div>
-                  <div class="font-bold text-lg">smoothtime</div>
-                  <div class="text-xs text-on-surface-variant">What this server would show</div>
-                </div>
-              </div>
-              
-              <div class="text-center py-4">
-                <div id="smoothtime-clock" class="clock-display tabular-nums text-primary">--:--:--</div>
-                <div class="mt-3 text-sm font-mono text-primary" id="smoothtime-offset">+1.500 h</div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Difference -->
-          <div class="mt-6 p-4 bg-surface-container-lowest rounded-2xl border border-outline-variant/10 text-center">
-            <div class="text-sm text-on-surface-variant">On this simulated day, your clock would be</div>
-            <div class="text-4xl font-bold font-mono text-primary mt-1" id="time-difference">-30 minutes</div>
-            <div class="text-xs text-on-surface-variant mt-1">behind official time</div>
-          </div>
-
-          <div class="mt-6 text-center text-xs text-on-surface-variant font-mono">
-            Both clocks tick live every second.
-          </div>
-
-        </div>
-      </div>
-    </section>
-
-    <section id="why" class="mb-24 md:mb-32">
-      <h2 class="reveal text-3xl md:text-4xl font-headline font-bold mb-8 md:mb-12 flex items-center gap-4">
-        <span class="text-primary font-mono text-xl">01.</span> Why this matters
-      </h2>
-      <div class="reveal-scale delay-100 glass-card p-6 md:p-12 rounded-2xl border border-outline-variant/10 shadow-lg">
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 items-center">
-          <div>
-            <h3 class="text-2xl font-bold mb-4">The Problem with Jumping Time</h3>
-            <p class="text-on-surface-variant text-base md:text-lg leading-relaxed mb-4">
-              Nature does not execute sudden jumps. In the field of chronobiology, researchers have shown that the human body naturally synchronizes its internal circadian rhythm to the gradual, daily shift of the sunrise. 
-            </p>
-            <p class="text-on-surface-variant text-base md:text-lg leading-relaxed mb-4">
-              Twice a year, however, we force a jarring 60-minute time shift on ourselves. This abrupt transition severs the alignment between our biological "sun clock" and our "social clock," causing what scientists call <strong>Social Jetlag</strong>. This artificial shift is linked to acute sleep loss, increased cardiovascular events, and massive disruptions to digital infrastructure.
-            </p>
-            <p class="text-on-surface-variant text-base md:text-lg leading-relaxed mb-6">
-              <strong>smoothtime.io</strong> solves this by mimicking nature's gradual "astro-shift" on your network. By spreading the transition across the entire season—adjusting just a fraction of a second each day—your devices stay perfectly aligned with Daylight Saving Time without ever experiencing the shock of a sudden jump.
-            </p>
-
-           <div class="p-4 rounded-xl bg-surface-container-highest border border-outline-variant/10 hover-lift">
-             <h4 class="text-sm font-bold text-primary mb-2">The Science of Social Jetlag</h4>
-             <ul class="text-sm text-on-surface-variant space-y-2 mb-4">
-               <li><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC7954020/" target="_blank" rel="noopener noreferrer" class="hover:text-primary transition-colors hover:underline flex items-center gap-2"><span class="material-symbols-outlined text-[16px]">science</span> AASM Position Statement on Daylight Saving Time Risks</a></li>
-               <li><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC10204006/" target="_blank" rel="noopener noreferrer" class="hover:text-primary transition-colors hover:underline flex items-center gap-2"><span class="material-symbols-outlined text-[16px]">science</span> How Social Jetlag Affects Health (NIH Research)</a></li>
-               <li><a href="https://www.youtube-nocookie.com/embed/Y2qNHvxtnnM/" target="_blank" rel="noopener noreferrer" class="hover:text-primary transition-colors hover:underline flex items-center gap-2"><span class="material-symbols-outlined text-[16px]">science</span> Prof. Christian Rieck on the Astro-Shift</a></li>
-             </ul>
-          <div class="bg-surface-container-lowest rounded-2xl p-8 border border-outline-variant/20 flex flex-col items-center justify-center text-center hover-lift">
-            <div class="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center mb-6 text-primary transition-transform duration-500 hover:rotate-12 hover:scale-110">
-              <span class="material-symbols-outlined text-3xl">psychology</span>
-            </div>
-            <h4 class="text-xl font-bold text-on-surface mb-2">Zero Disruptions</h4>
-            <p class="text-sm text-on-surface-variant mb-6">No missed morning alarms. No confusing overlapping calendar events.</p>
-            <div class="w-full h-2 bg-outline-variant/20 rounded-full overflow-hidden flex shadow-inner">
-              <div class="h-full bg-primary/40 w-1/4"></div>
-              <div class="h-full bg-primary/70 w-2/4"></div>
-              <div class="h-full bg-primary w-1/4"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="mb-24 md:mb-32">
-      <h2 class="reveal text-3xl md:text-4xl font-headline font-bold mb-8 md:mb-12 flex items-center gap-4">
-        <span class="text-primary font-mono text-xl">02.</span> How it Works
-      </h2>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div class="reveal-scale delay-100 md:col-span-2 glass-card p-8 md:p-10 rounded-2xl border border-outline-variant/10 hover-lift group">
-          <div class="flex flex-col h-full justify-between">
-            <div>
-              <div class="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mb-6 text-primary group-hover:bg-primary/20 transition-colors duration-300">
-                <span class="material-symbols-outlined">timeline</span>
-              </div>
-              <h3 class="text-xl md:text-2xl font-headline font-bold mb-4">Gentle Adjustments</h3>
-              <p class="text-on-surface-variant text-sm md:text-base leading-relaxed">Instead of waiting months to move your clock by a full hour, our open-source time servers gradually shift the time throughout the year. It works just like a physical clock moving very slightly faster or slower, entirely unnoticed by users.</p>
-            </div>
-            <div class="mt-8 pt-6 md:pt-8 border-t border-outline-variant/10 flex items-center gap-4 text-xs md:text-sm font-mono text-primary/60">
-              <span>MATHEMATICAL_DRIFT</span>
-              <span class="h-1 w-1 bg-outline-variant rounded-full hidden md:block"></span>
-              <span class="hidden md:block">100% OPEN SOURCE • NOW GLOBAL</span>
-            </div>
-          </div>
-        </div>
-        <div class="reveal-scale delay-200 glass-card p-8 md:p-10 rounded-2xl border border-outline-variant/10 hover-lift group">
-          <div class="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mb-6 text-primary group-hover:bg-primary/20 transition-colors duration-300">
-            <span class="material-symbols-outlined">devices</span>
-          </div>
-          <h3 class="text-xl md:text-2xl font-headline font-bold mb-4">Compatible with Everything</h3>
-          <p class="text-on-surface-variant text-sm md:text-base leading-relaxed">It works out-of-the-box with any standard device that connects to the internet to check the time. No special software needed. Now supports Southern Hemisphere timezones too.</p>
-        </div>
-      </div>
-    </section>
-
-    <section id="how-to-use" class="mb-16">
-      <h2 class="reveal text-3xl md:text-4xl font-headline font-bold mb-8 md:mb-12 flex items-center gap-4">
-        <span class="text-primary font-mono text-xl">03.</span> Setup for your Devices
-      </h2>
-      
-      <div class="reveal delay-100 mb-10 p-6 bg-[#690005]/10 border border-error/20 rounded-2xl flex flex-col md:flex-row gap-6 items-start md:items-center shadow-lg hover:border-error/40 transition-colors duration-500">
-        <div class="w-12 h-12 shrink-0 bg-error/10 rounded-full flex items-center justify-center text-error animate-pulse">
-          <span class="material-symbols-outlined text-2xl">warning</span>
-        </div>
-        <div>
-          <h3 class="text-xl font-headline font-bold text-error mb-2">CRITICAL SETUP STEP: You MUST set your system timezone to UTC</h3>
-          <p class="text-on-surface-variant text-sm md:text-base leading-relaxed">
-            Standard time servers transmit pure UTC, and your computer adds your local timezone on top. <strong>Smoothtime works differently.</strong> We bake your timezone and our custom daylight saving "smear" directly into the time we send you. If you leave your computer set to your local timezone, it will apply the timezone difference <em>twice</em>, resulting in a massively incorrect clock.
-          </p>
-        </div>
-      </div>
-
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12">
-        
-        <!-- Linux & Servers (ntpd) -->
-        <div class="reveal delay-200 bg-surface-container-lowest p-6 rounded-2xl border border-outline-variant/10 hover-lift">
-          <h4 class="font-bold text-on-surface mb-3 flex items-center gap-2"><span class="material-symbols-outlined text-primary text-[20px]">terminal</span> For Linux & Servers (ntpd)</h4>
-          <ol class="text-sm text-on-surface-variant list-decimal list-inside space-y-2">
-            <li>Set your system to pure UTC: <br><code class="bg-surface-container-highest px-2 py-0.5 mt-2 mb-1 inline-block rounded text-primary font-mono text-xs border border-outline-variant/20">sudo timedatectl set-timezone UTC</code></li>
-            <li>Add the smoothtime server to your <code class="text-primary font-mono text-xs">ntp.conf</code>.</li>
-            <li>Restart ntpd to apply the change.</li>
-          </ol>
-        </div>
-
-        <!-- chrony (NEW) -->
-        <div class="reveal delay-250 bg-surface-container-lowest p-6 rounded-2xl border border-primary/30 hover-lift">
-          <div class="flex items-center gap-2 mb-3">
-            <span class="material-symbols-outlined text-primary text-[20px]">dns</span>
-            <h4 class="font-bold text-on-surface">For chrony (recommended)</h4>
-          </div>
-          <p class="text-xs text-primary font-mono mb-3">Most modern Linux systems use chrony instead of ntpd.</p>
-          
-          <ol class="text-sm text-on-surface-variant list-decimal list-inside space-y-3">
-            <li>Set your system to pure UTC (critical!):<br>
-              <code class="bg-surface-container-highest px-2 py-0.5 mt-1 inline-block rounded text-primary font-mono text-xs border border-outline-variant/20">sudo timedatectl set-timezone UTC</code>
-            </li>
-            <li>Edit chrony config:<br>
-              <code class="bg-surface-container-highest px-2 py-0.5 mt-1 inline-block rounded text-primary font-mono text-xs border border-outline-variant/20">sudo nano /etc/chrony.conf</code>
-            </li>
-            <li>Add this line (replace with your regional server):<br>
-              <code class="bg-surface-container-highest px-3 py-1 mt-1 inline-block rounded text-primary font-mono text-xs border border-outline-variant/20">server europe-central.smoothtime.io iburst</code>
-            </li>
-            <li>Restart chrony:<br>
-              <code class="bg-surface-container-highest px-2 py-0.5 mt-1 inline-block rounded text-primary font-mono text-xs border border-outline-variant/20">sudo systemctl restart chronyd</code>
-            </li>
-          </ol>
-          
-          <div class="mt-4 p-3 bg-surface-container-high rounded-xl text-xs text-on-surface-variant">
-            <strong>Tip:</strong> You can add multiple regional servers for redundancy.<br>
-            chrony is faster and more accurate than traditional ntpd.
-          </div>
-        </div>
-
-        <!-- macOS -->
-        <div class="reveal delay-300 bg-surface-container-lowest p-6 rounded-2xl border border-outline-variant/10 hover-lift">
-          <h4 class="font-bold text-on-surface mb-3 flex items-center gap-2"><span class="material-symbols-outlined text-primary text-[20px]">laptop_mac</span> For macOS</h4>
-          <ol class="text-sm text-on-surface-variant list-decimal list-inside space-y-2">
-            <li>Open <strong>System Settings</strong> > <strong>General</strong> > <strong>Date & Time</strong>.</li>
-            <li>Turn off <strong>Set time zone automatically</strong>.</li>
-            <li>In the "Closest City" field, select <strong>UTC</strong> or <strong>GMT</strong>.</li>
-            <li>Update your Time Server address to your regional smoothtime node.</li>
-          </ol>
-        </div>
-
-        <!-- Windows -->
-        <div class="reveal delay-400 bg-surface-container-lowest p-6 rounded-2xl border border-outline-variant/10 hover-lift">
-          <h4 class="font-bold text-on-surface mb-3 flex items-center gap-2"><span class="material-symbols-outlined text-primary text-[20px]">desktop_windows</span> For Windows</h4>
-          <ol class="text-sm text-on-surface-variant list-decimal list-inside space-y-2">
-            <li>Open <strong>Settings</strong> > <strong>Time & language</strong> > <strong>Date & time</strong>.</li>
-            <li>Turn off <strong>Set time zone automatically</strong>.</li>
-            <li>Change the Time zone dropdown to <strong>(UTC) Coordinated Universal Time</strong>.</li>
-            <li>Click <strong>Sync now</strong> after configuring your new server address.</li>
-          </ol>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <footer class="bg-[#131315] w-full py-12 border-t border-[#3c4a42]/15">
-    <div class="flex flex-col md:flex-row justify-between items-center px-6 md:px-8 max-w-7xl mx-auto gap-8 font-body text-sm">
-      <div class="flex flex-col gap-2 text-center md:text-left">
-        <div class="text-lg font-mono text-[#4edea3]">smoothtime.io</div>
-        <div class="text-[#bbcabf]">© 2026 smoothtime.</div>
-      </div>
-      <div class="flex flex-col md:flex-row items-center gap-4 md:gap-8">
-        <a class="text-[#bbcabf] hover:text-[#4edea3] transition-colors" href="https://github.com/tommodore/smoothtime" target="_blank">GitHub</a>
-        <a class="text-[#bbcabf] hover:text-[#4edea3] transition-colors" href="https://github.com/tommodore/smoothtime/blob/main/README.md" target="_blank">Documentation</a>
-        <a class="text-[#bbcabf] hover:text-[#4edea3] transition-colors" href="https://status.smoothtime.io" target="_blank">Status Page</a>
-        <a class="text-sm text-on-surface-variant hover:text-primary transition-colors" href="/legal.html">Legal & Privacy</a>
-      </div>
-      <div class="text-xs text-outline-variant uppercase tracking-widest font-bold text-center md:text-right">
-          MIT Licensed Open Source • 11 Regions Worldwide
-      </div>
+<main id="main">
+<section class="hero"><div class="wrap">
+  <p class="eyebrow">Public NTP server · 11 regions · open source</p>
+  <h1>Daylight saving time,<br>without the jump.</h1>
+  <p class="lead">smoothtime spreads the 1-hour DST change smoothly across the entire season, so servers, homelabs and IoT devices never see a sudden clock change.</p>
+  <div class="card" style="margin-top:36px">
+    <div class="clocks" style="margin:0">
+      <div><div class="lbl"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> Official local time <span class="mono" id="h-offi"></span></div><div class="clk" id="h-official">--:--:--</div><div class="sm muted" id="h-tz"></div></div>
+      <div><div class="lbl acc"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg> smoothtime <span class="mono" id="h-offs"></span></div><div class="clk acc" id="h-smooth">--:--:--</div><div class="sm muted" id="h-diff"></div></div>
     </div>
-  </footer>
+    <div class="bar">
+      <select id="region" aria-label="Region"><option value="europe-west">Europe West (WET/WEST)</option><option value="europe-central">Europe Central (CET/CEST)</option><option value="europe-east">Europe East (EET/EEST)</option><option value="us-eastern">US Eastern (EST/EDT)</option><option value="us-central">US Central (CST/CDT)</option><option value="us-mountain">US Mountain (MST/MDT)</option><option value="us-pacific">US Pacific (PST/PDT)</option><option value="australia-sydney">Australia Sydney (AEST/AEDT)</option><option value="new-zealand">New Zealand (NZST/NZDT)</option><option value="chile">Chile (CLT/CLST)</option><option value="argentina">Argentina (ART, no DST)</option></select>
+      <div class="addrbox"><code id="h-addr">europe-central.smoothtime.io</code><button class="btn" id="h-copy"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="14" height="14" rx="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg><span>Copy</span></button></div>
+    </div>
+  </div>
+  <div class="cta"><a class="btn" href="#setup">Get started</a><a class="btn ghost" href="https://github.com/tommodore/smoothtime" target="_blank" rel="noopener"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.4 5.4 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></svg> View on GitHub</a></div>
+</div></section>
 
-  <script>
-    // --- Framer-like Scroll Reveal Engine ---
-    const observerOptions = {
-      root: null,
-      rootMargin: '0px',
-      threshold: 0.15 
-    };
+<section id="drift"><div class="wrap">
+  <p class="eyebrow">How it works</p>
+  <h2>A straight line instead of a step</h2>
+  <p class="lead">Official time jumps by one hour twice a year. smoothtime drifts linearly between the two transition dates instead, a fraction of a second per day, and meets official time exactly at each switch.</p>
+  <div class="card chart">
+    <div class="legend"><span><i style="background:var(--mute)"></i>Official UTC offset</span><span><i style="background:var(--acc)"></i>smoothtime offset</span><span><i style="background:var(--fg);width:2px;height:10px"></i>Today</span><span class="mono" id="c-region"></span></div>
+    <svg id="chart" viewBox="0 0 800 260" role="img" aria-label="UTC offset over the next 12 months"></svg>
+  </div>
+  <p class="sm muted" style="margin-top:12px">Formula: <code>offset = base + days_passed / total_days</code> between DST end and the next DST start; mirrored during summer.</p>
+</div></section>
 
-    const observer = new IntersectionObserver((entries, observer) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('active');
-          observer.unobserve(entry.target); 
-        }
-      });
-    }, observerOptions);
+<section id="regions"><div class="wrap">
+  <p class="eyebrow">Regions</p>
+  <h2>Pick the server for your time zone</h2>
+  <p class="lead">Offsets update live. Use the server for your region.</p>
+  <div class="card tblwrap"><table class="tbl"><thead><tr><th>Region</th><th>Server</th><th>smoothtime now</th><th class="c-off2">Official now</th><th></th></tr></thead><tbody><tr data-r="europe-west"><td><span class="rn">Europe West</span><span class="muted sm"> WET/WEST</span></td><td><code class="addr">europe-west.smoothtime.io</code></td><td class="mono num" data-off="europe-west">–</td><td class="mono num muted" data-offi="europe-west">–</td><td><button class="icon-btn" data-copy="europe-west.smoothtime.io" aria-label="Copy europe-west.smoothtime.io"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="14" height="14" rx="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg></button></td></tr><tr data-r="europe-central"><td><span class="rn">Europe Central</span><span class="muted sm"> CET/CEST</span></td><td><code class="addr">europe-central.smoothtime.io</code></td><td class="mono num" data-off="europe-central">–</td><td class="mono num muted" data-offi="europe-central">–</td><td><button class="icon-btn" data-copy="europe-central.smoothtime.io" aria-label="Copy europe-central.smoothtime.io"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="14" height="14" rx="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg></button></td></tr><tr data-r="europe-east"><td><span class="rn">Europe East</span><span class="muted sm"> EET/EEST</span></td><td><code class="addr">europe-east.smoothtime.io</code></td><td class="mono num" data-off="europe-east">–</td><td class="mono num muted" data-offi="europe-east">–</td><td><button class="icon-btn" data-copy="europe-east.smoothtime.io" aria-label="Copy europe-east.smoothtime.io"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="14" height="14" rx="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg></button></td></tr><tr data-r="us-eastern"><td><span class="rn">US Eastern</span><span class="muted sm"> EST/EDT</span></td><td><code class="addr">us-eastern.smoothtime.io</code></td><td class="mono num" data-off="us-eastern">–</td><td class="mono num muted" data-offi="us-eastern">–</td><td><button class="icon-btn" data-copy="us-eastern.smoothtime.io" aria-label="Copy us-eastern.smoothtime.io"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="14" height="14" rx="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg></button></td></tr><tr data-r="us-central"><td><span class="rn">US Central</span><span class="muted sm"> CST/CDT</span></td><td><code class="addr">us-central.smoothtime.io</code></td><td class="mono num" data-off="us-central">–</td><td class="mono num muted" data-offi="us-central">–</td><td><button class="icon-btn" data-copy="us-central.smoothtime.io" aria-label="Copy us-central.smoothtime.io"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="14" height="14" rx="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg></button></td></tr><tr data-r="us-mountain"><td><span class="rn">US Mountain</span><span class="muted sm"> MST/MDT</span></td><td><code class="addr">us-mountain.smoothtime.io</code></td><td class="mono num" data-off="us-mountain">–</td><td class="mono num muted" data-offi="us-mountain">–</td><td><button class="icon-btn" data-copy="us-mountain.smoothtime.io" aria-label="Copy us-mountain.smoothtime.io"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="14" height="14" rx="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg></button></td></tr><tr data-r="us-pacific"><td><span class="rn">US Pacific</span><span class="muted sm"> PST/PDT</span></td><td><code class="addr">us-pacific.smoothtime.io</code></td><td class="mono num" data-off="us-pacific">–</td><td class="mono num muted" data-offi="us-pacific">–</td><td><button class="icon-btn" data-copy="us-pacific.smoothtime.io" aria-label="Copy us-pacific.smoothtime.io"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="14" height="14" rx="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg></button></td></tr><tr data-r="australia-sydney"><td><span class="rn">Australia Sydney</span><span class="muted sm"> AEST/AEDT</span></td><td><code class="addr">australia-sydney.smoothtime.io</code></td><td class="mono num" data-off="australia-sydney">–</td><td class="mono num muted" data-offi="australia-sydney">–</td><td><button class="icon-btn" data-copy="australia-sydney.smoothtime.io" aria-label="Copy australia-sydney.smoothtime.io"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="14" height="14" rx="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg></button></td></tr><tr data-r="new-zealand"><td><span class="rn">New Zealand</span><span class="muted sm"> NZST/NZDT</span></td><td><code class="addr">new-zealand.smoothtime.io</code></td><td class="mono num" data-off="new-zealand">–</td><td class="mono num muted" data-offi="new-zealand">–</td><td><button class="icon-btn" data-copy="new-zealand.smoothtime.io" aria-label="Copy new-zealand.smoothtime.io"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="14" height="14" rx="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg></button></td></tr><tr data-r="chile"><td><span class="rn">Chile</span><span class="muted sm"> CLT/CLST</span></td><td><code class="addr">chile.smoothtime.io</code></td><td class="mono num" data-off="chile">–</td><td class="mono num muted" data-offi="chile">–</td><td><button class="icon-btn" data-copy="chile.smoothtime.io" aria-label="Copy chile.smoothtime.io"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="14" height="14" rx="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg></button></td></tr><tr data-r="argentina"><td><span class="rn">Argentina</span><span class="muted sm"> ART, no DST</span></td><td><code class="addr">argentina.smoothtime.io</code></td><td class="mono num" data-off="argentina">–</td><td class="mono num muted" data-offi="argentina">–</td><td><button class="icon-btn" data-copy="argentina.smoothtime.io" aria-label="Copy argentina.smoothtime.io"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="14" height="14" rx="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg></button></td></tr></tbody></table></div>
+</div></section>
 
-    document.querySelectorAll('.reveal, .reveal-scale').forEach((element) => {
-      observer.observe(element);
-    });
+<section id="setup"><div class="wrap">
+  <p class="eyebrow">Setup</p>
+  <h2>Set up in about 30 seconds</h2>
+  <div class="callout"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg><div><strong>Set your system time zone to UTC.</strong> Standard time servers send pure UTC and your computer adds the local time zone. smoothtime already includes your time zone and the smooth DST drift in the time it sends. If you keep your local time zone, the offset is applied twice and your clock will be wrong.</div></div>
+  <div class="card">
+    <div class="tabs" role="tablist">
+      <button class="tab" role="tab" aria-selected="true" data-t="chrony">chrony</button>
+      <button class="tab" role="tab" aria-selected="false" data-t="ntpd">ntpd</button>
+      <button class="tab" role="tab" aria-selected="false" data-t="timesyncd">systemd-timesyncd</button>
+      <button class="tab" role="tab" aria-selected="false" data-t="windows">Windows</button>
+      <button class="tab" role="tab" aria-selected="false" data-t="macos">macOS</button>
+    </div>
+    <div class="pane" data-p="chrony"><p class="muted sm" style="margin-top:0">Recommended. Most modern Linux systems use chrony.</p>
+<pre><code>sudo timedatectl set-timezone UTC
+echo "server <span class="srv">europe-central</span>.smoothtime.io iburst" | sudo tee -a /etc/chrony.conf
+sudo systemctl restart chronyd</code></pre><p class="sm muted">Tip: you can add multiple regional servers for redundancy.</p></div>
+    <div class="pane" data-p="ntpd" hidden>
+<pre><code>sudo timedatectl set-timezone UTC
+echo "server <span class="srv">europe-central</span>.smoothtime.io iburst" | sudo tee -a /etc/ntp.conf
+sudo systemctl restart ntp   # or ntpd, depending on your distro</code></pre></div>
+    <div class="pane" data-p="timesyncd" hidden>
+<pre><code>sudo timedatectl set-timezone UTC
+# /etc/systemd/timesyncd.conf
+[Time]
+NTP=<span class="srv">europe-central</span>.smoothtime.io
 
-    // --- Regions ---
-    const regions = {
-      "europe-west":    { name: "Europe Western Smoothtime (WET/WEST)", iana: "Europe/Lisbon", base: 0.0,  rule: "eu" },
-      "europe-central": { name: "Europe Central Smoothtime (CET/CEST)", iana: "Europe/Berlin", base: 1.0,  rule: "eu" },
-      "europe-east":    { name: "Europe Eastern Smoothtime (EET/EEST)", iana: "Europe/Kiev", base: 2.0,  rule: "eu" },
-      "us-eastern":     { name: "US Eastern Smoothtime (EST/EDT)",      iana: "America/New_York", base: -5.0, rule: "us" },
-      "us-central":     { name: "US Central Smoothtime (CST/CDT)",      iana: "America/Chicago", base: -6.0, rule: "us" },
-      "us-mountain":    { name: "US Mountain Smoothtime (MST/MDT)",     iana: "America/Denver", base: -7.0, rule: "us" },
-      "us-pacific":     { name: "US Pacific Smoothtime (PST/PDT)",      iana: "America/Los_Angeles", base: -8.0, rule: "us" },
-      "australia-sydney": { name: "Australia Sydney Smoothtime (AEST/AEDT)", iana: "Australia/Sydney", base: 10.0, rule: "au" },
-      "new-zealand":      { name: "New Zealand Smoothtime (NZST/NZDT)", iana: "Pacific/Auckland", base: 12.0, rule: "nz" },
-      "chile":            { name: "Chile Smoothtime (CLT/CLST)", iana: "America/Santiago", base: -4.0, rule: "cl" },
-      "argentina":        { name: "Argentina Smoothtime (ART)", iana: "America/Argentina/Buenos_Aires", base: -3.0, rule: "none" }
-    };
+sudo systemctl restart systemd-timesyncd</code></pre></div>
+    <div class="pane" data-p="windows" hidden><ol>
+      <li>Open <strong>Settings › Time &amp; language › Date &amp; time</strong>.</li>
+      <li>Turn off <strong>Set time zone automatically</strong>.</li>
+      <li>Set the time zone to <strong>(UTC) Coordinated Universal Time</strong>.</li>
+      <li>Set the time server, for example from an administrator terminal:</li></ol>
+<pre><code>w32tm /config /manualpeerlist:"<span class="srv">europe-central</span>.smoothtime.io" /syncfromflags:manual /update
+w32tm /resync</code></pre></div>
+    <div class="pane" data-p="macos" hidden><ol>
+      <li>Open <strong>System Settings › General › Date &amp; Time</strong>.</li>
+      <li>Turn off <strong>Set time zone automatically</strong>.</li>
+      <li>Under "Closest City", select <strong>UTC</strong> or <strong>GMT</strong>.</li>
+      <li>Set the time server to <code><span class="srv">europe-central</span>.smoothtime.io</code>.</li></ol></div>
+  </div>
+</div></section>
 
-    let currentRegion = "europe-central";
-    let simRegion = "europe-central";
-    let currentDiffOffset = 0;
+<section id="why"><div class="wrap">
+  <p class="eyebrow">Why it matters</p>
+  <h2>Nature doesn't jump. Your clocks shouldn't either.</h2>
+  <p class="lead">Chronobiology research shows the body synchronizes its circadian rhythm to the gradual daily shift of sunrise. The abrupt 60-minute change twice a year causes what scientists call social jetlag, and it disrupts digital infrastructure.</p>
+  <div class="grid3">
+    <div class="card"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg><h3>Gentle adjustments</h3><p>The servers shift the time gradually throughout the year, like a clock running very slightly faster or slower.</p></div>
+    <div class="card"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg><h3>Zero disruptions</h3><p>No missed morning alarms. No confusing overlapping calendar events.</p></div>
+    <div class="card"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg><h3>Works with any NTP client</h3><p>Any standard device that syncs time over NTP. No special software needed.</p></div>
+  </div>
+  <ul class="refs">
+    <li><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC7954020/" target="_blank" rel="noopener noreferrer"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 2v7.31M14 9.3V2M8.5 2h7M14 9.3a6.5 6.5 0 1 1-4 0"/><path d="M5.52 16h12.96"/></svg> AASM Position Statement on Daylight Saving Time Risks <svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h6v6M10 14 21 3M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg></a></li>
+    <li><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC10204006/" target="_blank" rel="noopener noreferrer"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 2v7.31M14 9.3V2M8.5 2h7M14 9.3a6.5 6.5 0 1 1-4 0"/><path d="M5.52 16h12.96"/></svg> How Social Jetlag Affects Health (NIH Research) <svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h6v6M10 14 21 3M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg></a></li>
+    <li><a href="https://www.youtube-nocookie.com/embed/Y2qNHvxtnnM/" target="_blank" rel="noopener noreferrer"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 2v7.31M14 9.3V2M8.5 2h7M14 9.3a6.5 6.5 0 1 1-4 0"/><path d="M5.52 16h12.96"/></svg> Prof. Christian Rieck on the Astro-Shift <svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h6v6M10 14 21 3M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg></a></li>
+  </ul>
+</div></section>
 
-    function updateClock() {
-      const offsetH = smoothOffset();
-      const utcNow = new Date();
-      const smoothTime = new Date(utcNow.getTime() + offsetH * 3600 * 1000);
+<section id="faq"><div class="wrap">
+  <p class="eyebrow">FAQ</p>
+  <h2>Questions</h2>
+  <details><summary>Why do I have to set my system to UTC?</summary><p>smoothtime sends your region's local time, including the smooth DST drift, instead of pure UTC. If your system also applies a local time zone, the offset is counted twice.</p></details>
+  <details><summary>Does my clock match official time?</summary><p>Exactly on each DST transition date. In between, smoothtime is up to one hour away from official time, changing by a fraction of a second per day. The chart above shows the difference for your region.</p></details>
+  <details><summary>Which regions are supported?</summary><p>11 regions: Europe West, Central and East; US Eastern, Central, Mountain and Pacific; Australia Sydney; New Zealand; Chile; and Argentina, which has no DST and uses a constant offset.</p></details>
+  <details><summary>Which devices work?</summary><p>Anything that can use a custom NTP server: Linux (chrony, ntpd, systemd-timesyncd), macOS, Windows, and many routers and IoT devices.</p></details>
+  <details><summary>Is it free and open source?</summary><p>Yes. smoothtime is MIT-licensed and the source is on <a href="https://github.com/tommodore/smoothtime" target="_blank" rel="noopener">GitHub</a>. You can also run your own server with Docker.</p></details>
+</div></section>
+</main>
 
-      document.getElementById("live-clock").textContent = 
-        smoothTime.toLocaleTimeString("en-US", { timeZone: "UTC", hour12: false, hour: "2-digit", minute: "2-digit", second: "2-digit" });
-
-      const sign = offsetH >= 0 ? "+" : "";
-      document.getElementById("active-offset").textContent = `${sign}${offsetH.toFixed(4)} h`;
-      
-      const progressPercent = Math.max(0, Math.min(100, (offsetH - regions[currentRegion].base) * 100));
-      document.getElementById("offset-progress").style.width = `${progressPercent}%`;
-    }
-
-    function switchRegion(region) {
-      currentRegion = region;
-      document.querySelectorAll('.region-btn').forEach(btn => {
-        btn.classList.toggle('btn-active', btn.id === `btn-${region}`);
-      });
-      
-      const nameEl = document.getElementById("region-name");
-      if (nameEl) {
-        nameEl.style.opacity = 0;
-        setTimeout(() => {
-          nameEl.textContent = regions[currentRegion].name;
-          nameEl.style.opacity = 1;
-        }, 150);
-      }
-      
-      const serverAddr = document.getElementById('server-address');
-      if (serverAddr) {
-        serverAddr.textContent = `${region}.smoothtime.io`;
-      }
-      
-      const quickServer = document.getElementById('quick-server');
-      if (quickServer) {
-        quickServer.textContent = region;
-      }
-      
-      updateClock();
-    }
-
-    function copyServerAddress() {
-      const addr = document.getElementById('server-address').textContent;
-      navigator.clipboard.writeText(addr).then(() => {
-        const label = document.getElementById('copy-label');
-        label.textContent = 'Copied!';
-        setTimeout(() => { label.textContent = 'Copy'; }, 2000);
-      }).catch(() => {
-        // Fallback: select the text
-        const el = document.getElementById('server-address');
-        const range = document.createRange();
-        range.selectNodeContents(el);
-        const sel = window.getSelection();
-        sel.removeAllRanges();
-        sel.addRange(range);
-      });
-    }
-
-    function copyCommand() {
-      navigator.clipboard.writeText(document.getElementById('cmd-server').textContent);
-      const icon = document.getElementById('copy-icon');
-      icon.textContent = "check";
-      icon.classList.add('text-primary');
-      setTimeout(() => {
-        icon.textContent = "content_copy";
-        icon.classList.remove('text-primary');
-      }, 1500);
-    }
-
-    function fmtOffset(h) {
-      return `${h >= 0 ? '+' : '-'}${Math.abs(h).toFixed(3)} h`;
-    }
-
-    function officialAbbrev(cfg) {
-      const m = cfg.name.match(/\(([^)]+)\)/);
-      if (!m) return '';
-      const parts = m[1].split('/');
-      return parts[parts.length - 1].trim();
-    }
-
-    function updateSimulator() {
-      const regionKey = document.getElementById('sim-region').value;
-      const days = parseInt(document.getElementById('days-slider').value);
-      
-      document.getElementById('slider-value').textContent = `${days} / 180`;
-
-      const cfg = regions[regionKey];
-      const totalDays = 180;
-      const fraction = Math.min(1, Math.max(0, days / totalDays));
-
-      const hasDst = cfg.rule !== 'none';
-      const officialOffset = cfg.base + (hasDst ? 1.0 : 0.0);
-      const simulatedSmoothOffset = cfg.base + (hasDst ? 1.0 - fraction : 0.0);
-
-      currentDiffOffset = simulatedSmoothOffset - officialOffset;
-
-      document.getElementById('official-offset').textContent = `${fmtOffset(officialOffset)} (${officialAbbrev(cfg)})`;
-      document.getElementById('smoothtime-offset').textContent = `${fmtOffset(simulatedSmoothOffset)} (sim)`;
-
-      const diffMinutes = Math.round(currentDiffOffset * 60);
-      document.getElementById('time-difference').textContent = `${diffMinutes >= 0 ? '+' : ''}${diffMinutes} minutes`;
-
-      tickSimulatorClocks();
-    }
-
-    function tickSimulatorClocks() {
-      const regionKey = document.getElementById('sim-region').value;
-      const cfg = regions[regionKey];
-      const now = new Date();
-
-      const officialTimeStr = now.toLocaleTimeString("en-US", {
-        timeZone: cfg.iana,
-        hour12: false,
-        hour: "2-digit",
-        minute: "2-digit",
-        second: "2-digit"
-      });
-      document.getElementById('official-clock').textContent = officialTimeStr;
-
-      const smoothTime = new Date(now.getTime() + currentDiffOffset * 3600 * 1000);
-      const smoothTimeStr = smoothTime.toLocaleTimeString("en-US", {
-        timeZone: cfg.iana,
-        hour12: false,
-        hour: "2-digit",
-        minute: "2-digit",
-        second: "2-digit"
-      });
-      document.getElementById('smoothtime-clock').textContent = smoothTimeStr;
-    }
-
-    function getNthSunday(year, month, nth) {
-      let date = new Date(Date.UTC(year, month, 1));
-      let count = 0;
-      for (let i = 0; i < 31; i++) {
-        if (date.getUTCDay() === 0) {
-          count++;
-          if (count === nth) return date;
-        }
-        date.setUTCDate(date.getUTCDate() + 1);
-      }
-      return date;
-    }
-
-    function getLastSunday(year, month) {
-      let date = new Date(Date.UTC(year, month + 1, 0));
-      while (date.getUTCDay() !== 0) {
-        date.setUTCDate(date.getUTCDate() - 1);
-      }
-      return date;
-    }
-
-    function getDstDates(year, rule) {
-      if (rule === 'eu') {
-        return { start: getLastSunday(year, 2), end: getLastSunday(year, 9) };
-      } else if (rule === 'us') {
-        return { start: getNthSunday(year, 2, 2), end: getNthSunday(year, 10, 1) };
-      } else if (rule === 'au') {
-        return { start: getNthSunday(year, 9, 1), end: getNthSunday(year + 1, 3, 1) };
-      } else if (rule === 'nz') {
-        // New Zealand: last Sunday of September -> first Sunday of April
-        return { start: getLastSunday(year, 8), end: getNthSunday(year + 1, 3, 1) };
-      } else if (rule === 'cl') {
-        return { start: getNthSunday(year, 8, 1), end: getNthSunday(year + 1, 3, 1) };
-      }
-      return { start: new Date(0), end: new Date(0) };
-    }
-
-    function smoothOffset() {
-      const cfg = regions[currentRegion];
-      const now = new Date();
-      let year = now.getUTCFullYear();
-      // Southern Hemisphere: the summer that spans New Year started in the previous year
-      if (now < getDstDates(year, cfg.rule).start && now < getDstDates(year - 1, cfg.rule).end) year -= 1;
-      const dates = getDstDates(year, cfg.rule);
-      const tStart = dates.start;
-      const tEnd = dates.end;
-
-      if (tStart.getTime() === 0) return cfg.base;
-
-      let offset;
-      if (now >= tStart && now < tEnd) {
-        const fraction = (now - tStart) / (tEnd - tStart);
-        offset = cfg.base + 1.0 - fraction;
-      } else {
-        let wStart = tEnd;
-        let wEnd = getDstDates(year + 1, cfg.rule).start;
-        if (now < tStart) {
-          wStart = getDstDates(year - 1, cfg.rule).end;
-          wEnd = tStart;
-        }
-        const fraction = (now - wStart) / (wEnd - wStart);
-        offset = cfg.base + fraction;
-      }
-      return offset;
-    }
-
-    function initSimulator() {
-      const slider = document.getElementById('days-slider');
-      if (slider) {
-        slider.value = 90;
-        document.getElementById('sim-region').value = 'europe-central';
-        updateSimulator();
-        slider.oninput = updateSimulator;
-        document.getElementById('sim-region').onchange = updateSimulator;
-        setInterval(tickSimulatorClocks, 1000);
-      }
-    }
-
-    function init() {
-      switchRegion(currentRegion);
-      setInterval(updateClock, 1000);
-      initSimulator();
-
-      const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
-      if (["America/New_York","America/Toronto"].includes(tz)) currentRegion = "us-eastern";
-      else if (["America/Chicago"].includes(tz)) currentRegion = "us-central";
-      else if (["America/Denver"].includes(tz)) currentRegion = "us-mountain";
-      else if (["America/Los_Angeles"].includes(tz)) currentRegion = "us-pacific";
-      else if (["Europe/London", "Europe/Dublin", "Europe/Lisbon"].includes(tz)) currentRegion = "europe-west";
-      else if (["Europe/Bucharest","Europe/Helsinki","Europe/Riga","Europe/Tallinn","Europe/Vilnius","Europe/Sofia","Europe/Athens"].includes(tz)) currentRegion = "europe-east";
-      else if (["Australia/Sydney", "Australia/Melbourne"].includes(tz)) currentRegion = "australia-sydney";
-      else if (["Pacific/Auckland"].includes(tz)) currentRegion = "new-zealand";
-      else if (["America/Santiago"].includes(tz)) currentRegion = "chile";
-      else if (["America/Argentina/Buenos_Aires"].includes(tz)) currentRegion = "argentina";
-      else currentRegion = "europe-central";
-
-      switchRegion(currentRegion);
-    }
-
-    init();
-  </script>
+<footer><div class="wrap">
+  <div>© 2026 smoothtime · MIT licensed · 11 regions worldwide</div>
+  <div><a href="https://github.com/tommodore/smoothtime" target="_blank" rel="noopener">GitHub</a><a href="https://github.com/tommodore/smoothtime/blob/main/README.md" target="_blank" rel="noopener">Documentation</a><a href="https://status.smoothtime.io" target="_blank" rel="noopener">Status</a><a href="/legal.html">Legal &amp; Privacy</a></div>
+</div></footer>
+<script src="/app.js" defer></script>
 </body>
 </html>

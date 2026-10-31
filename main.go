@@ -2,12 +2,14 @@ package main
 
 import (
 	"encoding/binary"
+	"encoding/json"
 	"flag"
 	"fmt"
 	"log"
 	"net"
 	"net/http"
 	"strings"
+	"sync"
 	"time"
 )
 
@@ -16,11 +18,11 @@ import (
 type Rule string
 
 const (
-	RuleEU Rule = "eu"
-	RuleUS Rule = "us"
-	RuleAU Rule = "au" // Australia / New Zealand style (Southern Hemisphere: Oct start, Apr end)
-	RuleCL Rule = "cl" // Chile (Sep start, Apr end)
-	RuleNZ Rule = "nz" // New Zealand (last Sun Sep start, 1st Sun Apr end)
+	RuleEU   Rule = "eu"
+	RuleUS   Rule = "us"
+	RuleAU   Rule = "au"   // Australia / New Zealand style (Southern Hemisphere: Oct start, Apr end)
+	RuleCL   Rule = "cl"   // Chile (Sep start, Apr end)
+	RuleNZ   Rule = "nz"   // New Zealand (last Sun Sep start, 1st Sun Apr end)
 	RuleNone Rule = "none" // constant offset, no DST
 )
 
@@ -32,13 +34,13 @@ type RegionConfig struct {
 
 // Regions defines the timezone offsets and DST rules for each supported node.
 var Regions = map[string]RegionConfig{
-	"europe-west":     {"Europe Western (WET/WEST)", 0.0, RuleEU},
-	"europe-central":  {"Europe Central (CET/CEST)", 1.0, RuleEU},
-	"europe-east":     {"Europe Eastern (EET/EEST)", 2.0, RuleEU},
-	"us-eastern":      {"US Eastern (EST/EDT)", -5.0, RuleUS},
-	"us-central":      {"US Central (CST/CDT)", -6.0, RuleUS},
-	"us-mountain":     {"US Mountain (MST/MDT)", -7.0, RuleUS},
-	"us-pacific":      {"US Pacific (PST/PDT)", -8.0, RuleUS},
+	"europe-west":    {"Europe Western (WET/WEST)", 0.0, RuleEU},
+	"europe-central": {"Europe Central (CET/CEST)", 1.0, RuleEU},
+	"europe-east":    {"Europe Eastern (EET/EEST)", 2.0, RuleEU},
+	"us-eastern":     {"US Eastern (EST/EDT)", -5.0, RuleUS},
+	"us-central":     {"US Central (CST/CDT)", -6.0, RuleUS},
+	"us-mountain":    {"US Mountain (MST/MDT)", -7.0, RuleUS},
+	"us-pacific":     {"US Pacific (PST/PDT)", -8.0, RuleUS},
 	// New Southern Hemisphere regions
 	"australia-sydney": {"Australia Sydney (AEST/AEDT)", 10.0, RuleAU},
 	"new-zealand":      {"New Zealand (NZST/NZDT)", 12.0, RuleNZ},
@@ -93,6 +95,16 @@ func startHealthServer(port string) {
 		fmt.Fprint(w, "OK")
 	})
 
+	http.HandleFunc("/stats", func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		w.Write(statsJSON())
+	})
+	go func() {
+		for range time.Tick(time.Hour) {
+			log.Printf("Stats: %s", statsJSON())
+		}
+	}()
+
 	log.Printf("Health Check: HTTP server active on port %s at /health", port)
 	if err := http.ListenAndServe(":"+port, nil); err != nil {
 		log.Fatalf("Failed to start health server: %v", err)
@@ -119,7 +131,9 @@ func startServer(ip string, port int, region string) {
 			continue
 		}
 		// Handle each incoming NTP request in a non-blocking goroutine.
-		go handleNTPRequest(conn, clientAddr, buf, region)
+		req := append([]byte(nil), buf[:48]...) // own copy per request
+		recordRequest(region, clientAddr.IP.String())
+		go handleNTPRequest(conn, clientAddr, req, region)
 	}
 }
 
@@ -150,7 +164,7 @@ func handleNTPRequest(conn *net.UDPConn, clientAddr *net.UDPAddr, req []byte, re
 
 func getNthSunday(year int, month time.Month, nth int) time.Time {
 	t := time.Date(year, month, 1, 0, 0, 0, 0, time.UTC)
-	count := 0;
+	count := 0
 	for {
 		if t.Weekday() == time.Sunday {
 			count++
@@ -229,4 +243,30 @@ func ApplySmoothTime(utcNow time.Time, regionID string) time.Time {
 	offsetHours := CalculateSmoothOffset(utcNow, regionID)
 	offsetDuration := time.Duration(offsetHours * float64(time.Hour))
 	return utcNow.Add(offsetDuration)
+}
+
+// --- Usage stats ---
+
+var (
+	statsMu   sync.Mutex
+	statsDay  = time.Now().UTC().Format("2006-01-02")
+	perRegion = map[string]uint64{}
+	clients   = map[string]struct{}{}
+)
+
+func recordRequest(region, ip string) {
+	statsMu.Lock()
+	defer statsMu.Unlock()
+	if d := time.Now().UTC().Format("2006-01-02"); d != statsDay {
+		statsDay, clients = d, map[string]struct{}{}
+	}
+	perRegion[region]++
+	clients[ip] = struct{}{}
+}
+
+func statsJSON() []byte {
+	statsMu.Lock()
+	defer statsMu.Unlock()
+	b, _ := json.Marshal(map[string]any{"requests_per_region_since_start": perRegion, "unique_clients_today": len(clients), "day_utc": statsDay})
+	return b
 }

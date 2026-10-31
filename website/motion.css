@@ -15,7 +15,7 @@ header.scrolled{background:color-mix(in srgb,var(--color-bg) 94%,transparent)}
 body{counter-reset:sec}
 main section{counter-increment:sec;position:relative}
 .eyebrow{display:inline-block;white-space:nowrap;color:var(--mute)}
-main section:not(.hero) .eyebrow::before{content:"[LOG] 0" counter(sec) " — ";color:var(--acc)}
+main section:not(.hero) .eyebrow::before{content:"[LOG] 0" counter(sec) " - ";color:var(--acc)}
 .hero .eyebrow::before{content:"[SYS] ";color:var(--acc)}
 .telemetry{display:flex;flex-wrap:wrap;gap:6px 22px;margin:22px 0 0;font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--mute)}
 .telemetry b{color:var(--fg);font-weight:500}

@@ -54,11 +54,11 @@ purposeful (LCARS bars draw in, orbit/topo drift), and fully disabled under `pre
 
 ## Typography
 Sans `--font-sans` (Inter), mono `--font-mono` (JetBrains Mono).
-Sizes `--text-2xs` .66rem · `xs` .75 · `sm` .875 · `base` 1 · `md` 1.125 · `lg` 1.375 · `xl` clamp(1.6–2.4rem) · `2xl` clamp(2.2–3.6rem) · `3xl` clamp(3–6.4rem).
+Sizes `--text-2xs` .66rem · `xs` .75 · `sm` .875 · `base` 1 · `md` 1.125 · `lg` 1.375 · `xl` clamp(1.6-2.4rem) · `2xl` clamp(2.2-3.6rem) · `3xl` clamp(3-6.4rem).
 Weights 400/500/600/650. Leading 1.05/1.25/1.6/1.75. Tracking tight −.035em, caps .1em (mono labels).
 
 ## Spacing, radii, elevation
-Spacing (4px base): `--space-1` .25rem · 2 .5 · 3 .75 · 4 1 · 5 1.5 · 6 2 · 7 3 · 8 4 · 9 6rem. Container 1180px, gutter clamp(1.25–2.5rem).
+Spacing (4px base): `--space-1` .25rem · 2 .5 · 3 .75 · 4 1 · 5 1.5 · 6 2 · 7 3 · 8 4 · 9 6rem. Container 1180px, gutter clamp(1.25-2.5rem).
 Radii: none 0 · sm 4 · md 6 · lg 10 · pill 999px.
 Shadows: `--shadow-1/2/3`, glows `--glow-accent`, `--glow-success`.
 

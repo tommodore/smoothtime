@@ -1,11 +1,11 @@
 # Nord Design System
 
-Shared by **thomaskraeuter.com** and **smoothtime.io**. Live reference: https://thomaskraeuter.com/design (hidden, `noindex`).
+Shared by **thomaskraeuter.com**, **smoothtime.io** and **status.smoothtime.io**. Live reference: https://thomaskraeuter.com/design (hidden, `noindex`).
 
-The single source of truth is `tokens.css` (identical copy in both repos:
-`thomaskraeuter-website/src/styles/tokens.css`, `smoothtime/website/tokens.css`).
+The single source of truth is `tokens.css` (identical copy in all three repos:
+`thomaskraeuter-website/src/styles/tokens.css`, `smoothtime/website/tokens.css`, `smoothtime-status/styles/tokens.css`).
 It is the **only** file allowed to contain raw colour values; everything else uses `var(--…)`.
-When changing a token, change it in both repos.
+When changing a token, change it in all three repos. Exceptions that must hold literals (kept in sync by hand): favicons/logos (SVG files), `theme-color` meta tags, web manifests, and the Mantine colour tuple in `smoothtime-status/util/nord.ts`.
 
 ## Principles
 Calm, technical, timeless. Classic Nord palette (nordtheme.com), dark Polar Night base,
@@ -80,3 +80,15 @@ Shadows: `--shadow-1/2/3`, glows `--glow-accent`, `--glow-success`.
 - Code: `.ds-code`, `.ds-pre`
 
 Site-specific classes (e.g. `.cta`, `.btn`, `.card`) are thin aliases built only from these tokens.
+
+## Marks, logos & favicons
+All marks are a nord0 rounded square (rx 13/64) with a 2.5/64 Frost (nord8) frame.
+- **thomaskraeuter.com**: geometric "TK" in nord6 above a three-segment LCARS bar (nord13 · nord12 · nord9).
+- **smoothtime.io**: the smooth-return clock glyph in nord8.
+- **status.smoothtime.io**: the smoothtime mark plus a nord14 status dot.
+Each site ships `favicon.svg` (also used as the header logo), `favicon.ico` (16/32/48), `favicon-32.png`,
+`apple-touch-icon.png` (180, full-bleed nord0), `icon-192.png`, `icon-512.png` and `site.webmanifest`.
+
+## Status page (smoothtime-status)
+UptimeFlare stays upstream-mergeable: styling lives in `styles/tokens.css` + `styles/globals.css` (aliases `--st-*` onto tokens),
+status colours map to `--color-success/warning/danger(-text)`, Mantine uses the `nord` primary tuple, and the header adds the LCARS rail.

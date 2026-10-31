@@ -1,9 +1,9 @@
 /* Nord + LCARS-inspired mission-control layer. Motion only when JS ran (html.m) and motion is allowed. */
 html{scroll-behavior:smooth;scroll-padding-top:72px}
 ::selection{background:#5E81AC;color:#ECEFF4}
-body{background-image:radial-gradient(#2c3240 1px,transparent 1px);background-size:22px 22px}
+body{background-image:radial-gradient(#2c2c2c 1px,transparent 1px);background-size:22px 22px}
 header{transition:border-color .3s}
-header.scrolled{background:rgba(36,41,51,.92)}
+header.scrolled{background:rgba(33,33,33,.92)}
 .logo img{border-radius:5px}
 /* LCARS-style rail under the nav */
 .lcars{display:flex;align-items:center;gap:4px;height:6px;max-width:1080px;margin:0 auto;padding:0 20px;transform:translateY(3px)}

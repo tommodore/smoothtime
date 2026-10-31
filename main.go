@@ -20,6 +20,8 @@ const (
 	RuleUS Rule = "us"
 	RuleAU Rule = "au" // Australia / New Zealand style (Southern Hemisphere: Oct start, Apr end)
 	RuleCL Rule = "cl" // Chile (Sep start, Apr end)
+	RuleNZ Rule = "nz" // New Zealand (last Sun Sep start, 1st Sun Apr end)
+	RuleNone Rule = "none" // constant offset, no DST
 )
 
 type RegionConfig struct {
@@ -38,10 +40,10 @@ var Regions = map[string]RegionConfig{
 	"us-mountain":     {"US Mountain (MST/MDT)", -7.0, RuleUS},
 	"us-pacific":      {"US Pacific (PST/PDT)", -8.0, RuleUS},
 	// New Southern Hemisphere regions
-	"australia-sydney": {"Australia Sydney (AEST/AEDT)", -10.0, RuleAU},
-	"new-zealand":      {"New Zealand (NZST/NZDT)", 12.0, RuleAU},
+	"australia-sydney": {"Australia Sydney (AEST/AEDT)", 10.0, RuleAU},
+	"new-zealand":      {"New Zealand (NZST/NZDT)", 12.0, RuleNZ},
 	"chile":            {"Chile (CLT/CLST)", -4.0, RuleCL},
-	"argentina":        {"Argentina (ART) - no DST", -3.0, RuleEU}, // No DST - treated as constant offset
+	"argentina":        {"Argentina (ART) - no DST", -3.0, RuleNone},
 }
 
 const ntpEpochOffset = 2208988800
@@ -176,6 +178,8 @@ func getDstDates(year int, rule Rule) (start time.Time, end time.Time) {
 	} else if rule == RuleAU {
 		// Southern Hemisphere: DST starts 1st Sunday October, ends 1st Sunday April (next year)
 		return getNthSunday(year, time.October, 1), getNthSunday(year+1, time.April, 1)
+	} else if rule == RuleNZ {
+		return getLastSunday(year, time.September), getNthSunday(year+1, time.April, 1)
 	} else if rule == RuleCL {
 		// Chile: Starts 1st Sunday September, ends 1st Sunday April (next year)
 		return getNthSunday(year, time.September, 1), getNthSunday(year+1, time.April, 1)
@@ -187,6 +191,12 @@ func getDstDates(year int, rule Rule) (start time.Time, end time.Time) {
 func CalculateSmoothOffset(now time.Time, regionID string) float64 {
 	cfg := Regions[regionID]
 	year := now.Year()
+	// Southern Hemisphere: a summer spanning New Year began in the previous year.
+	if s, _ := getDstDates(year, cfg.Rule); !s.IsZero() && now.Before(s) {
+		if _, prevEnd := getDstDates(year-1, cfg.Rule); now.Before(prevEnd) {
+			year--
+		}
+	}
 	tStart, tEnd := getDstDates(year, cfg.Rule)
 
 	var offset float64

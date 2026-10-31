@@ -1,0 +1,126 @@
+/* Nord Design System — tokens v1.0
+   Shared by thomaskraeuter.com and smoothtime.io. Single source of truth:
+   the only file allowed to contain raw colour values. Palette: nordtheme.com */
+:root{
+  color-scheme:dark;
+  /* 1. Palette (primitive) */
+  --nord0:#2E3440;--nord1:#3B4252;--nord2:#434C5E;--nord3:#4C566A;
+  --nord4:#D8DEE9;--nord5:#E5E9F0;--nord6:#ECEFF4;
+  --nord7:#8FBCBB;--nord8:#88C0D0;--nord9:#81A1C1;--nord10:#5E81AC;
+  --nord11:#BF616A;--nord12:#D08770;--nord13:#EBCB8B;--nord14:#A3BE8C;--nord15:#B48EAD;
+  /* derived for AA text only (documented in DESIGN.md) */
+  --nord-muted:#A7B1C2;   /* 5.78:1 on nord0, 4.65:1 on nord1 */
+  --nord-red-text:#D9A0A6;/* 5.67:1 on nord0, 4.57:1 on nord1 */
+  --nord-sunken:#292E39;  /* nord0 darkened 4% for wells */
+  --white:#FFFFFF;
+
+  /* 2. Semantic colour */
+  --color-bg:var(--nord0);
+  --color-bg-sunken:var(--nord-sunken);
+  --color-surface:var(--nord1);
+  --color-surface-raised:var(--nord2);
+  --color-border:var(--nord1);
+  --color-border-strong:var(--nord3);
+  --color-dot:color-mix(in srgb,var(--nord1) 70%,var(--nord0));
+  --color-text:var(--nord4);
+  --color-text-strong:var(--nord6);
+  --color-text-muted:var(--nord-muted);
+  --color-text-faint:var(--nord3);          /* decorative only, never body text */
+  --color-text-inverse:var(--nord0);
+  --color-accent:var(--nord8);
+  --color-accent-hover:var(--nord7);
+  --color-accent-strong:var(--nord9);
+  --color-accent-deep:var(--nord10);
+  --color-accent-subtle:color-mix(in srgb,var(--nord8) 12%,transparent);
+  --color-focus:var(--nord8);
+  --focus-ring:0 0 0 2px var(--color-bg),0 0 0 4px var(--color-focus);
+  --color-selection-bg:var(--nord10);--color-selection-text:var(--nord6);
+  --color-success:var(--nord14);--color-warning:var(--nord13);
+  --color-danger:var(--nord11);--color-danger-text:var(--nord-red-text);
+  --color-info:var(--nord8);--color-highlight:var(--nord15);
+  --color-success-subtle:color-mix(in srgb,var(--nord14) 14%,transparent);
+  --color-warning-subtle:color-mix(in srgb,var(--nord13) 10%,transparent);
+  --color-danger-subtle:color-mix(in srgb,var(--nord11) 14%,transparent);
+  --color-star:color-mix(in srgb,var(--white) 55%,transparent);
+  --color-header-bg:color-mix(in srgb,var(--nord0) 86%,transparent);
+  /* LCARS segment colours */
+  --lcars-elbow:var(--nord8);--lcars-1:var(--nord13);--lcars-2:var(--nord12);
+  --lcars-3:var(--nord9);--lcars-4:var(--nord15);--lcars-rail:var(--nord1);
+
+  /* 3. Typography */
+  --font-sans:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --font-mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --text-2xs:.66rem;--text-xs:.75rem;--text-sm:.875rem;--text-base:1rem;--text-md:1.125rem;
+  --text-lg:1.375rem;--text-xl:clamp(1.6rem,3.2vw,2.4rem);--text-2xl:clamp(2.2rem,6vw,3.6rem);--text-3xl:clamp(3rem,8vw,6.4rem);
+  --weight-regular:400;--weight-medium:500;--weight-semibold:600;--weight-bold:650;
+  --leading-tight:1.05;--leading-snug:1.25;--leading-normal:1.6;--leading-relaxed:1.75;
+  --tracking-tight:-.035em;--tracking-normal:0;--tracking-caps:.1em;
+
+  /* 4. Spacing (4px base) */
+  --space-0:0;--space-1:.25rem;--space-2:.5rem;--space-3:.75rem;--space-4:1rem;--space-5:1.5rem;
+  --space-6:2rem;--space-7:3rem;--space-8:4rem;--space-9:6rem;
+  --container:1180px;--container-narrow:1080px;--gutter:clamp(1.25rem,4vw,2.5rem);
+
+  /* 5. Radii */
+  --radius-none:0;--radius-sm:4px;--radius-md:6px;--radius-lg:10px;--radius-pill:999px;
+
+  /* 6. Elevation */
+  --shadow-0:none;
+  --shadow-1:0 1px 2px color-mix(in srgb,var(--nord0) 60%,black 40%);
+  --shadow-2:0 6px 18px -6px color-mix(in srgb,var(--nord0) 40%,black 60%);
+  --shadow-3:0 18px 40px -12px color-mix(in srgb,var(--nord0) 30%,black 70%);
+  --glow-accent:0 0 0 3px color-mix(in srgb,var(--nord8) 18%,transparent);
+  --glow-success:0 0 0 3px color-mix(in srgb,var(--nord14) 18%,transparent);
+
+  /* 7. Motion */
+  --dur-instant:80ms;--dur-fast:150ms;--dur-base:300ms;--dur-slow:600ms;--dur-slower:1200ms;--dur-ambient:90s;
+  --ease-standard:cubic-bezier(.2,.6,.2,1);--ease-emphasized:cubic-bezier(.2,.7,.2,1);
+  --ease-in-out:cubic-bezier(.4,0,.2,1);--ease-linear:linear;
+  --stagger:70ms;
+
+  /* 8. Breakpoints (reference; CSS media queries can't read vars) */
+  --bp-sm:420px;--bp-md:640px;--bp-lg:860px;--bp-xl:1180px;
+  --z-header:10;--z-progress:20;--z-skip:99;
+}
+@media (prefers-reduced-motion:reduce){
+  :root{--dur-instant:0ms;--dur-fast:0ms;--dur-base:0ms;--dur-slow:0ms;--dur-slower:0ms;--stagger:0ms}
+  *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+}
+::selection{background:var(--color-selection-bg);color:var(--color-selection-text)}
+
+/* ===== Components (prefix ds-) ===== */
+.ds-btn{display:inline-flex;align-items:center;gap:var(--space-2);padding:.6rem 1rem;border:1px solid transparent;border-radius:var(--radius-md);
+  font:var(--weight-semibold) var(--text-sm)/1 var(--font-sans);text-decoration:none;cursor:pointer;white-space:nowrap;
+  transition:background var(--dur-fast) var(--ease-standard),color var(--dur-fast),border-color var(--dur-fast)}
+.ds-btn:focus-visible{outline:none;box-shadow:var(--focus-ring)}
+.ds-btn--primary{background:var(--color-accent);color:var(--color-text-inverse)}
+.ds-btn--primary:hover{background:var(--color-accent-hover)}
+.ds-btn--secondary{background:var(--color-surface);color:var(--color-text-strong);border-color:var(--color-border-strong)}
+.ds-btn--secondary:hover{background:var(--color-surface-raised)}
+.ds-btn--ghost{background:transparent;color:var(--color-text);border-color:var(--color-border-strong)}
+.ds-btn--ghost:hover{color:var(--color-accent);border-color:var(--color-accent)}
+.ds-link{color:var(--color-accent);text-decoration:underline;text-decoration-color:color-mix(in srgb,var(--color-accent) 40%,transparent);text-underline-offset:.22em}
+.ds-link:hover{color:var(--color-accent-hover);text-decoration-color:currentColor}
+.ds-card{background:var(--color-surface);border:1px solid var(--color-border-strong);border-radius:var(--radius-md);padding:var(--space-5);box-shadow:var(--shadow-1)}
+.ds-card--raised{background:var(--color-surface-raised);box-shadow:var(--shadow-2)}
+.ds-badge{display:inline-flex;align-items:center;gap:.4rem;padding:.15rem .5rem;border:1px solid var(--color-border-strong);border-radius:var(--radius-pill);
+  font:var(--weight-medium) var(--text-2xs)/1.4 var(--font-mono);letter-spacing:var(--tracking-caps);text-transform:uppercase;color:var(--color-text)}
+.ds-badge--success{color:var(--color-success);background:var(--color-success-subtle);border-color:transparent}
+.ds-badge--warning{color:var(--color-warning);background:var(--color-warning-subtle);border-color:transparent}
+.ds-badge--danger{color:var(--color-danger-text);background:var(--color-danger-subtle);border-color:transparent}
+.ds-badge--info{color:var(--color-info);background:var(--color-accent-subtle);border-color:transparent}
+.ds-tag{display:inline-block;padding:.2rem .5rem;border:1px solid var(--color-border-strong);font:var(--weight-regular) var(--text-xs) var(--font-mono);color:var(--color-text)}
+.ds-input{width:100%;background:var(--color-bg-sunken);color:var(--color-text-strong);border:1px solid var(--color-border-strong);border-radius:var(--radius-md);
+  padding:.55rem .75rem;font:var(--weight-regular) var(--text-sm)/1.4 var(--font-sans);transition:border-color var(--dur-fast)}
+.ds-input::placeholder{color:var(--color-text-muted)}
+.ds-input:focus{outline:none;border-color:var(--color-accent);box-shadow:var(--focus-ring)}
+.ds-label{display:block;margin-bottom:var(--space-1);font:var(--weight-medium) var(--text-xs) var(--font-mono);letter-spacing:var(--tracking-caps);text-transform:uppercase;color:var(--color-text-muted)}
+.ds-section-label{font:var(--weight-regular) var(--text-xs) var(--font-mono);letter-spacing:var(--tracking-caps);text-transform:uppercase;color:var(--color-text-muted)}
+.ds-section-label::before{content:"[LOG] ";color:var(--color-accent)}
+.ds-code{font-family:var(--font-mono);font-size:.9em;background:var(--color-bg-sunken);border:1px solid var(--color-border);border-radius:var(--radius-sm);padding:.1em .35em;color:var(--color-text-strong)}
+.ds-pre{font:var(--weight-regular) var(--text-sm)/var(--leading-relaxed) var(--font-mono);background:var(--color-bg-sunken);border:1px solid var(--color-border);border-radius:var(--radius-md);padding:var(--space-4);overflow-x:auto;color:var(--color-text)}
+.ds-lcars{display:flex;align-items:center;gap:4px;height:6px}
+.ds-lcars>span{height:6px;border-radius:var(--radius-pill);transform-origin:left center}
+.ds-lcars .elbow{width:42px;height:14px;border:6px solid var(--lcars-elbow);border-right:0;border-bottom:0;border-radius:14px 0 0 0;align-self:flex-start}
+.ds-lcars .s1{width:56px;background:var(--lcars-1)}.ds-lcars .s2{width:22px;background:var(--lcars-2)}
+.ds-lcars .s3{width:90px;background:var(--lcars-3)}.ds-lcars .rail{flex:1;height:1px;background:var(--lcars-rail)}.ds-lcars .s4{width:34px;background:var(--lcars-4)}

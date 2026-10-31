@@ -5,14 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>404 — smoothtime</title>
   <meta name="robots" content="noindex">
-  <meta name="theme-color" content="#212121">
+  <meta name="theme-color" content="#2E3440">
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="stylesheet" href="/tokens.css">
   <style>
     @font-face{font-family:Inter;font-weight:400 700;font-display:swap;src:url(/fonts/inter-var-latin.woff2) format("woff2")}
     @font-face{font-family:"JetBrains Mono";font-weight:400 700;font-display:swap;src:url(/fonts/jetbrains-mono-var-latin.woff2) format("woff2")}
-    :root{--bg:#212121;--panel:#292929;--line:#3B4252;--line2:#4C566A;--fg:#ECEFF4;--mute:#AEB4BF;--acc:#88C0D0;--acc2:#81A1C1;--amber:#EBCB8B;--peach:#B89858;--ok:#A3BE8C;--mono:"JetBrains Mono",ui-monospace,Menlo,monospace}
+    :root{--bg:var(--color-bg);--panel:var(--color-surface);--line:var(--color-border);--line2:var(--color-border-strong);--fg:var(--color-text-strong);--mute:var(--color-text-muted);--acc:var(--color-accent);--acc-d:var(--color-accent-subtle);--ok:var(--color-success);--warn:var(--color-warning);--acc2:var(--color-accent-strong);--amber:var(--lcars-1);--peach:var(--lcars-2);--r:var(--radius-lg);--mono:var(--font-mono)}
     *{box-sizing:border-box}
-    body{margin:0;min-height:100vh;display:flex;flex-direction:column;background:var(--bg);color:var(--fg);font:16px/1.6 Inter,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+    body{margin:0;min-height:100vh;display:flex;flex-direction:column;background:var(--bg);color:var(--color-text);font:16px/1.6 var(--font-sans);-webkit-font-smoothing:antialiased}
     header{border-bottom:1px solid var(--line)}header .wrap{display:flex;align-items:center;height:56px}
     .wrap{max-width:1080px;margin:0 auto;padding:0 20px;width:100%}
     .logo{display:flex;align-items:center;gap:8px;font-weight:600;text-decoration:none;color:inherit}
@@ -25,7 +26,7 @@
     .readout::before{content:"";position:absolute;left:0;top:20px;bottom:20px;width:3px;border-radius:0 3px 3px 0;background:var(--acc)}
     .lbl{font:500 .7rem var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--mute)}
     #clock{font:500 clamp(2rem,8vw,3rem)/1.1 var(--mono);font-variant-numeric:tabular-nums;color:var(--acc);margin-top:8px}
-    .btn{display:inline-flex;gap:6px;background:var(--acc);color:var(--bg);text-decoration:none;font:600 .85rem Inter,sans-serif;padding:10px 16px;border-radius:6px}.btn:hover{background:#8FBCBB}
+    .btn{display:inline-flex;gap:6px;background:var(--acc);color:var(--bg);text-decoration:none;font:600 .85rem Inter,sans-serif;padding:10px 16px;border-radius:6px}.btn:hover{background:var(--color-accent-hover)}
     footer{padding:24px 0;font-size:.8rem;color:var(--mute);border-top:1px solid var(--line)}footer a{color:var(--acc)}
   </style>
   <script defer data-domain="smoothtime.io" src="https://plausible.smoothtime.io/js/script.js"></script>

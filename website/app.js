@@ -59,15 +59,15 @@
     const x = i => P.l + (W - P.l - P.r) * i / N, y = v => P.t + (H - P.t - P.b) * (hi - v) / (hi - lo);
     const path = a => a.map((v, i) => (i ? "L" : "M") + x(i).toFixed(1) + " " + y(v).toFixed(1)).join("");
     let g = "";
-    for (let v = Math.ceil(lo * 2) / 2; v <= hi; v += 0.5) g += `<line x1="${P.l}" x2="${W - P.r}" y1="${y(v)}" y2="${y(v)}" stroke="#3B4252"/><text x="${P.l - 8}" y="${y(v) + 4}" fill="#7B8699" font-size="11" text-anchor="end" font-family="JetBrains Mono,monospace">${v >= 0 ? "+" : ""}${v.toFixed(1)}h</text>`;
+    for (let v = Math.ceil(lo * 2) / 2; v <= hi; v += 0.5) g += `<line x1="${P.l}" x2="${W - P.r}" y1="${y(v)}" y2="${y(v)}" style="stroke:var(--color-border)"/><text x="${P.l - 8}" y="${y(v) + 4}" style="fill:var(--color-text-muted)" font-size="11" text-anchor="end" font-family="JetBrains Mono,monospace">${v >= 0 ? "+" : ""}${v.toFixed(1)}h</text>`;
     for (let m = 0; m < 13; m++) {
       const d = new Date(Date.UTC(start.getUTCFullYear(), start.getUTCMonth() + m, 1)); const i = (d - start) / span * N;
       if (i < 0 || i > N) continue;
-      g += `<text x="${x(i)}" y="${H - 8}" fill="#7B8699" font-size="11" text-anchor="middle" font-family="Inter,sans-serif">${d.toLocaleString("en", { month: "short", timeZone: "UTC" })}</text>`;
+      g += `<text x="${x(i)}" y="${H - 8}" style="fill:var(--color-text-muted)" font-size="11" text-anchor="middle" font-family="Inter,sans-serif">${d.toLocaleString("en", { month: "short", timeZone: "UTC" })}</text>`;
     }
     const ti = 30 / 365 * N;
-    g += `<line x1="${x(ti)}" x2="${x(ti)}" y1="${P.t}" y2="${H - P.b}" stroke="#EBCB8B" stroke-dasharray="3 3" opacity=".7"/>`;
-    g += `<path class="off" d="${path(off)}" fill="none" stroke="#7B8699" stroke-width="1.5" stroke-dasharray="5 4"/><path d="${path(pts)}" fill="none" stroke="#88C0D0" stroke-width="2.25"/>`;
+    g += `<line x1="${x(ti)}" x2="${x(ti)}" y1="${P.t}" y2="${H - P.b}" style="stroke:var(--color-warning)" stroke-dasharray="3 3" opacity=".7"/>`;
+    g += `<path class="off" d="${path(off)}" fill="none" style="stroke:var(--color-text-muted)" stroke-width="1.5" stroke-dasharray="5 4"/><path d="${path(pts)}" fill="none" style="stroke:var(--color-accent)" stroke-width="2.25"/>`;
     $("#chart").innerHTML = g;
     $("#c-region").textContent = R[cur].n;
   }

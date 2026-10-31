@@ -62,3 +62,5 @@ main section::after{content:"";position:absolute;left:0;right:0;bottom:0;height:
 }
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation:none!important;transition:none!important}}
 @media (max-width:640px){.lcars .s3{width:48px}.lcars .s1{width:34px}}
+.hero .eyebrow{white-space:normal;display:block}
+@media (max-width:640px){main section .eyebrow{white-space:normal}.m .eyebrow.rv{width:auto!important;animation:none!important}.m .eyebrow.rv::after{display:none}}

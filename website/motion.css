@@ -6,7 +6,7 @@ header.scrolled{background:rgba(10,10,11,.62);backdrop-filter:blur(16px) saturat
 .btn:hover{transform:translateY(-1px);box-shadow:0 6px 24px -6px rgba(45,212,191,.55)}
 .btn.ghost:hover{box-shadow:0 6px 24px -10px rgba(237,237,239,.25)}
 .card{transition:transform .35s cubic-bezier(.2,.7,.2,1),border-color .35s,box-shadow .35s}
-#why .card:hover,.hero .card:hover{transform:translateY(-3px);border-color:rgba(45,212,191,.45);box-shadow:0 18px 40px -20px rgba(45,212,191,.35)}
+#why .card:hover,#who .card:hover,.hero .card:hover{transform:translateY(-3px);border-color:rgba(45,212,191,.45);box-shadow:0 18px 40px -20px rgba(45,212,191,.35)}
 .hero{position:relative;isolation:isolate;overflow:hidden}
 .hero::before{content:"";position:absolute;inset:-20% -10% auto;height:120%;z-index:-1;pointer-events:none;
  background:radial-gradient(40% 45% at 70% 25%,rgba(45,212,191,.16),transparent 70%),radial-gradient(35% 40% at 15% 70%,rgba(56,189,248,.09),transparent 70%)}

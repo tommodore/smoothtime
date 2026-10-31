@@ -5,7 +5,7 @@
   const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); if (e.target.dataset.n) count(e.target); } }), { threshold: .12, rootMargin: "0px 0px -6% 0px" });
   // stagger groups: direct children of each section wrap (except hero h1), plus card grids
   d.querySelectorAll("section .wrap").forEach(w => [...w.children].forEach((c, i) => { if (c.tagName === "H1") return; c.classList.add("rv"); c.style.setProperty("--i", Math.min(i, 6)); }));
-  d.querySelectorAll("#why .card, .faq details, details").forEach((c, i, a) => { c.classList.add("rv"); c.style.setProperty("--i", [...c.parentNode.children].indexOf(c) % 6); });
+  d.querySelectorAll("#why .card, #who .card, .faq details, details").forEach((c, i, a) => { c.classList.add("rv"); c.style.setProperty("--i", [...c.parentNode.children].indexOf(c) % 6); });
   // headline word reveal (keeps <br>)
   const h1 = d.querySelector("h1");
   if (h1) { let i = 0; h1.querySelectorAll("*").length <= 2 && [...h1.childNodes].forEach(n => { if (n.nodeType === 3) { const s = d.createElement("span"); s.innerHTML = n.textContent.split(/(\s+)/).map(t => t.trim() ? `<span class="w" style="--i:${i++}">${t}</span>` : t).join(""); n.replaceWith(...s.childNodes); } }); }

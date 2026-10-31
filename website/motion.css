@@ -1,24 +1,64 @@
-/* motion: only active when JS ran (html.m) and motion is allowed */
+/* Nord + LCARS-inspired mission-control layer. Motion only when JS ran (html.m) and motion is allowed. */
 html{scroll-behavior:smooth;scroll-padding-top:72px}
-header{transition:background .4s,border-color .4s,backdrop-filter .4s}
-header.scrolled{background:rgba(10,10,11,.62);backdrop-filter:blur(16px) saturate(1.4);border-color:#2a2a30}
-.btn{transition:transform .25s cubic-bezier(.2,.7,.2,1),box-shadow .25s,filter .25s}
-.btn:hover{transform:translateY(-1px);box-shadow:0 6px 24px -6px rgba(45,212,191,.55)}
-.btn.ghost:hover{box-shadow:0 6px 24px -10px rgba(237,237,239,.25)}
-.card{transition:transform .35s cubic-bezier(.2,.7,.2,1),border-color .35s,box-shadow .35s}
-#why .card:hover,#who .card:hover,.hero .card:hover{transform:translateY(-3px);border-color:rgba(45,212,191,.45);box-shadow:0 18px 40px -20px rgba(45,212,191,.35)}
-.hero{position:relative;isolation:isolate;overflow:hidden}
-.hero::before{content:"";position:absolute;inset:-20% -10% auto;height:120%;z-index:-1;pointer-events:none;
- background:radial-gradient(40% 45% at 70% 25%,rgba(45,212,191,.16),transparent 70%),radial-gradient(35% 40% at 15% 70%,rgba(56,189,248,.09),transparent 70%)}
+::selection{background:#5E81AC;color:#ECEFF4}
+body{background-image:radial-gradient(#2c3240 1px,transparent 1px);background-size:22px 22px}
+header{transition:border-color .3s}
+header.scrolled{background:rgba(36,41,51,.92)}
+.logo img{border-radius:5px}
+/* LCARS-style rail under the nav */
+.lcars{display:flex;align-items:center;gap:4px;height:6px;max-width:1080px;margin:0 auto;padding:0 20px;transform:translateY(3px)}
+.lcars>span{height:6px;border-radius:99px;transform-origin:left center}
+.lcars .elbow{width:40px;height:14px;border:6px solid var(--acc);border-right:0;border-bottom:0;border-radius:14px 0 0 0;align-self:flex-start;transform:translateY(-1px);opacity:.9}
+.lcars .s1{width:56px;background:var(--amber);opacity:.85}.lcars .s2{width:22px;background:var(--peach);opacity:.8}
+.lcars .s3{width:90px;background:var(--acc2)}.lcars .rail{flex:1;height:1px;background:var(--line)}.lcars .s4{width:34px;background:var(--amber);opacity:.65}
+.progress{position:fixed;left:0;right:0;top:0;height:2px;background:var(--acc);transform:scaleX(0);transform-origin:left;z-index:20;pointer-events:none}
+/* labels: log-style */
+body{counter-reset:sec}
+main section{counter-increment:sec;position:relative}
+.eyebrow{display:inline-block;white-space:nowrap;color:var(--mute)}
+main section:not(.hero) .eyebrow::before{content:"[LOG] 0" counter(sec) " — ";color:var(--acc)}
+.hero .eyebrow::before{content:"[SYS] ";color:var(--acc)}
+.telemetry{display:flex;flex-wrap:wrap;gap:6px 22px;margin:22px 0 0;font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--mute)}
+.telemetry b{color:var(--fg);font-weight:500}
+/* readouts */
+.clocks .lbl{font-family:var(--mono);font-size:.7rem;letter-spacing:.1em;text-transform:uppercase}
+.clk{font-weight:500;letter-spacing:-.02em}
+.clocks>div{position:relative}
+.clocks>div::before{content:"";position:absolute;left:0;top:24px;bottom:24px;width:3px;border-radius:0 3px 3px 0;background:var(--line2)}
+.clocks>div+div::before{background:var(--acc)}
+.card{border-radius:6px}
+.btn{border-radius:6px;transition:background .15s,color .15s,border-color .15s}
+.btn:hover{filter:none;background:#8FBCBB}.btn.ghost:hover{background:transparent;border-color:var(--acc);color:var(--acc)}
+.grid3 .card,.grid2 .card{transition:border-color .2s}
+.grid3 .card:hover,.grid2 .card:hover{border-color:var(--line2)}
+.tab[aria-selected=true]{border-color:var(--acc)}
+.status{font-family:var(--mono);font-size:.72rem;letter-spacing:.08em;text-transform:uppercase}
+/* section ridge divider */
+main section{border-bottom:0}
+main section::after{content:"";position:absolute;left:0;right:0;bottom:0;height:22px;pointer-events:none;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 22' preserveAspectRatio='none'%3E%3Cpolyline fill='none' stroke='%234C566A' stroke-width='1' vector-effect='non-scaling-stroke' points='0,21 140,20 230,17 280,13 320,15 380,8 420,11 470,3 500,6 540,1 580,8 640,11 700,9 760,15 820,13 880,17 960,16 1040,20 1120,19 1200,21'/%3E%3C/svg%3E") center bottom/100% 100% no-repeat}
 @media (prefers-reduced-motion:no-preference){
- .hero::before{animation:glow 14s ease-in-out infinite alternate}
- @keyframes glow{to{transform:translate3d(-6%,4%,0) scale(1.08);opacity:.75}}
- .m .rv{opacity:0;transform:translateY(22px);filter:blur(4px);transition:opacity .8s cubic-bezier(.2,.7,.2,1),transform .8s cubic-bezier(.2,.7,.2,1),filter .8s;transition-delay:calc(var(--i,0)*80ms)}
- .m .rv.in{opacity:1;transform:none;filter:none}
- .m h1 .w{display:inline-block;opacity:0;transform:translateY(.4em);filter:blur(8px);animation:wi .9s cubic-bezier(.2,.7,.2,1) forwards;animation-delay:calc(var(--i)*70ms + .1s)}
- @keyframes wi{to{opacity:1;transform:none;filter:none}}
- .m #chart.draw path{stroke-dasharray:var(--l);stroke-dashoffset:var(--l);animation:draw 1.6s cubic-bezier(.4,0,.2,1) forwards}
- .m #chart.draw path+path{animation-delay:.25s}
+ .lcars>span{animation:seg .7s cubic-bezier(.2,.7,.2,1) both}
+ .lcars .elbow{animation-name:fd}.lcars .s1{animation-delay:.12s}.lcars .s2{animation-delay:.2s}.lcars .rail{animation-delay:.34s;animation-duration:1.2s}.lcars .s4{animation-delay:.6s}
+ .lcars .s3{animation:seg .7s .28s cubic-bezier(.2,.7,.2,1) both,pulse 6s 2s ease-in-out infinite}
+ @keyframes seg{from{transform:scaleX(0);opacity:0}}
+ @keyframes fd{from{opacity:0}}
+ @keyframes pulse{50%{opacity:.35}}
+ .dot{animation:blink 2.4s steps(1) infinite}
+ @keyframes blink{50%{opacity:.25}}
+ .hero .wrap>*{animation:rise .6s cubic-bezier(.2,.6,.2,1) both}
+ .hero .wrap>:nth-child(2){animation-delay:.06s}.hero .wrap>:nth-child(3){animation-delay:.12s}.hero .wrap>:nth-child(4){animation-delay:.18s}.hero .wrap>:nth-child(5){animation-delay:.24s}.hero .wrap>:nth-child(6){animation-delay:.3s}
+ @keyframes rise{from{opacity:0;transform:translateY(6px)}}
+ .m .rv{opacity:0;transform:translateY(8px);transition:opacity .5s cubic-bezier(.2,.6,.2,1),transform .5s cubic-bezier(.2,.6,.2,1);transition-delay:calc(var(--i,0)*70ms)}
+ .m .rv.in{opacity:1;transform:none}
+ .m .eyebrow.rv{overflow:hidden;width:0;opacity:1;transform:none;vertical-align:bottom}
+ .m .eyebrow.rv.in{animation:type 1s steps(var(--n,30)) forwards}
+ .m .eyebrow.rv::after{content:"▍";color:var(--acc);margin-left:.15em;animation:blink 1s steps(1) infinite}
+ @keyframes type{to{width:var(--w,24em)}}
+ .m main section::after{clip-path:inset(0 100% 0 0);transition:clip-path 1.6s cubic-bezier(.4,0,.2,1) .2s}
+ .m main section.seen::after{clip-path:inset(0)}
+ .m #chart.draw path:not(.off){stroke-dasharray:var(--l);stroke-dashoffset:var(--l);animation:draw 1.6s cubic-bezier(.4,0,.2,1) forwards}
+ .m #chart.draw path.off{animation:fd .8s both}
  @keyframes draw{to{stroke-dashoffset:0}}
 }
-@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.btn:hover,.card:hover{transform:none!important}}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation:none!important;transition:none!important}}
+@media (max-width:640px){.lcars .s3{width:48px}.lcars .s1{width:34px}}

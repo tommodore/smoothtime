@@ -1,55 +1,55 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>404 — smoothtime</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#242933">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <style>
-    .big404 { font-size: 12rem; font-family: monospace; line-height: 1; }
-    @media (max-width: 640px) { .big404 { font-size: 7rem; } }
+    @font-face{font-family:Inter;font-weight:400 700;font-display:swap;src:url(/fonts/inter-var-latin.woff2) format("woff2")}
+    @font-face{font-family:"JetBrains Mono";font-weight:400 700;font-display:swap;src:url(/fonts/jetbrains-mono-var-latin.woff2) format("woff2")}
+    :root{--bg:#242933;--panel:#2E3440;--line:#3B4252;--line2:#434C5E;--fg:#ECEFF4;--mute:#AEB7C6;--acc:#88C0D0;--acc2:#81A1C1;--amber:#EBCB8B;--peach:#D08770;--ok:#A3BE8C;--mono:"JetBrains Mono",ui-monospace,Menlo,monospace}
+    *{box-sizing:border-box}
+    body{margin:0;min-height:100vh;display:flex;flex-direction:column;background:var(--bg);color:var(--fg);font:16px/1.6 Inter,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+    header{border-bottom:1px solid var(--line)}header .wrap{display:flex;align-items:center;height:56px}
+    .wrap{max-width:1080px;margin:0 auto;padding:0 20px;width:100%}
+    .logo{display:flex;align-items:center;gap:8px;font-weight:600;text-decoration:none;color:inherit}
+    main{flex:1;display:grid;place-items:center;padding:56px 20px}
+    .box{max-width:560px;width:100%}
+    .code{font:500 .75rem var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--mute)}.code b{color:var(--peach);font-weight:500}
+    h1{font-size:clamp(2rem,6vw,3rem);letter-spacing:-.035em;line-height:1.05;margin:14px 0 10px;font-weight:650}
+    p{color:var(--mute);margin:0}
+    .readout{margin:28px 0;border:1px solid var(--line);border-radius:6px;background:var(--panel);padding:20px 22px;position:relative}
+    .readout::before{content:"";position:absolute;left:0;top:20px;bottom:20px;width:3px;border-radius:0 3px 3px 0;background:var(--acc)}
+    .lbl{font:500 .7rem var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--mute)}
+    #clock{font:500 clamp(2rem,8vw,3rem)/1.1 var(--mono);font-variant-numeric:tabular-nums;color:var(--acc);margin-top:8px}
+    .btn{display:inline-flex;gap:6px;background:var(--acc);color:var(--bg);text-decoration:none;font:600 .85rem Inter,sans-serif;padding:10px 16px;border-radius:6px}.btn:hover{background:#8FBCBB}
+    footer{padding:24px 0;font-size:.8rem;color:var(--mute);border-top:1px solid var(--line)}footer a{color:var(--acc)}
   </style>
   <script defer data-domain="smoothtime.io" src="https://plausible.smoothtime.io/js/script.js"></script>
   <link rel="stylesheet" href="/motion.css">
 </head>
-<body class="bg-zinc-950 text-white min-h-screen font-sans flex items-center justify-center">
-  <div class="max-w-2xl mx-auto px-6 text-center">
-    
-    <!-- Big 404 -->
-    <div class="big404 text-teal-400/10 select-none">404</div>
-    
-    <h1 class="text-5xl font-bold tracking-tighter -mt-12 mb-4">Page not found</h1>
-    <p class="text-xl text-zinc-400 mb-10 max-w-md mx-auto">
-      Looks like this page got lost in the smooth time drift.
-    </p>
-
-    <!-- Fun live clock -->
-    <div class="bg-zinc-900 rounded-3xl p-8 inline-block mb-10">
-      <div id="clock" class="text-5xl font-mono text-teal-400">00:00:00</div>
-      <div class="text-zinc-500 text-sm mt-2">current smooth time</div>
+<body>
+<header><div class="wrap"><a class="logo" href="/"><img src="/favicon.svg" width="22" height="22" alt="">smoothtime</a></div><div class="lcars" aria-hidden="true"><span class="elbow"></span><span class="seg s1"></span><span class="seg s2"></span><span class="seg s3"></span><span class="rail"></span><span class="seg s4"></span></div></header>
+<main>
+  <div class="box">
+    <p class="code">[ERR] <b>404</b> — signal lost</p>
+    <h1>Page not found</h1>
+    <p>Looks like this page got lost in the smooth time drift.</p>
+    <div class="readout">
+      <div class="lbl">Your local time</div>
+      <div id="clock">--:--:--</div>
     </div>
-
-    <!-- Back button -->
-    <a href="/" 
-       class="inline-block bg-teal-600 hover:bg-teal-500 transition px-10 py-4 rounded-2xl text-lg font-medium">
-      ← Back to smoothtime
-    </a>
-
-    <p class="text-xs text-zinc-500 mt-16">
-      Open Source • MIT • 
-      <a href="https://github.com/tommodore/smoothtime" class="text-teal-400 hover:underline">github.com/tommodore/smoothtime</a>
-    </p>
+    <a class="btn" href="/">← Back to smoothtime</a>
   </div>
-
-  <script>
-    function updateClock() {
-      const now = new Date();
-      document.getElementById("clock").textContent = 
-        now.toLocaleTimeString("de-DE", { hour: "2-digit", minute: "2-digit", second: "2-digit" });
-    }
-    setInterval(updateClock, 1000);
-    updateClock();
-  </script>
+</main>
+<footer><div class="wrap">Open Source · MIT · <a href="https://github.com/tommodore/smoothtime">github.com/tommodore/smoothtime</a></div></footer>
+<script>
+  function updateClock(){document.getElementById("clock").textContent=new Date().toLocaleTimeString("de-DE",{hour:"2-digit",minute:"2-digit",second:"2-digit"})}
+  setInterval(updateClock,1000);updateClock();
+</script>
 <script src="/motion.js" defer></script>
 </body>
 </html>

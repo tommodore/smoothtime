@@ -139,6 +139,7 @@
     :focus-visible{outline:2px solid var(--acc);outline-offset:2px}
   </style>
   <script defer data-domain="smoothtime.io" src="https://plausible.smoothtime.io/js/script.js"></script>
+  <link rel="stylesheet" href="/motion.css">
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
@@ -155,7 +156,7 @@
 
 <main id="main">
 <section class="hero"><div class="wrap">
-  <p class="eyebrow">Public NTP server · 11 regions · open source</p>
+  <p class="eyebrow">Public NTP server · <span data-count>11</span> regions · open source</p>
   <h1>Daylight saving time,<br>without the jump.</h1>
   <p class="lead">smoothtime spreads the 1-hour DST change smoothly across the entire season, so servers, homelabs and IoT devices never see a sudden clock change.</p>
   <div class="card" style="margin-top:36px">
@@ -263,5 +264,6 @@ w32tm /resync</code></pre></div>
   <div><a href="https://github.com/tommodore/smoothtime" target="_blank" rel="noopener">GitHub</a><a href="https://github.com/tommodore/smoothtime/blob/main/README.md" target="_blank" rel="noopener">Documentation</a><a href="https://status.smoothtime.io" target="_blank" rel="noopener">Status</a><a href="/legal.html">Legal &amp; Privacy</a></div>
 </div></footer>
 <script src="/app.js" defer></script>
+<script src="/motion.js" defer></script>
 </body>
 </html>

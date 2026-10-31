@@ -1,0 +1,24 @@
+/* motion: only active when JS ran (html.m) and motion is allowed */
+html{scroll-behavior:smooth;scroll-padding-top:72px}
+header{transition:background .4s,border-color .4s,backdrop-filter .4s}
+header.scrolled{background:rgba(10,10,11,.62);backdrop-filter:blur(16px) saturate(1.4);border-color:#2a2a30}
+.btn{transition:transform .25s cubic-bezier(.2,.7,.2,1),box-shadow .25s,filter .25s}
+.btn:hover{transform:translateY(-1px);box-shadow:0 6px 24px -6px rgba(45,212,191,.55)}
+.btn.ghost:hover{box-shadow:0 6px 24px -10px rgba(237,237,239,.25)}
+.card{transition:transform .35s cubic-bezier(.2,.7,.2,1),border-color .35s,box-shadow .35s}
+#why .card:hover,.hero .card:hover{transform:translateY(-3px);border-color:rgba(45,212,191,.45);box-shadow:0 18px 40px -20px rgba(45,212,191,.35)}
+.hero{position:relative;isolation:isolate;overflow:hidden}
+.hero::before{content:"";position:absolute;inset:-20% -10% auto;height:120%;z-index:-1;pointer-events:none;
+ background:radial-gradient(40% 45% at 70% 25%,rgba(45,212,191,.16),transparent 70%),radial-gradient(35% 40% at 15% 70%,rgba(56,189,248,.09),transparent 70%)}
+@media (prefers-reduced-motion:no-preference){
+ .hero::before{animation:glow 14s ease-in-out infinite alternate}
+ @keyframes glow{to{transform:translate3d(-6%,4%,0) scale(1.08);opacity:.75}}
+ .m .rv{opacity:0;transform:translateY(22px);filter:blur(4px);transition:opacity .8s cubic-bezier(.2,.7,.2,1),transform .8s cubic-bezier(.2,.7,.2,1),filter .8s;transition-delay:calc(var(--i,0)*80ms)}
+ .m .rv.in{opacity:1;transform:none;filter:none}
+ .m h1 .w{display:inline-block;opacity:0;transform:translateY(.4em);filter:blur(8px);animation:wi .9s cubic-bezier(.2,.7,.2,1) forwards;animation-delay:calc(var(--i)*70ms + .1s)}
+ @keyframes wi{to{opacity:1;transform:none;filter:none}}
+ .m #chart.draw path{stroke-dasharray:var(--l);stroke-dashoffset:var(--l);animation:draw 1.6s cubic-bezier(.4,0,.2,1) forwards}
+ .m #chart.draw path+path{animation-delay:.25s}
+ @keyframes draw{to{stroke-dashoffset:0}}
+}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.btn:hover,.card:hover{transform:none!important}}
